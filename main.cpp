@@ -1,4 +1,4 @@
-#include <contrib/cpp-httplib/httplib.h>
+#include <httplib.h>
 
 int main(void)
 {
