@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/c++,cmake,windows,visualstudio
 # Edit at https://www.gitignore.io/?templates=c++,cmake,windows,visualstudio
 
+*.vcxproj
+*.vcxproj.filters
+
 ### C++ ###
 # Prerequisites
 *.d
