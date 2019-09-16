@@ -14,7 +14,7 @@ git clone --recurse-submodules -j8 git@github.com:sevastopolTeam/server.git
 https://cmake.org/download/
 
 в папке с проектом:
-cmake .
-cmake --build .
+1) cmake .
+2) cmake --build .
 
 бинарник будет находиться в Debug/main.exe
