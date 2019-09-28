@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(Server)
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 include_directories(contrib/cpp-httplib)
+include_directories(contrib/mongo-cxx-driver)
 add_executable(main main.cpp)
