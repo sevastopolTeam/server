@@ -1,3 +1,6 @@
 [submodule "contrib/cpp-httplib"]
 	path = contrib/cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib
+[submodule "contrib/mongo-cxx-driver"]
+	path = contrib/mongo-cxx-driver
+	url = https://https://github.com/mongodb/mongo-cxx-driver
