@@ -6,12 +6,12 @@
 #include <mongoc.h>
 #include <bson.h>
 
-int main(void)
-{
-    using namespace httplib;
+using namespace std;
+using namespace httplib;
 
+int main(void) {
     Server svr;
-    std::cout << "111" << std::endl;
+    cout << "Starting server..." << endl;
     mongoc_init();
 
     mongoc_client_t* client = mongoc_client_new("mongodb://localhost:1235");
@@ -25,12 +25,16 @@ int main(void)
         while (mongoc_cursor_next (cursor, &doc)) {
             char* str = bson_as_canonical_extended_json (doc, NULL);
             printf ("%s\n", str);
-            ans += std::string(str);
+            if (!ans.empty()) {
+                ans += ",";
+            }
+            ans += string(str);
             bson_free (str);
         }
 
         bson_destroy (query);
 	mongoc_cursor_destroy (cursor);
+        ans = "[" + ans + "]";
         res.set_content(ans, "text/plain");
     });
 
@@ -41,12 +45,12 @@ int main(void)
         bson_oid_t oid;
         bson_oid_init (&oid, NULL);
         BSON_APPEND_OID (doc, "_id", &oid);
-        BSON_APPEND_UTF8 (doc, "hello", std::string(numbers).c_str());
+        BSON_APPEND_UTF8 (doc, "hello", string(numbers).c_str());
 
         bson_error_t error;
-        // if (!mongoc_collection_insert_one (collection, doc, NULL, NULL, &error)) {
-        //    printf ("%s\n", error.message);
-        // }
+        if (!mongoc_collection_insert(collection, MONGOC_INSERT_NONE, doc, NULL, &error)) {
+            printf ("%s\n", error.message);
+        }
 
         bson_destroy (doc);
     });
@@ -55,6 +59,7 @@ int main(void)
         svr.stop();
     });
 
+    cout << "Server started" << endl;
     svr.listen("0.0.0.0", 1234);
     mongoc_collection_destroy (collection);
     mongoc_client_destroy (client);
