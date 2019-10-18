@@ -1,10 +1,10 @@
-#include "contrib/httplib/httplib.h"
 #include <string>
 #include <string.h>
 #include <iostream>
 #include <stdio.h>
-#include <mongoc.h>
-#include <bson.h>
+
+#include "httplib.h"
+#include "mongoc/mongoc.h"
 
 using namespace std;
 using namespace httplib;

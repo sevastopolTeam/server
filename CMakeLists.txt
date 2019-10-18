@@ -1,12 +1,20 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 project(server)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
-find_package (libmongoc-1.0 1.7 REQUIRED)
-message ("--   mongoc found version \"${MONGOC_VERSION}\"")
-message ("--   mongoc include path \"${MONGOC_INCLUDE_DIRS}\"")
-message ("--   mongoc libraries \"${MONGOC_LIBRARIES}\"")
-include_directories(${MONGOC_INCLUDE_DIRS})
-add_definitions(${MONGO_DEFINITIONS})
+
+include_directories(
+  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/contrib/httplib
+  ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libbson/src
+  ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libmongoc/src
+)
+
 add_subdirectory(contrib)
+
 add_executable(server main.cpp)
-target_link_libraries (server PRIVATE "${MONGOC_LIBRARIES}")
+
+target_link_libraries(server
+  mongoc-1.0
+  bson-1.0
+)
