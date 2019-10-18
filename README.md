@@ -8,7 +8,7 @@ https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-th
 в консоли git-bash создать рабочую папку
 
 Склонировать проект в рабочую папку:
-git clone --recurse-submodules -j8 git@github.com:sevastopolTeam/server.git
+git clone git@github.com:sevastopolTeam/server.git
 
 скачать и установить cmake:
 https://cmake.org/download/
@@ -17,4 +17,4 @@ https://cmake.org/download/
 1) cmake .
 2) cmake --build .
 
-бинарник будет находиться в Debug/main.exe
+бинарник будет находиться в Debug/server.exe (windows) ./server (unix)
