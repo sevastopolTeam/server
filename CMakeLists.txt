@@ -15,6 +15,6 @@ add_subdirectory(contrib)
 add_executable(server main.cpp)
 
 target_link_libraries(server
-  mongoc-1.0
-  bson-1.0
+  mongoc_static
+  bson_static
 )
