@@ -6,12 +6,10 @@
 #include "httplib.h"
 #include "mongoc/mongoc.h"
 
-using namespace std;
-using namespace httplib;
 
 int main(void) {
-    Server svr;
-    cout << "Starting server..." << endl;
+    httplib::Server svr;
+    std::cout << "Starting server..." << std::endl;
     mongoc_init();
 
     mongoc_client_t* client = mongoc_client_new("mongodb://localhost:1235");
@@ -28,7 +26,7 @@ int main(void) {
             if (!ans.empty()) {
                 ans += ",";
             }
-            ans += string(str);
+            ans += std::string(str);
             bson_free (str);
         }
 
@@ -45,7 +43,7 @@ int main(void) {
         bson_oid_t oid;
         bson_oid_init (&oid, NULL);
         BSON_APPEND_OID (doc, "_id", &oid);
-        BSON_APPEND_UTF8 (doc, "hello", string(numbers).c_str());
+        BSON_APPEND_UTF8 (doc, "hello", std::string(numbers).c_str());
 
         bson_error_t error;
         if (!mongoc_collection_insert(collection, MONGOC_INSERT_NONE, doc, NULL, &error)) {
@@ -59,7 +57,7 @@ int main(void) {
         svr.stop();
     });
 
-    cout << "Server started" << endl;
+    std::cout << "Server started" << std::endl;
     svr.listen("0.0.0.0", 1234);
     mongoc_collection_destroy (collection);
     mongoc_client_destroy (client);
