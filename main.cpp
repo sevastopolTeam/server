@@ -14,7 +14,7 @@ int main(void) {
 
     mongoc_client_t* client = mongoc_client_new("mongodb://localhost:1235");
     mongoc_collection_t* collection = mongoc_client_get_collection (client, "prod", "base");
-    svr.Get("/hi", [&](const Request& req, Response& res) {
+    svr.Get("/hi", [&](const httplib::Request& req, httplib::Response& res) {
 	const bson_t* doc;
 	bson_t* query = bson_new ();
 	mongoc_cursor_t* cursor = mongoc_collection_find_with_opts (collection, query, NULL, NULL);
@@ -36,7 +36,7 @@ int main(void) {
         res.set_content(ans, "text/plain");
     });
 
-    svr.Get(R"(/numbers/(\d+))", [&](const Request& req, Response& res) {
+    svr.Get(R"(/numbers/(\d+))", [&](const httplib::Request& req, httplib::Response& res) {
         auto numbers = req.matches[1];
         res.set_content(numbers, "text/plain");
         bson_t* doc = bson_new ();
@@ -53,7 +53,7 @@ int main(void) {
         bson_destroy (doc);
     });
 
-    svr.Get("/stop", [&](const Request& req, Response& res) {
+    svr.Get("/stop", [&](const httplib::Request& req, httplib::Response& res) {
         svr.stop();
     });
 
