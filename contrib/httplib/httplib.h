@@ -32,18 +32,6 @@
 #define _CRT_NONSTDC_NO_DEPRECATE
 #endif //_CRT_NONSTDC_NO_DEPRECATE
 
-#if defined(_MSC_VER)
-#ifdef _WIN64
-typedef __int64 ssize_t;
-#else
-typedef int ssize_t;
-#endif
-
-#if _MSC_VER < 1900
-#define snprintf _snprintf_s
-#endif
-#endif // _MSC_VER
-
 #ifndef S_ISREG
 #define S_ISREG(m) (((m)&S_IFREG) == S_IFREG)
 #endif // S_ISREG
@@ -187,7 +175,7 @@ struct MultipartFormData {
 };
 typedef std::vector<MultipartFormData> MultipartFormDataItems;
 
-typedef std::pair<ssize_t, ssize_t> Range;
+typedef std::pair<int, int> Range;
 typedef std::vector<Range> Ranges;
 
 struct Request {
@@ -1551,12 +1539,12 @@ inline int write_headers(Stream &strm, const T &info, const Headers &headers) {
   return write_len;
 }
 
-inline ssize_t write_content(Stream &strm, ContentProvider content_provider,
+inline int write_content(Stream &strm, ContentProvider content_provider,
                              size_t offset, size_t length) {
   size_t begin_offset = offset;
   size_t end_offset = offset + length;
   while (offset < end_offset) {
-    ssize_t written_length = 0;
+    int written_length = 0;
     content_provider(
         offset, end_offset - offset,
         [&](const char *d, size_t l) {
@@ -1566,16 +1554,16 @@ inline ssize_t write_content(Stream &strm, ContentProvider content_provider,
         [&](void) { written_length = -1; });
     if (written_length < 0) { return written_length; }
   }
-  return static_cast<ssize_t>(offset - begin_offset);
+  return static_cast<int>(offset - begin_offset);
 }
 
-inline ssize_t write_content_chunked(Stream &strm,
+inline int write_content_chunked(Stream &strm,
                                      ContentProvider content_provider) {
   size_t offset = 0;
   auto data_available = true;
-  ssize_t total_written_length = 0;
+  int total_written_length = 0;
   while (data_available) {
-    ssize_t written_length = 0;
+    int written_length = 0;
     content_provider(
         offset, 0,
         [&](const char *d, size_t l) {
@@ -1792,14 +1780,14 @@ inline bool parse_range_header(const std::string &s, Ranges &ranges) {
                       static auto re = std::regex(R"(\s*(\d*)-(\d*))");
                       std::cmatch m;
                       if (std::regex_match(b, e, m, re)) {
-                        ssize_t first = -1;
+                        int first = -1;
                         if (!m.str(1).empty()) {
-                          first = static_cast<ssize_t>(std::stoll(m.str(1)));
+                          first = static_cast<int>(std::stoll(m.str(1)));
                         }
 
-                        ssize_t last = -1;
+                        int last = -1;
                         if (!m.str(2).empty()) {
-                          last = static_cast<ssize_t>(std::stoll(m.str(2)));
+                          last = static_cast<int>(std::stoll(m.str(2)));
                         }
 
                         if (first != -1 && last != -1 && first > last) {
