@@ -34,9 +34,9 @@
 
 #if defined(_MSC_VER)
 #ifdef _WIN64
-typedef __int64 ssize_t;
+typedef __int64 s_size_t;
 #else
-typedef int ssize_t;
+typedef int s_size_t;
 #endif
 
 #if _MSC_VER < 1900
@@ -187,7 +187,7 @@ struct MultipartFormData {
 };
 typedef std::vector<MultipartFormData> MultipartFormDataItems;
 
-typedef std::pair<ssize_t, ssize_t> Range;
+typedef std::pair<s_size_t, s_size_t> Range;
 typedef std::vector<Range> Ranges;
 
 struct Request {
@@ -1551,12 +1551,12 @@ inline int write_headers(Stream &strm, const T &info, const Headers &headers) {
   return write_len;
 }
 
-inline ssize_t write_content(Stream &strm, ContentProvider content_provider,
+inline s_size_t write_content(Stream &strm, ContentProvider content_provider,
                              size_t offset, size_t length) {
   size_t begin_offset = offset;
   size_t end_offset = offset + length;
   while (offset < end_offset) {
-    ssize_t written_length = 0;
+    s_size_t written_length = 0;
     content_provider(
         offset, end_offset - offset,
         [&](const char *d, size_t l) {
@@ -1566,16 +1566,16 @@ inline ssize_t write_content(Stream &strm, ContentProvider content_provider,
         [&](void) { written_length = -1; });
     if (written_length < 0) { return written_length; }
   }
-  return static_cast<ssize_t>(offset - begin_offset);
+  return static_cast<s_size_t>(offset - begin_offset);
 }
 
-inline ssize_t write_content_chunked(Stream &strm,
+inline s_size_t write_content_chunked(Stream &strm,
                                      ContentProvider content_provider) {
   size_t offset = 0;
   auto data_available = true;
-  ssize_t total_written_length = 0;
+  s_size_t total_written_length = 0;
   while (data_available) {
-    ssize_t written_length = 0;
+    s_size_t written_length = 0;
     content_provider(
         offset, 0,
         [&](const char *d, size_t l) {
@@ -1792,14 +1792,14 @@ inline bool parse_range_header(const std::string &s, Ranges &ranges) {
                       static auto re = std::regex(R"(\s*(\d*)-(\d*))");
                       std::cmatch m;
                       if (std::regex_match(b, e, m, re)) {
-                        ssize_t first = -1;
+                        s_size_t first = -1;
                         if (!m.str(1).empty()) {
-                          first = static_cast<ssize_t>(std::stoll(m.str(1)));
+                          first = static_cast<s_size_t>(std::stoll(m.str(1)));
                         }
 
-                        ssize_t last = -1;
+                        s_size_t last = -1;
                         if (!m.str(2).empty()) {
-                          last = static_cast<ssize_t>(std::stoll(m.str(2)));
+                          last = static_cast<s_size_t>(std::stoll(m.str(2)));
                         }
 
                         if (first != -1 && last != -1 && first > last) {
