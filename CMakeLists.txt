@@ -12,7 +12,10 @@ include_directories(
 
 add_subdirectory(contrib)
 
-add_executable(server main.cpp)
+add_executable(server
+application.cpp
+main.cpp
+)
 
 target_link_libraries(server
   mongoc_static
