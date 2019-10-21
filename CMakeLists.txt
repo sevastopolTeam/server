@@ -10,11 +10,13 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libmongoc/src
 )
 
-add_subdirectory(contrib)
+add_subdirectory(
+  contrib
+)
 
 add_executable(server
-application.cpp
-main.cpp
+  application.cpp
+  main.cpp
 )
 
 target_link_libraries(server
