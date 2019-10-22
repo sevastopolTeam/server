@@ -16,8 +16,6 @@ add_subdirectory(
 add_executable(server
   application.cpp
   main.cpp
-  handlers/hi.cpp
-  handlers/numbers.cpp
 )
 
 target_link_libraries(server
