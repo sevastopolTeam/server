@@ -2,10 +2,12 @@
 
 #include <iostream>
 
-#include <handlers/hi.h>
-#include <handlers/numbers.h>
+#include "contrib/json/json.hpp"
+#include "handlers/hi.h"
+#include "handlers/numbers.h"
 
 TApplication::TApplication() {
+    nlohmann::json a;
     std::cout << "Starting server..." << std::endl;
     mongoc_init();
     Client = mongoc_client_new("mongodb://localhost:1235");

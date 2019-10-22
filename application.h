@@ -1,6 +1,6 @@
 #pragma once
 
-#include "httplib.h"
+#include "contrib/httplib/httplib.h"
 #include "mongoc/mongoc.h"
 
 class TApplication {
