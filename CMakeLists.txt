@@ -5,14 +5,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 include_directories(
   ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/contrib/httplib
-  ${PROJECT_SOURCE_DIR}/contrib/json/include
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libbson/src
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libmongoc/src
 )
 
 add_subdirectory(
-  contrib
+  contrib/mongo-c-driver
 )
 
 add_executable(server
@@ -25,5 +23,4 @@ add_executable(server
 target_link_libraries(server
   bson_static
   mongoc_static
-  nlohmann_json::nlohmann_json
 )
