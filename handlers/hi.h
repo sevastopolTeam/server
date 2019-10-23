@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string>
 
-#include "contrib/httplib/httplib.h"
+#include "httplib.h"
 #include "mongoc/mongoc.h"
 
 void HiHandler(mongoc_collection_t* collection, const httplib::Request& req, httplib::Response& res) {

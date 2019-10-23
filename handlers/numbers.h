@@ -2,10 +2,10 @@
 
 #include <string>
 
-#include "contrib/httplib/httplib.h"
+#include "httplib.h"
 #include "mongoc/mongoc.h"
 
-void NumbersHandler(mongoc_collection_t* Collection, const httplib::Request& req, httplib::Response& res) {
+void NumbersHandler(mongoc_collection_t* collection, const httplib::Request& req, httplib::Response& res) {
 	auto numbers = req.matches[1];
 	res.set_content(numbers, "text/plain");
 	bson_t* doc = bson_new();
@@ -15,7 +15,7 @@ void NumbersHandler(mongoc_collection_t* Collection, const httplib::Request& req
 	BSON_APPEND_UTF8(doc, "hello", std::string(numbers).c_str());
 
 	bson_error_t error;
-	if (!mongoc_collection_insert(Collection, MONGOC_INSERT_NONE, doc, NULL, &error)) {
+	if (!mongoc_collection_insert(collection, MONGOC_INSERT_NONE, doc, NULL, &error)) {
 		printf("%s\n", error.message);
 	}
 

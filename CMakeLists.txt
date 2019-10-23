@@ -7,18 +7,21 @@ include_directories(
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libbson/src
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libmongoc/src
+  ${PROJECT_SOURCE_DIR}/contrib/httplib
+  ${PROJECT_SOURCE_DIR}/contrib/json
 )
 
-add_subdirectory(
-  contrib/mongo-c-driver
-)
+add_subdirectory(contrib)
+add_subdirectory(library)
 
 add_executable(server
-  application.cpp
   main.cpp
+  application.cpp
 )
 
 target_link_libraries(server
   bson_static
   mongoc_static
+  httplib
+  json
 )

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "contrib/json/json.hpp"
+#include "json.h"
 #include "handlers/hi.h"
 #include "handlers/numbers.h"
 
@@ -21,9 +21,11 @@ TApplication::TApplication() {
 }
 
 TApplication::~TApplication() {
+	std::cout << "Stopping server..." << std::endl;
     Server.stop();
     mongoc_collection_destroy(Collection);
     mongoc_client_destroy(Client);
     mongoc_cleanup();
+	std::cout << "Server stopped" << std::endl;
 }
 
