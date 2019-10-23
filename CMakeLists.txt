@@ -12,6 +12,7 @@ include_directories(
 )
 
 add_subdirectory(contrib)
+add_subdirectory(library)
 
 add_executable(server
   main.cpp
@@ -21,6 +22,7 @@ add_executable(server
 target_link_libraries(server
   bson_static
   mongoc_static
+  mongo
   httplib
   json
 )

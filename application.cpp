@@ -5,9 +5,10 @@
 #include "json.h"
 #include "handlers/hi.h"
 #include "handlers/numbers.h"
+#include "library/mongo/wrappers.h"
 
 TApplication::TApplication() {
-    nlohmann::json a;
+    nlohmann::json b;
     std::cout << "Starting server..." << std::endl;
     mongoc_init();
     Client = mongoc_client_new("mongodb://localhost:1235");
@@ -21,11 +22,10 @@ TApplication::TApplication() {
 }
 
 TApplication::~TApplication() {
-	std::cout << "Stopping server..." << std::endl;
+    std::cout << "Stopping server..." << std::endl;
     Server.stop();
     mongoc_collection_destroy(Collection);
     mongoc_client_destroy(Client);
     mongoc_cleanup();
-	std::cout << "Server stopped" << std::endl;
+    std::cout << "Server stopped" << std::endl;
 }
-
