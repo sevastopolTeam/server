@@ -6,6 +6,7 @@
 #include "httplib.h"
 #include "mongoc/mongoc.h"
 
+// HiHandler
 void HiHandler(mongoc_collection_t* collection, const httplib::Request& req, httplib::Response& res) {
 	const bson_t* doc;
 	bson_t* query = bson_new();
