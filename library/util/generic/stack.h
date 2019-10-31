@@ -2,8 +2,11 @@
 
 #include <stack>
 
-template <class T>
-using TStack = std::stack<T>;
+template<
+    class T,
+    class Container = std::deque<T>
+>
+using TStack = std::stack<T, Container>;
 
 namespace NStack {
 

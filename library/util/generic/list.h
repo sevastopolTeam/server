@@ -2,8 +2,8 @@
 
 #include <list>
 
-template <class T>
-using TList = std::list<T>;
+template <class T, class A = std::allocator<T>>
+using TList = std::list<T, A>;
 
 namespace NList {
 
