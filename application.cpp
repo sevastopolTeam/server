@@ -8,7 +8,7 @@
 #include "library/mongo/wrappers.h"
 
 TApplication::TApplication() {
-    nlohmann::json b;
+    NJson::TJsonValue b;
     std::cout << "Starting server..." << std::endl;
     mongoc_init();
     Client = mongoc_client_new("mongodb://localhost:1235");

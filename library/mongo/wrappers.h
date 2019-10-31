@@ -6,13 +6,12 @@
 #include <vector>
 #include <functional>
 
+#include "util/generic/string.h"
 #include "mongoc/mongoc.h"
 #include "json.h"
 
 
 namespace NMongo {
-    using TString = std::string;
-    using TJson = nlohmann::json;
 
     class TMongoException : public std::exception {
     private:
@@ -72,9 +71,9 @@ namespace NMongo {
         TBsonValue();
         TBsonValue(bson_t* value, bool shouldCopy = false);
         TBsonValue(const bson_t* value);
-        TBsonValue(const TJson& json);
+        TBsonValue(const NJson::TJsonValue& json);
         TBsonValue(const TBsonValue& other);
-        explicit TBsonValue(const TString& json); // an optimization; consider using NJson::TJsonValue as a safer alternative
+        explicit TBsonValue(const TString& json); // an optimization; consider using NJson::NJson::TJsonValueValue as a safer alternative
 
         ~TBsonValue();
 
@@ -83,7 +82,7 @@ namespace NMongo {
         void Destroy();
         bson_t* Release();
 
-        TJson ToJson() const;
+        NJson::TJsonValue ToJson() const;
 
         operator bson_t*() {
             return Value;

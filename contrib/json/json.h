@@ -81,7 +81,7 @@ SOFTWARE.
 
 #include <cstddef> // size_t
 
-namespace nlohmann
+namespace NJson
 {
 namespace detail
 {
@@ -103,13 +103,13 @@ struct position_t
 };
 
 } // namespace detail
-} // namespace nlohmann
+} // namespace NJson
 
-// #include <nlohmann/detail/macro_scope.hpp>
+// #include <NJson/detail/macro_scope.hpp>
 
 
 #include <utility> // pair
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
+// #include <NJson/thirdparty/hedley/hedley.hpp>
 /* Hedley - https://nemequ.github.io/hedley
  * Created by Evan Nemerson <evan@nemerson.com>
  *
@@ -1735,7 +1735,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     AllocatorType, JSONSerializer>
 
 
-namespace nlohmann
+namespace NJson
 {
 namespace detail
 {
@@ -2081,7 +2081,7 @@ class other_error : public exception
     other_error(int id_, const char* what_arg) : exception(id_, what_arg) {}
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace NJson
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -2092,7 +2092,7 @@ class other_error : public exception
 #include <cstddef> // size_t
 #include <type_traits> // conditional, enable_if, false_type, integral_constant, is_constructible, is_integral, is_same, remove_cv, remove_reference, true_type
 
-namespace nlohmann
+namespace NJson
 {
 namespace detail
 {
@@ -2148,7 +2148,7 @@ struct static_const
 template<typename T>
 constexpr T static_const<T>::value;
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace NJson
 
 // #include <nlohmann/detail/meta/type_traits.hpp>
 
@@ -2166,7 +2166,7 @@ constexpr T static_const<T>::value;
 // #include <nlohmann/detail/meta/void_t.hpp>
 
 
-namespace nlohmann
+namespace NJson
 {
 namespace detail
 {
@@ -2176,12 +2176,12 @@ template <typename ...Ts> struct make_void
 };
 template <typename ...Ts> using void_t = typename make_void<Ts...>::type;
 } // namespace detail
-}  // namespace nlohmann
+}  // namespace NJson
 
 // #include <nlohmann/detail/meta/cpp_future.hpp>
 
 
-namespace nlohmann
+namespace NJson
 {
 namespace detail
 {
@@ -2224,7 +2224,7 @@ struct iterator_traits<T*, enable_if_t<std::is_object<T>::value>>
     using reference = T&;
 };
 } // namespace detail
-} // namespace nlohmann
+} // namespace NJson
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -2239,7 +2239,7 @@ struct iterator_traits<T*, enable_if_t<std::is_object<T>::value>>
 
 
 // http://en.cppreference.com/w/cpp/experimental/is_detected
-namespace nlohmann
+namespace NJson
 {
 namespace detail
 {
@@ -2289,7 +2289,7 @@ template <class To, template <class...> class Op, class... Args>
 using is_detected_convertible =
     std::is_convertible<detected_t<Op, Args...>, To>;
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/json_fwd.hpp>
 #ifndef INCLUDE_NLOHMANN_JSON_FWD_HPP_
@@ -2306,7 +2306,7 @@ using is_detected_convertible =
 @see https://github.com/nlohmann
 @since version 1.0.0
 */
-namespace nlohmann
+namespace  NJson
 {
 /*!
 @brief default JSONSerializer template argument
@@ -2352,13 +2352,13 @@ uses the standard template types.
 
 @since version 1.0.0
 */
-using json = basic_json<>;
-}  // namespace nlohmann
+using TJsonValue = basic_json<>;
+}  // namespace  NJson
 
 #endif  // INCLUDE_NLOHMANN_JSON_FWD_HPP_
 
 
-namespace nlohmann
+namespace  NJson
 {
 /*!
 @brief detail namespace with internal helper functions
@@ -2705,7 +2705,7 @@ template <typename BasicJsonType, typename CompatibleType>
 struct is_compatible_type
     : is_compatible_type_impl<BasicJsonType, CompatibleType> {};
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/value_t.hpp>
 
@@ -2716,7 +2716,7 @@ struct is_compatible_type
 #include <cstdint> // uint8_t
 #include <string> // string
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -2784,10 +2784,10 @@ inline bool operator<(const value_t lhs, const value_t rhs) noexcept
     return l_index < order.size() and r_index < order.size() and order[l_index] < order[r_index];
 }
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -3154,7 +3154,7 @@ namespace
 {
 constexpr const auto& from_json = detail::static_const<detail::from_json_fn>::value;
 } // namespace
-} // namespace nlohmann
+} // namespace  NJson
 
 // #include <nlohmann/detail/conversions/to_json.hpp>
 
@@ -3182,7 +3182,7 @@ constexpr const auto& from_json = detail::static_const<detail::from_json_fn>::va
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -3300,7 +3300,7 @@ template<typename IteratorType> class iteration_proxy
 // For further reference see https://blog.tartanllama.xyz/structured-bindings/
 // And see https://github.com/nlohmann/json/pull/1391
 template <std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
-auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
+auto get(const NJson::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
     return i.key();
 }
@@ -3308,12 +3308,12 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 // For further reference see https://blog.tartanllama.xyz/structured-bindings/
 // And see https://github.com/nlohmann/json/pull/1391
 template <std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
-auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
+auto get(const NJson::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
     return i.value();
 }
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // The Addition to the STD Namespace is required to add
 // Structured Bindings Support to the iteration_proxy_value class
@@ -3327,16 +3327,16 @@ namespace std
     #pragma clang diagnostic ignored "-Wmismatched-tags"
 #endif
 template <typename IteratorType>
-class tuple_size<::nlohmann::detail::iteration_proxy_value<IteratorType>>
+class tuple_size<::NJson::detail::iteration_proxy_value<IteratorType>>
             : public std::integral_constant<std::size_t, 2> {};
 
 template <std::size_t N, typename IteratorType>
-class tuple_element<N, ::nlohmann::detail::iteration_proxy_value<IteratorType >>
+class tuple_element<N, ::NJson::detail::iteration_proxy_value<IteratorType >>
 {
   public:
     using type = decltype(
                      get<N>(std::declval <
-                            ::nlohmann::detail::iteration_proxy_value<IteratorType >> ()));
+                            ::NJson::detail::iteration_proxy_value<IteratorType >> ()));
 };
 #if defined(__clang__)
     #pragma clang diagnostic pop
@@ -3350,7 +3350,7 @@ class tuple_element<N, ::nlohmann::detail::iteration_proxy_value<IteratorType >>
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -3676,10 +3676,10 @@ namespace
 {
 constexpr const auto& to_json = detail::static_const<detail::to_json_fn>::value;
 } // namespace
-} // namespace nlohmann
+} // namespace  NJson
 
 
-namespace nlohmann
+namespace  NJson
 {
 
 template<typename, typename>
@@ -3696,10 +3696,10 @@ struct adl_serializer
     */
     template<typename BasicJsonType, typename ValueType>
     static auto from_json(BasicJsonType&& j, ValueType& val) noexcept(
-        noexcept(::nlohmann::from_json(std::forward<BasicJsonType>(j), val)))
-    -> decltype(::nlohmann::from_json(std::forward<BasicJsonType>(j), val), void())
+        noexcept(::NJson::from_json(std::forward<BasicJsonType>(j), val)))
+    -> decltype(::NJson::from_json(std::forward<BasicJsonType>(j), val), void())
     {
-        ::nlohmann::from_json(std::forward<BasicJsonType>(j), val);
+        ::NJson::from_json(std::forward<BasicJsonType>(j), val);
     }
 
     /*!
@@ -3713,14 +3713,14 @@ struct adl_serializer
     */
     template <typename BasicJsonType, typename ValueType>
     static auto to_json(BasicJsonType& j, ValueType&& val) noexcept(
-        noexcept(::nlohmann::to_json(j, std::forward<ValueType>(val))))
-    -> decltype(::nlohmann::to_json(j, std::forward<ValueType>(val)), void())
+        noexcept(::NJson::to_json(j, std::forward<ValueType>(val))))
+    -> decltype(::NJson::to_json(j, std::forward<ValueType>(val)), void())
     {
-        ::nlohmann::to_json(j, std::forward<ValueType>(val));
+        ::NJson::to_json(j, std::forward<ValueType>(val));
     }
 };
 
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/conversions/from_json.hpp>
 
@@ -3767,7 +3767,7 @@ struct adl_serializer
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -4190,7 +4190,7 @@ class input_adapter
     input_adapter_t ia = nullptr;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/input/json_sax.hpp>
 
@@ -4206,13 +4206,13 @@ class input_adapter
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 
 /*!
 @brief SAX interface
 
-This class describes the SAX interface used by @ref nlohmann::json::sax_parse.
+This class describes the SAX interface used by @ref NJson::TJsonValue::sax_parse.
 Each function is called in different situations while the input is parsed. The
 boolean return value informs the parser whether to continue processing the
 input.
@@ -4895,7 +4895,7 @@ class json_sax_acceptor
 };
 }  // namespace detail
 
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -4911,7 +4911,7 @@ class json_sax_acceptor
 // #include <nlohmann/detail/meta/type_traits.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -5043,12 +5043,12 @@ struct is_sax_static_asserts
         "std::string&, const exception&)");
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -7008,7 +7008,7 @@ class binary_reader
     json_sax_t* sax = nullptr;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/input/input_adapters.hpp>
 
@@ -7032,7 +7032,7 @@ class binary_reader
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -8527,7 +8527,7 @@ scan_number_done:
     const char decimal_point_char = '.';
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/input/parser.hpp>
 
@@ -8555,7 +8555,7 @@ scan_number_done:
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -9034,7 +9034,7 @@ class parser
     const bool allow_exceptions = true;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/iterators/internal_iterator.hpp>
 
@@ -9045,7 +9045,7 @@ class parser
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -9159,10 +9159,10 @@ class primitive_iterator_t
     }
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -9182,7 +9182,7 @@ template<typename BasicJsonType> struct internal_iterator
     primitive_iterator_t primitive_iterator {};
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/iterators/iter_impl.hpp>
 
@@ -9206,7 +9206,7 @@ template<typename BasicJsonType> struct internal_iterator
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -9829,7 +9829,7 @@ class iter_impl
     internal_iterator<typename std::remove_const<BasicJsonType>::type> m_it {};
 };
 } // namespace detail
-} // namespace nlohmann
+} // namespace  NJson
 
 // #include <nlohmann/detail/iterators/iteration_proxy.hpp>
 
@@ -9840,7 +9840,7 @@ class iter_impl
 #include <iterator> // reverse_iterator
 #include <utility> // declval
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -9952,7 +9952,7 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
     }
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/iterators/primitive_iterator.hpp>
 
@@ -9974,7 +9974,7 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 template<typename BasicJsonType>
 class json_pointer
@@ -10970,7 +10970,7 @@ class json_pointer
     /// the reference tokens
     std::vector<std::string> reference_tokens;
 };
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/json_ref.hpp>
 
@@ -10981,7 +10981,7 @@ class json_pointer
 // #include <nlohmann/detail/meta/type_traits.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -11042,7 +11042,7 @@ class json_ref
     const bool is_rvalue;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -11078,7 +11078,7 @@ class json_ref
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -11188,10 +11188,10 @@ class output_adapter
     output_adapter_t<CharType> oa = nullptr;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -12513,7 +12513,7 @@ class binary_writer
     output_adapter_t<CharType> oa = nullptr;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/output/output_adapters.hpp>
 
@@ -12548,7 +12548,7 @@ class binary_writer
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -13641,7 +13641,7 @@ char* to_chars(char* first, const char* last, FloatType value)
 }
 
 } // namespace detail
-} // namespace nlohmann
+} // namespace  NJson
 
 // #include <nlohmann/detail/exceptions.hpp>
 
@@ -13656,7 +13656,7 @@ char* to_chars(char* first, const char* last, FloatType value)
 // #include <nlohmann/detail/value_t.hpp>
 
 
-namespace nlohmann
+namespace  NJson
 {
 namespace detail
 {
@@ -14338,7 +14338,7 @@ class serializer
     void dump_float(number_float_t x, std::true_type /*is_ieee_single_or_double*/)
     {
         char* begin = number_buffer.data();
-        char* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
+        char* end = ::NJson::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
     }
@@ -14471,7 +14471,7 @@ class serializer
     const error_handler_t error_handler;
 };
 }  // namespace detail
-}  // namespace nlohmann
+}  // namespace  NJson
 
 // #include <nlohmann/detail/value_t.hpp>
 
@@ -14483,7 +14483,7 @@ class serializer
 @see https://github.com/nlohmann
 @since version 1.0.0
 */
-namespace nlohmann
+namespace  NJson
 {
 
 /*!
@@ -14572,48 +14572,48 @@ class basic_json
 {
   private:
     template<detail::value_t> friend struct detail::external_constructor;
-    friend ::nlohmann::json_pointer<basic_json>;
-    friend ::nlohmann::detail::parser<basic_json>;
-    friend ::nlohmann::detail::serializer<basic_json>;
+    friend ::NJson::json_pointer<basic_json>;
+    friend ::NJson::detail::parser<basic_json>;
+    friend ::NJson::detail::serializer<basic_json>;
     template<typename BasicJsonType>
-    friend class ::nlohmann::detail::iter_impl;
+    friend class ::NJson::detail::iter_impl;
     template<typename BasicJsonType, typename CharType>
-    friend class ::nlohmann::detail::binary_writer;
+    friend class ::NJson::detail::binary_writer;
     template<typename BasicJsonType, typename SAX>
-    friend class ::nlohmann::detail::binary_reader;
+    friend class ::NJson::detail::binary_reader;
     template<typename BasicJsonType>
-    friend class ::nlohmann::detail::json_sax_dom_parser;
+    friend class ::NJson::detail::json_sax_dom_parser;
     template<typename BasicJsonType>
-    friend class ::nlohmann::detail::json_sax_dom_callback_parser;
+    friend class ::NJson::detail::json_sax_dom_callback_parser;
 
     /// workaround type for MSVC
     using basic_json_t = NLOHMANN_BASIC_JSON_TPL;
 
     // convenience aliases for types residing in namespace detail;
-    using lexer = ::nlohmann::detail::lexer<basic_json>;
-    using parser = ::nlohmann::detail::parser<basic_json>;
+    using lexer = ::NJson::detail::lexer<basic_json>;
+    using parser = ::NJson::detail::parser<basic_json>;
 
-    using primitive_iterator_t = ::nlohmann::detail::primitive_iterator_t;
+    using primitive_iterator_t = ::NJson::detail::primitive_iterator_t;
     template<typename BasicJsonType>
-    using internal_iterator = ::nlohmann::detail::internal_iterator<BasicJsonType>;
+    using internal_iterator = ::NJson::detail::internal_iterator<BasicJsonType>;
     template<typename BasicJsonType>
-    using iter_impl = ::nlohmann::detail::iter_impl<BasicJsonType>;
+    using iter_impl = ::NJson::detail::iter_impl<BasicJsonType>;
     template<typename Iterator>
-    using iteration_proxy = ::nlohmann::detail::iteration_proxy<Iterator>;
-    template<typename Base> using json_reverse_iterator = ::nlohmann::detail::json_reverse_iterator<Base>;
+    using iteration_proxy = ::NJson::detail::iteration_proxy<Iterator>;
+    template<typename Base> using json_reverse_iterator = ::NJson::detail::json_reverse_iterator<Base>;
 
     template<typename CharType>
-    using output_adapter_t = ::nlohmann::detail::output_adapter_t<CharType>;
+    using output_adapter_t = ::NJson::detail::output_adapter_t<CharType>;
 
-    using binary_reader = ::nlohmann::detail::binary_reader<basic_json>;
-    template<typename CharType> using binary_writer = ::nlohmann::detail::binary_writer<basic_json, CharType>;
+    using binary_reader = ::NJson::detail::binary_reader<basic_json>;
+    template<typename CharType> using binary_writer = ::NJson::detail::binary_writer<basic_json, CharType>;
 
-    using serializer = ::nlohmann::detail::serializer<basic_json>;
+    using serializer = ::NJson::detail::serializer<basic_json>;
 
   public:
     using value_t = detail::value_t;
-    /// JSON Pointer, see @ref nlohmann::json_pointer
-    using json_pointer = ::nlohmann::json_pointer<basic_json>;
+    /// JSON Pointer, see @ref NJson::json_pointer
+    using json_pointer = ::NJson::json_pointer<basic_json>;
     template<typename T, typename SFINAE>
     using json_serializer = JSONSerializer<T, SFINAE>;
     /// how to treat decoding errors
@@ -14622,7 +14622,7 @@ class basic_json
     using initializer_list_t = std::initializer_list<detail::json_ref<basic_json>>;
 
     using input_format_t = detail::input_format_t;
-    /// SAX interface type, see @ref nlohmann::json_sax
+    /// SAX interface type, see @ref NJson::TJsonValue_sax
     using json_sax_t = json_sax<basic_json>;
 
     ////////////////
@@ -22437,7 +22437,7 @@ std::string to_string(const NLOHMANN_BASIC_JSON_TPL& j)
 {
     return j.dump();
 }
-} // namespace nlohmann
+} // namespace  NJson
 
 ///////////////////////
 // nonmember support //
@@ -22449,17 +22449,17 @@ namespace std
 
 /// hash value for JSON objects
 template<>
-struct hash<nlohmann::json>
+struct hash<NJson::TJsonValue>
 {
     /*!
     @brief return a hash value for a JSON object
 
     @since version 1.0.0
     */
-    std::size_t operator()(const nlohmann::json& j) const
+    std::size_t operator()(const NJson::TJsonValue& j) const
     {
         // a naive hashing via the string representation
-        const auto& h = hash<nlohmann::json::string_t>();
+        const auto& h = hash<NJson::TJsonValue::string_t>();
         return h(j.dump());
     }
 };
@@ -22468,16 +22468,16 @@ struct hash<nlohmann::json>
 /// @note: do not remove the space after '<',
 ///        see https://github.com/nlohmann/json/pull/679
 template<>
-struct less< ::nlohmann::detail::value_t>
+struct less< ::NJson::detail::value_t>
 {
     /*!
     @brief compare two value_t enum values
     @since version 3.0.0
     */
-    bool operator()(nlohmann::detail::value_t lhs,
-                    nlohmann::detail::value_t rhs) const noexcept
+    bool operator()(NJson::detail::value_t lhs,
+                    NJson::detail::value_t rhs) const noexcept
     {
-        return nlohmann::detail::operator<(lhs, rhs);
+        return NJson::detail::operator<(lhs, rhs);
     }
 };
 
@@ -22487,9 +22487,9 @@ struct less< ::nlohmann::detail::value_t>
 @since version 1.0.0
 */
 template<>
-inline void swap<nlohmann::json>(nlohmann::json& j1, nlohmann::json& j2) noexcept(
-    is_nothrow_move_constructible<nlohmann::json>::value and
-    is_nothrow_move_assignable<nlohmann::json>::value
+inline void swap<NJson::TJsonValue>(NJson::TJsonValue& j1, NJson::TJsonValue& j2) noexcept(
+    is_nothrow_move_constructible<NJson::TJsonValue>::value and
+    is_nothrow_move_assignable<NJson::TJsonValue>::value
 )
 {
     j1.swap(j2);
@@ -22511,9 +22511,9 @@ if no parse error occurred.
 @since version 1.0.0
 */
 JSON_HEDLEY_NON_NULL(1)
-inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+inline NJson::TJsonValue operator "" _json(const char* s, std::size_t n)
 {
-    return nlohmann::json::parse(s, s + n);
+    return NJson::TJsonValue::parse(s, s + n);
 }
 
 /*!
@@ -22530,9 +22530,9 @@ object if no parse error occurred.
 @since version 2.0.0
 */
 JSON_HEDLEY_NON_NULL(1)
-inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+inline NJson::TJsonValue::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
 {
-    return nlohmann::json::json_pointer(std::string(s, n));
+    return NJson::TJsonValue::json_pointer(std::string(s, n));
 }
 
 // #include <nlohmann/detail/macro_unscope.hpp>

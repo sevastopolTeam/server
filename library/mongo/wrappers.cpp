@@ -115,7 +115,7 @@ namespace NMongo {
     }
 
     TBsonValue::TBsonValue()
-        : TBsonValue(TJson::array())
+        : TBsonValue(NJson::TJsonValue::array())
     {
     }
 
@@ -129,7 +129,7 @@ namespace NMongo {
     {
     }
 
-    TBsonValue::TBsonValue(const TJson& json)
+    TBsonValue::TBsonValue(const NJson::TJsonValue& json)
         : Value(bson_new_from_json(reinterpret_cast<const uint8_t*>(json.dump().c_str()), -1, nullptr))
     {
     }
@@ -167,10 +167,10 @@ namespace NMongo {
         return result;
     }
 
-    TJson TBsonValue::ToJson() const {
+    NJson::TJsonValue TBsonValue::ToJson() const {
         
         auto bsonStr = bson_as_json(Value, nullptr);
-        TJson result = TJson::parse(bsonStr);
+        NJson::TJsonValue result = NJson::TJsonValue::parse(bsonStr);
         bson_free(bsonStr);
         return result;
     }
@@ -384,7 +384,7 @@ namespace NMongo {
     }
     */
     bool THelper::CheckConnection(const TString& db, TError* error) {
-        TJson ping;
+        NJson::TJsonValue ping;
         ping["ping"] = 1;
         TBsonValue command(ping);
 
