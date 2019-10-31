@@ -13,6 +13,7 @@ include_directories(
 
 add_subdirectory(contrib)
 add_subdirectory(library)
+add_subdirectory(util)
 
 add_executable(server
   main.cpp
