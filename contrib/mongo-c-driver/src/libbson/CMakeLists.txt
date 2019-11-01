@@ -274,7 +274,14 @@ if (ENABLE_STATIC MATCHES "ON|AUTO")
 endif ()
 
 function (add_example bin src)
+   set (BSON_EXAMPLE_SOURCES ${PROJECT_SOURCE_DIR}/${src})	
+   add_executable (${bin} ${BSON_EXAMPLE_SOURCES})	
 
+
+   # Link against the shared lib like normal apps	
+   target_link_libraries (${bin} bson_shared)	
+
+   set (EXAMPLES ${EXAMPLES} ${bin})
 endfunction ()
 
 if (ENABLE_EXAMPLES)

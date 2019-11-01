@@ -1,7 +1,8 @@
 #pragma once
 
+#include "data_source.h"
 #include "contrib/httplib/httplib.h"
-#include "contrib/mongo-c-driver/src/libmongoc/src/mongoc/mongoc.h"
+#include "library/mongo/wrappers.h"
 
 class TApplication {
 public:
@@ -10,7 +11,6 @@ public:
     ~TApplication();
 private:
     httplib::Server Server;
-    mongoc_client_t* Client;
-    mongoc_collection_t* Collection;
-};
+    std::unique_ptr<TDataSource> DataSource;
+ };
 

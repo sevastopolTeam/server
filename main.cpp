@@ -3,6 +3,7 @@
 
 #include "application.h"
 
+
 int main(int argc, char* argv[]) {
     try {
         if (argc < 2) {

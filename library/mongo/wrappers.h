@@ -1,25 +1,23 @@
 #pragma once
 
 #include <exception>
-#include <stdio.h>
-#include <vector>
 #include <functional>
 
 #include "contrib/json/json.h"
+#include "contrib/mongo-c-driver/src/libbson/src/bson/bson.h"
 #include "contrib/mongo-c-driver/src/libmongoc/src/mongoc/mongoc.h"
 #include "util/generic/noncopyable.h"
 #include "util/generic/string.h"
 #include "util/generic/vector.h"
 
 namespace NMongo {
-
     class TMongoException : public std::exception {
     private:
         TString Message;
 
     public:
         TMongoException(bson_error_t error) {
-            Message = NString::ToString(error.code) + TString(error.message);
+            Message = std::to_string(static_cast<int>(error.code)) + TString(error.message);
         }
 
         const char* what() const noexcept override {
@@ -115,7 +113,7 @@ namespace NMongo {
         T* Value;
     };
 
-    class TReadPreferences : public TNonCopyable {
+    class TReadPreferences: public TNonCopyable {
     public:
         TReadPreferences();
         TReadPreferences(mongoc_read_mode_t mode);
@@ -226,7 +224,7 @@ namespace NMongo {
             const TBsonValue& sort = TBsonValue(), bool upsert = false,
             bool retnew = false, bool remove = false,
             const TBsonValue& fields = TBsonValue(), TError* error = nullptr);
-        int Count(const TString& db, const TString& collection,
+        long long Count(const TString& db, const TString& collection,
             const TBsonValue& selector = TBsonValue(),
             size_t skip = 0, size_t limit = 0, TError* error = nullptr);
         void Aggregate(const TString& db, const TString& collection,
