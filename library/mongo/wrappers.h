@@ -1,15 +1,15 @@
 #pragma once
 
-#include <string>
 #include <exception>
 #include <stdio.h>
 #include <vector>
 #include <functional>
 
+#include "contrib/json/json.h"
+#include "contrib/mongo-c-driver/src/libmongoc/src/mongoc/mongoc.h"
+#include "util/generic/noncopyable.h"
 #include "util/generic/string.h"
-#include "mongoc/mongoc.h"
-#include "json.h"
-
+#include "util/generic/vector.h"
 
 namespace NMongo {
 
@@ -19,13 +19,11 @@ namespace NMongo {
 
     public:
         TMongoException(bson_error_t error) {
-            char str[100];
-            sprintf(str, "%u %s", error.code, error.message);
-            Message = TString(str);
+            Message = NString::ToString(error.code) + TString(error.message);
         }
 
         const char* what() const noexcept override {
-            return Message.data();
+            return Message.c_str();
         }
     };
 
@@ -73,7 +71,7 @@ namespace NMongo {
         TBsonValue(const bson_t* value);
         TBsonValue(const NJson::TJsonValue& json);
         TBsonValue(const TBsonValue& other);
-        explicit TBsonValue(const TString& json); // an optimization; consider using NJson::NJson::TJsonValueValue as a safer alternative
+        explicit TBsonValue(const TString& json); // an optimization; consider using NJson::TJsonValue as a safer alternative
 
         ~TBsonValue();
 
@@ -96,7 +94,7 @@ namespace NMongo {
     };
 
     template <typename T>
-    class TMongoStructureHolder {
+    class TMongoStructureHolder: public TNonCopyable {
     public:
         inline TMongoStructureHolder(T* value)
             : Value(value)
@@ -117,7 +115,7 @@ namespace NMongo {
         T* Value;
     };
 
-    class TReadPreferences {
+    class TReadPreferences : public TNonCopyable {
     public:
         TReadPreferences();
         TReadPreferences(mongoc_read_mode_t mode);
@@ -173,8 +171,8 @@ namespace NMongo {
         TCursor(mongoc_cursor_t* value);
         ~TCursor() noexcept(false) override;
 
-        TBsonValue Begin();
-        TBsonValue Next();
+        std::pair<TBsonValue, bool> Begin();
+        std::pair<TBsonValue, bool> Next();
     };
 
     class TBulkOperation : public TMongoStructureHolder<mongoc_bulk_operation_t> {
@@ -199,7 +197,7 @@ namespace NMongo {
             const TBsonValue& selector, const TBsonValue& updater, TError* error = nullptr);
 
         bool BulkInsert(const TString& db, const TString& collectionName,
-            const std::vector<TBsonValue>& values, bool ordered, TError* error = nullptr);
+            const TVector<TBsonValue>& values, bool ordered, TError* error = nullptr);
 
         struct TUpdateParams {
             TBsonValue Selector;
@@ -207,22 +205,22 @@ namespace NMongo {
             bool Upsert;
         };
         bool BulkUpdate(const TString& db, const TString& collection,
-            const std::vector<TUpdateParams>& ops, bool ordered, TError* error = nullptr);
+            const TVector<TUpdateParams>& ops, bool ordered, TError* error = nullptr);
 
         bool Remove(const TString& db, const TString& collection,
             const TBsonValue& selector, TError* error = nullptr);
 
-        /*void Find(const TString& db, const TString& collection,
-                const std::function<void(const TBsonValue&)>& callback,
-                const TBsonValue& selector = TBsonValue(),
-                size_t skip = 0, size_t limit = 0,
-                const TBsonValue& fields = TBsonValue(),
-                const TReadPreferences& readPrefs = TReadPreferences());
-        std::vector<TBsonValue> Find(const TString& db, const TString& collection,
+        void Find(const TString& db, const TString& collection,
+            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
             const TBsonValue& selector = TBsonValue(),
             size_t skip = 0, size_t limit = 0,
             const TBsonValue& fields = TBsonValue(),
-            const TReadPreferences& readPrefs = TReadPreferences());*/
+            const TReadPreferences& readPrefs = TReadPreferences());
+        TVector<TBsonValue> Find(const TString& db, const TString& collection,
+            const TBsonValue& selector = TBsonValue(),
+            size_t skip = 0, size_t limit = 0,
+            const TBsonValue& fields = TBsonValue(),
+            const TReadPreferences& readPrefs = TReadPreferences());
         TBsonValue FindAndModify(const TString& db, const TString& collection,
             const TBsonValue& query, const TBsonValue& update,
             const TBsonValue& sort = TBsonValue(), bool upsert = false,
@@ -231,13 +229,13 @@ namespace NMongo {
         int Count(const TString& db, const TString& collection,
             const TBsonValue& selector = TBsonValue(),
             size_t skip = 0, size_t limit = 0, TError* error = nullptr);
-        /*void Aggregate(const TString& db, const TString& collection,
-            const std::function<void(const TBsonValue&)>& callback,
+        void Aggregate(const TString& db, const TString& collection,
+            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
             const TBsonValue& pipeline,
             const mongoc_query_flags_t flags = MONGOC_QUERY_NONE);
-        std::vector<TBsonValue> Aggregate(const TString& db, const TString& collection,
+        TVector<TBsonValue> Aggregate(const TString& db, const TString& collection,
             const TBsonValue& pipeline,
-            const mongoc_query_flags_t flags = MONGOC_QUERY_NONE);*/
+            const mongoc_query_flags_t flags = MONGOC_QUERY_NONE);
 
         // return true then the connection is established
         bool CheckConnection(const TString& db, TError* error = nullptr);

@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "httplib.h"
-#include "mongoc/mongoc.h"
+#include "contrib/httplib/httplib.h"
+#include "contrib/mongo-c-driver/src/libmongoc/src/mongoc/mongoc.h"
 
 void NumbersHandler(mongoc_collection_t* collection, const httplib::Request& req, httplib::Response& res) {
 	auto numbers = req.matches[1];

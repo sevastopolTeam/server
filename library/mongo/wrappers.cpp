@@ -90,18 +90,17 @@ namespace NMongo {
         mongoc_cursor_destroy(*this);
     }
 
-    TBsonValue TCursor::Begin() {
+    std::pair<TBsonValue, bool> TCursor::Begin() {
         return Next();
     }
 
-    TBsonValue TCursor::Next() {
+    std::pair<TBsonValue, bool> TCursor::Next() {
         const bson_t* doc;
         if (mongoc_cursor_next(*this, &doc)) {
-            return TBsonValue(doc);
+            return std::make_pair(TBsonValue(doc), true);
         }
         else {
-            // пустой бы указатель возвращать нужно бы написать свой TMaybe
-            return TBsonValue();
+            return std::make_pair(TBsonValue(), false);
         }
     }
 
@@ -248,7 +247,7 @@ namespace NMongo {
     }
 
     bool THelper::BulkInsert(const TString& db, const TString& collectionName,
-            const std::vector<TBsonValue>& values, bool ordered, TError* error) {
+            const TVector<TBsonValue>& values, bool ordered, TError* error) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         TBulkOperation bulk(mongoc_collection_create_bulk_operation(collection, ordered, nullptr));
@@ -265,7 +264,7 @@ namespace NMongo {
     }
 
     bool THelper::BulkUpdate(const TString& db, const TString& collectionName,
-        const std::vector<TUpdateParams>& ops, bool ordered, TError* error) {
+            const TVector<TUpdateParams>& ops, bool ordered, TError* error) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         TBulkOperation bulk(mongoc_collection_create_bulk_operation(collection, ordered, nullptr));
@@ -282,7 +281,7 @@ namespace NMongo {
     }
 
     bool THelper::Remove(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, TError* error) {
+            const TBsonValue& selector, TError* error) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -293,37 +292,37 @@ namespace NMongo {
         }
         return result;
     }
-/*
+
     void THelper::Find(const TString& db, const TString& collectionName,
-        const std::function<void(const TBsonValue&)>& callback,
-        const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
-        const TReadPreferences& readPrefs) {
+            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
+            const TReadPreferences& readPrefs) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
 
         TCursor cursor(mongoc_collection_find(collection, MONGOC_QUERY_NONE,
             skip, limit, 0, selector, fields, readPrefs));
-        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
-            callback(*it);
+        for (auto it = cursor.Begin(); it.second; it = cursor.Next()) {
+            callback(it);
         }
     }
 
-    std::vector<TBsonValue> THelper::Find(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
-        const TReadPreferences& readPrefs) {
-        std::vector<TBsonValue> result;
+    TVector<TBsonValue> THelper::Find(const TString& db, const TString& collectionName,
+            const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
+            const TReadPreferences& readPrefs) {
+        TVector<TBsonValue> result;
         Find(db, collectionName,
-            [&result](const TBsonValue& value) {
-            result.push_back(value);
-        },
+            [&result](const std::pair<TBsonValue, bool>& value) {
+                result.push_back(value.first);
+            },
             selector, skip, limit, fields, readPrefs);
         return result;
     }
-    */
+
     TBsonValue THelper::FindAndModify(const TString& db, const TString& collectionName,
-        const TBsonValue& query, const TBsonValue& update,
-        const TBsonValue& sort, bool upsert, bool retnew,
-        bool remove, const TBsonValue& fields, TError* error) {
+            const TBsonValue& query, const TBsonValue& update,
+            const TBsonValue& sort, bool upsert, bool retnew,
+            bool remove, const TBsonValue& fields, TError* error) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
 
@@ -356,33 +355,33 @@ namespace NMongo {
         }
         return result;
     }
-    /*
+
     void THelper::Aggregate(const TString& db, const TString& collectionName,
-        const std::function<void(const TBsonValue&)>& callback,
-        const TBsonValue& pipeline,
-        const mongoc_query_flags_t flags) {
+            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const TBsonValue& pipeline,
+            const mongoc_query_flags_t flags) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
 
         TCursor cursor(mongoc_collection_aggregate(collection, flags,
             pipeline, nullptr, nullptr));
-        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
-            callback(*it);
+        for (auto it = cursor.Begin(); it.second; it = cursor.Next()) {
+            callback(it);
         }
     }
 
-    std::vector<TBsonValue> THelper::Aggregate(const TString& db,
-        const TString& collectionName, const TBsonValue& pipeline,
-        const mongoc_query_flags_t flags) {
-        std::vector<TBsonValue> result;
+    TVector<TBsonValue> THelper::Aggregate(const TString& db,
+            const TString& collectionName, const TBsonValue& pipeline,
+            const mongoc_query_flags_t flags) {
+        TVector<TBsonValue> result;
         Aggregate(db, collectionName,
-            [&result](const TBsonValue& value) {
-            result.push_back(value);
+            [&result](const std::pair<TBsonValue, bool>& value) {
+            result.push_back(value.first);
         },
             pipeline, flags);
         return result;
     }
-    */
+
     bool THelper::CheckConnection(const TString& db, TError* error) {
         NJson::TJsonValue ping;
         ping["ping"] = 1;

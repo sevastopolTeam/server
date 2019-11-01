@@ -7,8 +7,6 @@ include_directories(
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libbson/src
   ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libmongoc/src
-  ${PROJECT_SOURCE_DIR}/contrib/httplib
-  ${PROJECT_SOURCE_DIR}/contrib/json
 )
 
 add_subdirectory(contrib)
