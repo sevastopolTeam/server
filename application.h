@@ -1,7 +1,7 @@
 #pragma once
 
-#include "httplib.h"
-#include "mongoc/mongoc.h"
+#include "contrib/httplib/httplib.h"
+#include "contrib/mongo-c-driver/src/libmongoc/src/mongoc/mongoc.h"
 
 class TApplication {
 public:
