@@ -4,6 +4,7 @@
 
 using TString = std::string;
 
+/*
 namespace NString {
     int ToInt(const TString& s) {
         return std::stoi(s);
@@ -20,3 +21,4 @@ namespace NString {
         return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
     }
 }
+*/

@@ -39,7 +39,7 @@ namespace NMongo {
     }
 
     TUri::TUri(const TString& connectionString)
-        : TMongoStructureHolder(mongoc_uri_new(connectionString.data()))
+        : TMongoStructureHolder(mongoc_uri_new(connectionString.c_str()))
     {
     }
 
