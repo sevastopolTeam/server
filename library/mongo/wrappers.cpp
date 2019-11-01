@@ -67,7 +67,7 @@ namespace NMongo {
     }
 
     TCollection::TCollection(const TClient& client, const TString& db,
-        const TString& collection)
+            const TString& collection)
         : TMongoStructureHolder(mongoc_client_get_collection(client, db.data(), collection.data()))
     {
     }
@@ -114,7 +114,7 @@ namespace NMongo {
     }
 
     TBsonValue::TBsonValue()
-        : TBsonValue(NJson::TJsonValue::array())
+        : TBsonValue(NJson::TJsonValue::object())
     {
     }
 
@@ -343,12 +343,12 @@ namespace NMongo {
         return ret;
     }
 
-    int THelper::Count(const TString& db, const TString& collectionName,
+    long long THelper::Count(const TString& db, const TString& collectionName,
         const TBsonValue& selector, size_t skip, size_t limit, TError* error) {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
-        int result = mongoc_collection_count(collection, MONGOC_QUERY_NONE, selector,
+        long long result = mongoc_collection_count(collection, MONGOC_QUERY_NONE, selector,
             skip, limit, nullptr, &err);
         if (error != nullptr) {
             *error = err;

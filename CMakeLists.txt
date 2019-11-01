@@ -16,12 +16,13 @@ add_subdirectory(util)
 add_executable(server
   main.cpp
   application.cpp
+  data_source.cpp
 )
 
 target_link_libraries(server
   bson_static
   mongoc_static
+  json
   mongo
   httplib
-  json
 )
