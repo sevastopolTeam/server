@@ -4,8 +4,9 @@ project(server)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
 
 include_directories(
-  contrib/mongo-c-driver/src/libbson/src
-  contrib/mongo-c-driver/src/libmongoc/src
+  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libbson/src
+  ${PROJECT_SOURCE_DIR}/contrib/mongo-c-driver/src/libmongoc/src
 )
 
 add_subdirectory(contrib)

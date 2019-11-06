@@ -13,4 +13,3 @@ private:
     httplib::Server Server;
     std::unique_ptr<TDataSource> DataSource;
  };
-
