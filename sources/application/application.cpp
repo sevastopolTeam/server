@@ -7,19 +7,20 @@
 #include "handlers/hi.h"
 #include "handlers/numbers.h"
 
-TApplication::TApplication() {
+TApplication::TApplication(){
     std::cout << "Starting server..." << std::endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod", "base"));
 
-    Server.Get("/hi",               [&](const httplib::Request& req, httplib::Response& res){ HiHandler(*DataSource, req, res);});
-    Server.Get(R"(/numbers/(\d+))", [&](const httplib::Request& req, httplib::Response& res){ NumbersHandler(*DataSource, req, res);});
+    Server.reset(new httplib::Server());
+    Server->Get("/hi", [&](const httplib::Request& req, httplib::Response& res) { HiHandler(*DataSource, req, res);});
+    Server->Get(R"(/numbers/(\d+))", [&](const httplib::Request& req, httplib::Response& res) { NumbersHandler(*DataSource, req, res);});
+}
 
-    std::cout << "Server started" << std::endl;
-    Server.listen("0.0.0.0", 1234);
+void TApplication::Start() {
+    std::cout << "Started HTTP-server" << std::endl;
+    Server->listen("0.0.0.0", 1234);
 }
 
 TApplication::~TApplication() {
-    std::cout << "Stopping server..." << std::endl;
-    Server.stop();
-    std::cout << "Server stopped" << std::endl;
+    std::cout << "Stopped HTTP-server" << std::endl;
 }

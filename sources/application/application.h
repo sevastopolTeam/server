@@ -9,8 +9,10 @@ class TApplication {
 public:
     TApplication();
 
+    void Start();
+
     ~TApplication();
 private:
-    httplib::Server Server;
     THolder<TDataSource> DataSource;
+    THolder<httplib::Server> Server;
  };
