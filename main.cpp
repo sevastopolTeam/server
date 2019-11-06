@@ -1,8 +1,7 @@
 #include <iostream>
 #include <exception> 
 
-#include "application.h"
-
+#include "sources/application/application.h"
 
 int main(int argc, char* argv[]) {
     try {
@@ -16,4 +15,3 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 }
-

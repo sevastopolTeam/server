@@ -1,12 +1,14 @@
-add_library(algorithm STATIC algorithm.cpp)
-add_library(deque STATIC deque.cpp)
-add_library(hashmap STATIC hashmap.cpp)
-add_library(hashset STATIC hashset.cpp)
-add_library(list STATIC list.cpp)
-add_library(map STATIC map.cpp)
-add_library(noncopyable STATIC noncopyable.cpp)
-add_library(queue STATIC queue.cpp)
-add_library(set STATIC set.cpp)
-add_library(stack STATIC stack.cpp)
-add_library(string STATIC string.cpp)
-add_library(vector STATIC vector.cpp)
+add_library(generic STATIC
+  algorithm.cpp
+  deque.cpp
+  hashmap.cpp
+  hashset.cpp
+  list.cpp
+  map.cpp
+  noncopyable.cpp
+  queue.cpp
+  set.cpp
+  stack.cpp
+  string.cpp
+  vector.cpp
+)
