@@ -1,15 +1,18 @@
 #include "data_source.h"
 
+#include <iostream>
+
 TDataSource::TDataSource(const TString& uri, const TString& db, const TString& collection) {
     NMongo::Init();
     Master.reset(new NMongo::THelper(uri));
     Db = db;
     Collection = collection;
+    std::cout << "Started mongoDB" << std::endl;
 }
 
 TDataSource::~TDataSource() {
-    Master.reset();
     NMongo::Cleanup();
+    std::cout << "Stopped mongoDB" << std::endl;
 }
 
 TVector<NMongo::TBsonValue> TDataSource::Find() {
