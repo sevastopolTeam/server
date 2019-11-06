@@ -7,7 +7,7 @@
 #include "handlers/hi.h"
 #include "handlers/numbers.h"
 
-TApplication::TApplication(){
+TApplication::TApplication() {
     std::cout << "Starting server..." << std::endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod", "base"));
 
@@ -22,5 +22,6 @@ void TApplication::Start() {
 }
 
 TApplication::~TApplication() {
+    Server->stop();
     std::cout << "Stopped HTTP-server" << std::endl;
 }

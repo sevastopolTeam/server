@@ -10,7 +10,7 @@ THolder<TApplication> application;
 int main(int argc, char* argv[]) {
     try {
         if (argc < 2) {
-            std::cout << "miss config file" << std::endl;
+            std::cout << "missing config file" << std::endl;
         }
         application.reset(new TApplication());
         auto term = [](int signum) {
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
         signal(SIGINT, term);
 
         application->Start();
-        return 0;
+        return 1;
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
         return 1;
