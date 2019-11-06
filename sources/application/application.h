@@ -3,6 +3,7 @@
 #include "contrib/httplib/httplib.h"
 #include "library/mongo/wrappers.h"
 #include "sources/data_source/data_source.h"
+#include "util/generic/holder.h"
 
 class TApplication {
 public:
@@ -11,5 +12,5 @@ public:
     ~TApplication();
 private:
     httplib::Server Server;
-    std::unique_ptr<TDataSource> DataSource;
+    THolder<TDataSource> DataSource;
  };

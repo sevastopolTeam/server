@@ -3,6 +3,7 @@ add_library(generic STATIC
   deque.cpp
   hashmap.cpp
   hashset.cpp
+  holder.cpp
   list.cpp
   map.cpp
   noncopyable.cpp

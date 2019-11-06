@@ -1,6 +1,7 @@
 #pragma once
 
 #include "library/mongo/wrappers.h"
+#include "util/generic/holder.h"
 
 class TDataSource {
 public:
@@ -11,7 +12,7 @@ public:
     bool Insert(NMongo::TBsonValue value);
 
 private:
-    std::unique_ptr<NMongo::THelper> Master;
+    THolder<NMongo::THelper> Master;
     TString Db;
     TString Collection;
 };
