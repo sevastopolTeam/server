@@ -3,7 +3,6 @@
 TDataSource::TDataSource(const TString& uri, const TString& db, const TString& collection) {
     NMongo::Init();
     Master.reset(new NMongo::THelper(uri));
-    mongoc_client_pool_new(mongoc_uri_new(uri.c_str()));
     Db = db;
     Collection = collection;
 }

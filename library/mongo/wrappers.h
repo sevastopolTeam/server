@@ -17,7 +17,7 @@ namespace NMongo {
 
     public:
         TMongoException(bson_error_t error) {
-            Message = std::to_string(static_cast<int>(error.code)) + TString(error.message);
+            Message = NString::ToString(static_cast<int>(error.code)) + TString(error.message);
         }
 
         const char* what() const noexcept override {
