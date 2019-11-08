@@ -93,7 +93,10 @@ add_library(mongoc_static
     ../libmongoc/src/mongoc/mongoc-write-concern.c
 )
 
-target_link_libraries (mongoc_static zlib)
+target_link_libraries (mongoc_static PUBLIC
+    zlib
+    bson_static
+)
 
 target_compile_definitions (mongoc_static
 	PUBLIC MONGOC_STATIC BSON_STATIC
