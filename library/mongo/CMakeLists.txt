@@ -1,7 +1,7 @@
 include_directories(
   ../..
-  ../../contrib/mongo-c-driver/src/libbson/src
-  ../../contrib/mongo-c-driver/src/libmongoc/src
+  ../../contrib/mongo-c-driver/libbson/src
+  ../../contrib/mongo-c-driver/libmongoc/src
 )
 
 add_library(mongo STATIC wrappers.cpp)

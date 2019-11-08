@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=c++,cmake,windows,visualstudio
 
 *.vcxproj
+*.sln
 *.vcxproj.filters
 
 ### C++ ###
