@@ -1,0 +1,101 @@
+include_directories(
+	../../../contrib/mongo-c-driver/common
+	../../../contrib/mongo-c-driver/libbson
+	../../../contrib/mongo-c-driver/libmongoc
+	../../../contrib/mongo-c-driver/libbson/src
+	../../../contrib/mongo-c-driver/libmongoc/src
+	../../../contrib/zlib
+)
+
+add_library(mongoc_static
+    ../common/common-b64.c
+    ../common/common-md5.c
+    ../libmongoc/src/mongoc/mongoc-aggregate.c
+    ../libmongoc/src/mongoc/mongoc-apm.c
+    ../libmongoc/src/mongoc/mongoc-array.c
+    ../libmongoc/src/mongoc/mongoc-async-cmd.c
+    ../libmongoc/src/mongoc/mongoc-async.c
+    ../libmongoc/src/mongoc/mongoc-buffer.c
+    ../libmongoc/src/mongoc/mongoc-bulk-operation.c
+    ../libmongoc/src/mongoc/mongoc-change-stream.c
+    ../libmongoc/src/mongoc/mongoc-client-pool.c
+    ../libmongoc/src/mongoc/mongoc-client-session.c
+    ../libmongoc/src/mongoc/mongoc-client.c
+    ../libmongoc/src/mongoc/mongoc-cluster-sasl.c
+    ../libmongoc/src/mongoc/mongoc-cluster.c
+    ../libmongoc/src/mongoc/mongoc-cmd.c
+    ../libmongoc/src/mongoc/mongoc-collection.c
+    ../libmongoc/src/mongoc/mongoc-compression.c
+    ../libmongoc/src/mongoc/mongoc-counters.c
+    ../libmongoc/src/mongoc/mongoc-crypto-openssl.c
+    ../libmongoc/src/mongoc/mongoc-crypto.c
+    ../libmongoc/src/mongoc/mongoc-cursor-array.c
+    ../libmongoc/src/mongoc/mongoc-cursor-change-stream.c
+    ../libmongoc/src/mongoc/mongoc-cursor-cmd-deprecated.c
+    ../libmongoc/src/mongoc/mongoc-cursor-cmd.c
+    ../libmongoc/src/mongoc/mongoc-cursor-find-cmd.c
+    ../libmongoc/src/mongoc/mongoc-cursor-find-opquery.c
+    ../libmongoc/src/mongoc/mongoc-cursor-find.c
+    ../libmongoc/src/mongoc/mongoc-cursor-legacy.c
+    ../libmongoc/src/mongoc/mongoc-cursor.c
+    ../libmongoc/src/mongoc/mongoc-database.c
+    ../libmongoc/src/mongoc/mongoc-error.c
+    ../libmongoc/src/mongoc/mongoc-find-and-modify.c
+    ../libmongoc/src/mongoc/mongoc-gridfs-bucket-file.c
+    ../libmongoc/src/mongoc/mongoc-gridfs-bucket.c
+    ../libmongoc/src/mongoc/mongoc-gridfs-file-list.c
+    ../libmongoc/src/mongoc/mongoc-gridfs-file-page.c
+    ../libmongoc/src/mongoc/mongoc-gridfs-file.c
+    ../libmongoc/src/mongoc/mongoc-gridfs.c
+    ../libmongoc/src/mongoc/mongoc-handshake.c
+    ../libmongoc/src/mongoc/mongoc-host-list.c
+    ../libmongoc/src/mongoc/mongoc-index.c
+    ../libmongoc/src/mongoc/mongoc-init.c
+    ../libmongoc/src/mongoc/mongoc-linux-distro-scanner.c
+    ../libmongoc/src/mongoc/mongoc-list.c
+    ../libmongoc/src/mongoc/mongoc-log.c
+    ../libmongoc/src/mongoc/mongoc-matcher-op.c
+    ../libmongoc/src/mongoc/mongoc-matcher.c
+    ../libmongoc/src/mongoc/mongoc-memcmp.c
+    ../libmongoc/src/mongoc/mongoc-openssl.c
+    ../libmongoc/src/mongoc/mongoc-opts-helpers.c
+    ../libmongoc/src/mongoc/mongoc-opts.c
+    ../libmongoc/src/mongoc/mongoc-queue.c
+    ../libmongoc/src/mongoc/mongoc-rand-openssl.c
+    ../libmongoc/src/mongoc/mongoc-read-concern.c
+    ../libmongoc/src/mongoc/mongoc-read-prefs.c
+    ../libmongoc/src/mongoc/mongoc-rpc.c
+    ../libmongoc/src/mongoc/mongoc-scram.c
+    ../libmongoc/src/mongoc/mongoc-server-description.c
+    ../libmongoc/src/mongoc/mongoc-server-stream.c
+    ../libmongoc/src/mongoc/mongoc-set.c
+    ../libmongoc/src/mongoc/mongoc-socket.c
+    ../libmongoc/src/mongoc/mongoc-ssl.c
+    ../libmongoc/src/mongoc/mongoc-stream-buffered.c
+    ../libmongoc/src/mongoc/mongoc-stream-file.c
+    ../libmongoc/src/mongoc/mongoc-stream-gridfs-download.c
+    ../libmongoc/src/mongoc/mongoc-stream-gridfs-upload.c
+    ../libmongoc/src/mongoc/mongoc-stream-gridfs.c
+    ../libmongoc/src/mongoc/mongoc-stream-socket.c
+    ../libmongoc/src/mongoc/mongoc-stream-tls-openssl-bio.c
+    ../libmongoc/src/mongoc/mongoc-stream-tls-openssl.c
+    ../libmongoc/src/mongoc/mongoc-stream-tls.c
+    ../libmongoc/src/mongoc/mongoc-stream.c
+    ../libmongoc/src/mongoc/mongoc-topology-description-apm.c
+    ../libmongoc/src/mongoc/mongoc-topology-description.c
+    ../libmongoc/src/mongoc/mongoc-topology-scanner.c
+    ../libmongoc/src/mongoc/mongoc-topology.c
+    ../libmongoc/src/mongoc/mongoc-uri.c
+    ../libmongoc/src/mongoc/mongoc-util.c
+    ../libmongoc/src/mongoc/mongoc-version-functions.c
+    ../libmongoc/src/mongoc/mongoc-write-command-legacy.c
+    ../libmongoc/src/mongoc/mongoc-write-command.c
+    ../libmongoc/src/mongoc/mongoc-write-concern.c
+)
+
+target_link_libraries (mongoc_static zlib)
+
+target_compile_definitions (mongoc_static
+	PUBLIC MONGOC_STATIC BSON_STATIC
+	PRIVATE MONGOC_COMPILATION
+)

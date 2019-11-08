@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
             exit(0);
         };
         signal(SIGINT, term);
+        signal(SIGTERM, term);
 
         application->Start();
         return 1;
