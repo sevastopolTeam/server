@@ -1,7 +1,8 @@
 #pragma once
 
+#include "collections/base.h"
+#include "collections/user.h"
 #include "library/mongo/wrappers.h"
-#include "sources/data_source/collections/base.h"
 #include "util/generic/holder.h"
 
 class TDataSource {
@@ -21,4 +22,5 @@ public:
     TMongoDriver MongoDriver;
     THolder<NMongo::THelper> Master;
     TCollectionBase Base;
+    TCollectionUser User;
 };

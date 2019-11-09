@@ -8,5 +8,5 @@ public:
     using ICollection::ICollection;
 
     TVector<NMongo::TBsonValue> Find();
-    bool Insert(NMongo::TBsonValue value);
+    bool Insert(const NMongo::TBsonValue& value);
 };

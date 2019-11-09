@@ -6,6 +6,7 @@
 
 #include "handlers/hi.h"
 #include "handlers/numbers.h"
+#include "handlers/register_user.h"
 
 TApplication::TApplication() {
     std::cout << "Starting server..." << std::endl;
@@ -14,6 +15,7 @@ TApplication::TApplication() {
 
     Server->Get("/hi", [&](const httplib::Request& req, httplib::Response& res) { HiHandler(*DataSource, req, res);});
     Server->Get(R"(/numbers/(\d+))", [&](const httplib::Request& req, httplib::Response& res) { NumbersHandler(*DataSource, req, res);});
+    Server->Post("/register_user", [&](const httplib::Request& req, httplib::Response& res) { RegisterUserHandler(*DataSource, req, res);});
 }
 
 void TApplication::Start() {
