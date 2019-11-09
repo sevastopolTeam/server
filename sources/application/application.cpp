@@ -9,9 +9,9 @@
 
 TApplication::TApplication() {
     std::cout << "Starting server..." << std::endl;
-    DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod", "base"));
-
+    DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
     Server.reset(new httplib::Server());
+
     Server->Get("/hi", [&](const httplib::Request& req, httplib::Response& res) { HiHandler(*DataSource, req, res);});
     Server->Get(R"(/numbers/(\d+))", [&](const httplib::Request& req, httplib::Response& res) { NumbersHandler(*DataSource, req, res);});
 }

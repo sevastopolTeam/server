@@ -1,18 +1,24 @@
 #pragma once
 
 #include "library/mongo/wrappers.h"
+#include "sources/data_source/collections/base.h"
 #include "util/generic/holder.h"
 
 class TDataSource {
 public:
-    TDataSource(const TString& uri, const TString& db, const TString& collection);
+    TDataSource(const TString& uri, const TString& db);
     ~TDataSource();
 
-    TVector<NMongo::TBsonValue> Find();
-    bool Insert(NMongo::TBsonValue value);
+    struct TMongoDriver {
+        TMongoDriver() {
+            NMongo::Init();
+        }
+        ~TMongoDriver() {
+            NMongo::Cleanup();
+        }
+    };
 
-private:
+    TMongoDriver MongoDriver;
     THolder<NMongo::THelper> Master;
-    TString Db;
-    TString Collection;
+    TCollectionBase Base;
 };
