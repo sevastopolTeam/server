@@ -4,6 +4,7 @@ add_library(generic STATIC
   hashmap.cpp
   hashset.cpp
   holder.cpp
+  iostream.cpp
   list.cpp
   map.cpp
   noncopyable.cpp

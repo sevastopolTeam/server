@@ -1,9 +1,9 @@
 #pragma once
 
-#include <iostream>
-
 #include "contrib/httplib/httplib.h"
 #include "sources/data_source/data_source.h"
+
+#include "util/generic/iostream.h"
 
 void HiHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
     TVector<TRecordBase> result = dataSource.CollectionBase.Find();
@@ -16,7 +16,7 @@ void HiHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Re
         ans += i.ToJson().dump();
     }
     ans = "[" + ans + "]";
-    std::cout << ans << std::endl;
+    Cout << ans << Endl;
 
     res.set_content(ans, "text/plain");
 }

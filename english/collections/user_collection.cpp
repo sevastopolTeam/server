@@ -1,7 +1,5 @@
 #include "user_collection.h"
 
-#include <iostream>
-
 namespace NEnglish {
 
 	bool TCollectionUser::Register(const TRecordUser& user) {
