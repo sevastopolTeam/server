@@ -1,11 +1,11 @@
 #pragma once
 
-#include <iostream>
-
 #include "contrib/httplib/httplib.h"
 #include "sources/data_source/data_source.h"
 
 #include "english/collections/user_collection.h"
+
+#include "util/generic/iostream.h"
 
 namespace NEnglish {
 
@@ -22,12 +22,12 @@ namespace NEnglish {
                     }
                 }
             }
-            std::cout << result.dump() << std::endl;
+            Cout << result.dump() << Endl;
             res.set_content(result.dump(), "application/json");
         } catch (const std::exception& e) {
             NJson::TJsonValue result;
             result["status"] = e.what();
-            std::cout << result << std::endl;
+            Cout << result << Endl;
             res.set_content(result, "application/json");
         }
     }

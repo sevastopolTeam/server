@@ -1,6 +1,6 @@
 #include "data_source.h"
 
-#include <iostream>
+#include "util/generic/iostream.h"
 
 namespace {
     const TString COLLECTION_NAME_BASE = "base";
@@ -20,9 +20,9 @@ TDataSource::TDataSource(const TString& uri, const TString& dbName)
         NEnglish::TCollectionUser(Master.get(), dbName, NEnglish::COLLECTION_NAME_USER)
     )
 {
-    std::cout << "Started mongoDB" << std::endl;
+    Cout << "Started mongoDB" << Endl;
 }
 
 TDataSource::~TDataSource() {
-    std::cout << "Stopped mongoDB" << std::endl;
+    Cout << "Stopped mongoDB" << Endl;
 }

@@ -10,7 +10,7 @@
 #include "english/handlers/registration.h"
 
 TApplication::TApplication() {
-    std::cout << "Starting server..." << std::endl;
+    Cout << "Starting server..." << Endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
     Server.reset(new httplib::Server());
 
@@ -27,11 +27,11 @@ TApplication::TApplication() {
 }
 
 void TApplication::Start() {
-    std::cout << "Started HTTP-server" << std::endl;
+    Cout << "Started HTTP-server" << Endl;
     Server->listen("0.0.0.0", 1234);
 }
 
 TApplication::~TApplication() {
     Server->stop();
-    std::cout << "Stopped HTTP-server" << std::endl;
+    Cout << "Stopped HTTP-server" << Endl;
 }

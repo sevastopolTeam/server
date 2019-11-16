@@ -1,7 +1,6 @@
 #include "user_record.h"
 
 #include <ctime>
-#include <iostream>
 
 namespace {
     TString Normalize(const TString& str) {
