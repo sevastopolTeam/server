@@ -9,8 +9,8 @@ namespace {
 
 TDataSource::TDataSource(const TString& uri, const TString& dbName)
     : Master(new NMongo::THelper(uri))
-    , Base(Master.get(), dbName, COLLECTION_NAME_BASE)
-    , User(Master.get(), dbName, COLLECTION_NAME_USER)
+    , CollectionBase(Master.get(), dbName, COLLECTION_NAME_BASE)
+    , CollectionEnglishUser(Master.get(), dbName, COLLECTION_NAME_USER)
 {
     std::cout << "Started mongoDB" << std::endl;
 }

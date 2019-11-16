@@ -6,7 +6,7 @@
 #include "sources/data_source/data_source.h"
 
 void HiHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-    TVector<NMongo::TBsonValue> result = dataSource.Base.Find();
+    TVector<TRecordBase> result = dataSource.CollectionBase.Find();
 
     TString ans;
     for (const auto& i : result) {

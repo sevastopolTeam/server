@@ -1,5 +1,6 @@
-#include <iostream>
+#include <ctime>
 #include <exception>
+#include <iostream>
 #include <functional>
 #include <signal.h>
 
@@ -9,6 +10,7 @@ THolder<TApplication> application;
 
 int main(int argc, char* argv[]) {
     try {
+        srand(time(0));
         if (argc < 2) {
             std::cout << "missing config file" << std::endl;
         }

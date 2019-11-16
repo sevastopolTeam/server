@@ -14,6 +14,8 @@ add_subdirectory(library)
 add_subdirectory(sources)
 add_subdirectory(util)
 
+add_subdirectory(english)
+
 add_executable(server
   main.cpp
 )

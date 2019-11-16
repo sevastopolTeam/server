@@ -1,15 +1,17 @@
 #pragma once
 
-#include "collections/base.h"
-#include "collections/user.h"
 #include "library/mongo/wrappers.h"
+#include "sources/collections/base.h"
 #include "util/generic/holder.h"
+
+#include "english/collections/user_collection.h"
 
 class TDataSource {
 public:
     TDataSource(const TString& uri, const TString& db);
     ~TDataSource();
 
+private:
     struct TMongoDriver {
         TMongoDriver() {
             NMongo::Init();
@@ -21,6 +23,8 @@ public:
 
     TMongoDriver MongoDriver;
     THolder<NMongo::THelper> Master;
-    TCollectionBase Base;
-    TCollectionUser User;
+
+public:
+    TCollectionBase CollectionBase;
+    TCollectionEnglishUser CollectionEnglishUser;
 };

@@ -18,3 +18,9 @@ https://cmake.org/download/
 2) cmake --build .
 
 бинарник будет находиться в Debug/server.exe (windows) ./server (unix)
+
+про json:
+https://github.com/nlohmann/json/blob/develop/README.md
+
+про mongo:
+https://docs.mongodb.com/v3.6/introduction/
