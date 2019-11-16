@@ -17,7 +17,7 @@ TDataSource::TDataSource(const TString& uri, const TString& dbName)
     : Master(new NMongo::THelper(uri))
     , CollectionBase(Master.get(), dbName, COLLECTION_NAME_BASE)
     , English(
-    	NEnglish::TCollectionUser(Master.get(), dbName, NEnglish::COLLECTION_NAME_USER)
+        NEnglish::TCollectionUser(Master.get(), dbName, NEnglish::COLLECTION_NAME_USER)
     )
 {
     std::cout << "Started mongoDB" << std::endl;
