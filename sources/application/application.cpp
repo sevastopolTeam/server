@@ -7,7 +7,7 @@
 #include "sources/handlers/hi.h"
 #include "sources/handlers/numbers.h"
 
-#include "english/handlers/register_user.h"
+#include "english/handlers/registration.h"
 
 TApplication::TApplication() {
     std::cout << "Starting server..." << std::endl;
@@ -21,8 +21,8 @@ TApplication::TApplication() {
         NumbersHandler(*DataSource, req, res);
     });
 
-    Server->Post("/api/english/register_user", [&](const httplib::Request& req, httplib::Response& res) {
-        RegisterUserHandler(*DataSource, req, res);
+    Server->Post("/api/english/registration", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::RegistrationHandler(*DataSource, req, res);
     });
 }
 

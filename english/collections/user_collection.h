@@ -5,10 +5,14 @@
 
 #include "english/records/user_record.h"
 
-class TCollectionEnglishUser : public ICollection {
-public:
-    using ICollection::ICollection;
+namespace NEnglish {
 
-    bool Register(const TRecordEnglishUser& user);
-    bool IsAlreadyRegistred(const TRecordEnglishUser& user);
-};
+	class TCollectionUser : public ICollection {
+	public:
+	    using ICollection::ICollection;
+
+	    bool Register(const TRecordUser& user);
+	    bool IsAlreadyRegistred(const TRecordUser& user);
+	};
+
+}
