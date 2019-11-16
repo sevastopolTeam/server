@@ -27,7 +27,7 @@ namespace NEnglish {
         , ResetPasswordKey(GenerateConfirmationKey())
     {}
 
-    bool TRecordUser::IsValide(NJson::TJsonValue* error) {
+    bool TRecordUser::IsValid(NJson::TJsonValue* error) {
         if (Password != RepeatPassword) {
             (*error)["status"] = "validation_error";
             (*error)["validation_errors"] = { { "Password", "is not same" } };

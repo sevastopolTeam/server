@@ -13,7 +13,7 @@ namespace NEnglish {
         try {
             TRecordUser user(NJson::TJsonValue::parse(req.body));
             NJson::TJsonValue result;
-            if (user.IsValide(&result)) {
+            if (user.IsValid(&result)) {
                 if (dataSource.English.CollectionUser.IsAlreadyRegistred(user)) {
                     result["status"] = "user already register";
                 } else {
