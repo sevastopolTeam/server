@@ -2,7 +2,9 @@ include_directories(
   ../..
 )
 
-add_library(application STATIC application.cpp)
+add_library(application STATIC
+  application.cpp
+)
 
 target_link_libraries(application PUBLIC
   httplib

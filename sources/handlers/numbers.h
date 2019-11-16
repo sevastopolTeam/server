@@ -11,7 +11,7 @@ void NumbersHandler(TDataSource& dataSource, const httplib::Request& req, httpli
 
     NJson::TJsonValue json;
     json["hello"] = TString(numbers);
-    if (!dataSource.Base.Insert(json)) {
+    if (!dataSource.CollectionBase.Insert(json)) {
         std::cout << "error insert" << std::endl;
     }
 }
