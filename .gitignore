@@ -39,6 +39,8 @@
 *.exe
 *.out
 *.app
+contrib/mongo-c-driver/tools/mongoc-stat
+server
 
 ### CMake ###
 CMakeLists.txt.user
