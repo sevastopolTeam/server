@@ -6,6 +6,12 @@
 
 #include "english/collections/user_collection.h"
 
+struct TEnglishCollections {
+    NEnglish::TCollectionUser CollectionUser;
+
+    TEnglishCollections(const NEnglish::TCollectionUser& collectionUser);
+};
+
 class TDataSource {
 public:
     TDataSource(const TString& uri, const TString& db);
@@ -26,5 +32,5 @@ private:
 
 public:
     TCollectionBase CollectionBase;
-    TCollectionEnglishUser CollectionEnglishUser;
+    TEnglishCollections English;
 };

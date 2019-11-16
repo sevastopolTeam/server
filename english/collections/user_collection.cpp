@@ -2,11 +2,15 @@
 
 #include <iostream>
 
-bool TCollectionEnglishUser::Register(const TRecordEnglishUser& user) {
-    return Master->Insert(DbName, CollectionName, user.ToJson());
-}
+namespace NEnglish {
 
-bool TCollectionEnglishUser::IsAlreadyRegistred(const TRecordEnglishUser& user)
-{
-    return Master->Find(DbName, CollectionName, user.GetUniqSelector()).size();
+	bool TCollectionUser::Register(const TRecordUser& user) {
+	    return Master->Insert(DbName, CollectionName, user.ToJson());
+	}
+
+	bool TCollectionUser::IsAlreadyRegistred(const TRecordUser& user)
+	{
+	    return Master->Find(DbName, CollectionName, user.GetUniqSelector()).size();
+	}
+
 }

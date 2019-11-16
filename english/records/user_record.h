@@ -4,22 +4,26 @@
 #include "sources/records/record.h"
 #include "util/generic/string.h"
 
-class TRecordEnglishUser : public IRecord {
-public:
-    TRecordEnglishUser(const NJson::TJsonValue& json);
+namespace NEnglish {
 
-    bool IsValide(NJson::TJsonValue* error);
-    NJson::TJsonValue ToJson() const override;
+    class TRecordUser : public IRecord {
+    public:
+        TRecordUser(const NJson::TJsonValue& json);
 
-    NJson::TJsonValue GetUniqSelector() const;
+        bool IsValide(NJson::TJsonValue* error);
+        NJson::TJsonValue ToJson() const override;
 
-private:
-    TString Email;
-    TString Name;
-    TString Phone;
-    TString Password;
-    TString RepeatPassword;
-    TString ConfirmationKey;
-    bool Confirmed;
-    TString ResetPasswordKey;
-};
+        NJson::TJsonValue GetUniqSelector() const;
+
+    private:
+        TString Email;
+        TString Name;
+        TString Phone;
+        TString Password;
+        TString RepeatPassword;
+        TString ConfirmationKey;
+        bool Confirmed;
+        TString ResetPasswordKey;
+    };
+
+}

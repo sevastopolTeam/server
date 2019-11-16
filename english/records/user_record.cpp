@@ -14,39 +14,42 @@ namespace {
     }
 }
 
-TRecordEnglishUser::TRecordEnglishUser(const NJson::TJsonValue& json)
-    : Email(Normalize(json.value("Email", "")))
-    , Name(json.value("Name", ""))
-    , Phone(json.value("Phone", ""))
-    , Password(json.value("Password", ""))
-    , RepeatPassword(json.value("RepeatPassword", ""))
-    , ConfirmationKey(GenerateConfirmationKey())
-    , Confirmed(false)
-    , ResetPasswordKey(GenerateConfirmationKey())
-{}
+namespace NEnglish {
 
-bool TRecordEnglishUser::IsValide(NJson::TJsonValue* error) {
-    if (Password != RepeatPassword) {
-        (*error)["status"] = "validation_error";
-        (*error)["validation_errors"] = { { "Password", "is not same" } };
-        return false;
+    TRecordUser::TRecordUser(const NJson::TJsonValue& json)
+        : Email(Normalize(json.value("Email", "")))
+        , Name(json.value("Name", ""))
+        , Phone(json.value("Phone", ""))
+        , Password(json.value("Password", ""))
+        , RepeatPassword(json.value("RepeatPassword", ""))
+        , ConfirmationKey(GenerateConfirmationKey())
+        , Confirmed(false)
+        , ResetPasswordKey(GenerateConfirmationKey())
+    {}
+
+    bool TRecordUser::IsValide(NJson::TJsonValue* error) {
+        if (Password != RepeatPassword) {
+            (*error)["status"] = "validation_error";
+            (*error)["validation_errors"] = { { "Password", "is not same" } };
+            return false;
+        }
+        (*error)["status"] = "ok";
+        return true;
     }
-    (*error)["status"] = "ok";
-    return true;
-}
 
-NJson::TJsonValue TRecordEnglishUser::ToJson() const {
-    return {
-        {"Email", Email},
-        {"Name", Name},
-        {"Phone", Phone},
-        {"Password", Password},
-        {"ConfirmationKey", ConfirmationKey},
-        {"Confirmed", Confirmed},
-        {"ResetPasswordKey", ResetPasswordKey}
-    };
-}
+    NJson::TJsonValue TRecordUser::ToJson() const {
+        return {
+            {"Email", Email},
+            {"Name", Name},
+            {"Phone", Phone},
+            {"Password", Password},
+            {"ConfirmationKey", ConfirmationKey},
+            {"Confirmed", Confirmed},
+            {"ResetPasswordKey", ResetPasswordKey}
+        };
+    }
 
-NJson::TJsonValue TRecordEnglishUser::GetUniqSelector() const {
-    return { { "Email", Email } };
+    NJson::TJsonValue TRecordUser::GetUniqSelector() const {
+        return { { "Email", Email } };
+    }
 }
