@@ -10,13 +10,13 @@ THolder<TApplication> application;
 
 int main(int argc, char* argv[]) {
     try {
-        srand(time(0));
+        srand(time(NULL));
         if (argc < 2) {
-            Cout << "missing config file" << Endl;
+            ERROR_LOG << "missing config file" << Endl;
         }
         application.reset(new TApplication());
         auto term = [](int signum) {
-            Cout << "Interrupt signal (" << signum << ") received.\n";
+            ERROR_LOG << "Interrupt signal (" << signum << ") received" << Endl;
             exit(0);
         };
         signal(SIGINT, term);
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
         application->Start();
         return 1;
     } catch (const std::exception& e) {
-        Cout << e.what() << Endl;
+        ERROR_LOG << e.what() << Endl;
         return 1;
     }
 }
