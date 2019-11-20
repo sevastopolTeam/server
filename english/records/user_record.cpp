@@ -4,7 +4,7 @@
 
 namespace {
     TString Normalize(const TString& str) {
-        return str;
+        return NString::ToLower(str);
     }
 
     TString GenerateConfirmationKey() {
@@ -24,7 +24,12 @@ namespace NEnglish {
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
         , ResetPasswordKey(GenerateConfirmationKey())
-    {}
+    {
+        // // ValidateRequired("Name");
+        // Validate("Name", { EValidationsType::REQUIRED });
+        // Validate("Email", { EValidationsType::REQUIRED, EValidationsType::EMAIL });
+        // Validate("Phone", { EValidationsType::REQUIRED });
+    }
 
     bool TRecordUser::IsValid(NJson::TJsonValue* error) {
         if (Password != RepeatPassword) {

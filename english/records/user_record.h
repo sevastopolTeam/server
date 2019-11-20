@@ -16,14 +16,18 @@ namespace NEnglish {
         NJson::TJsonValue GetUniqSelector() const;
 
     private:
+        // DB fields
         TString Email;
         TString Name;
         TString Phone;
-        TString Password;
-        TString RepeatPassword;
+        TString PasswordHash;
         TString ConfirmationKey;
         bool Confirmed;
         TString ResetPasswordKey;
+
+        // extra fields
+        TString Password;
+        TString RepeatPassword;
     };
 
 }

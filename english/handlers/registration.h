@@ -7,10 +7,16 @@
 
 #include "util/generic/iostream.h"
 
+#include "english/validators/validator_user.h"
+#include "sources/records/base_record.h"
+
 namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         try {
+            TValidatorUser v(NJson::TJsonValue::parse(req.body));
+            // Cout << v.Validate() << Endl;
+            return;
             TRecordUser user(NJson::TJsonValue::parse(req.body));
             NJson::TJsonValue result;
             if (user.IsValid(&result)) {
