@@ -20,9 +20,9 @@ TDataSource::TDataSource(const TString& uri, const TString& dbName)
         NEnglish::TCollectionUser(Master.get(), dbName, NEnglish::COLLECTION_NAME_USER)
     )
 {
-    Cout << "Started mongoDB" << Endl;
+    INFO_LOG << "Started mongoDB" << Endl;
 }
 
 TDataSource::~TDataSource() {
-    Cout << "Stopped mongoDB" << Endl;
+    INFO_LOG << "Stopped mongoDB" << Endl;
 }

@@ -16,7 +16,7 @@ void HiHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Re
         ans += i.ToJson().dump();
     }
     ans = "[" + ans + "]";
-    Cout << ans << Endl;
+    INFO_LOG << ans << Endl;
 
     res.set_content(ans, "text/plain");
 }

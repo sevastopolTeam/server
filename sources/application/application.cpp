@@ -1,7 +1,5 @@
 #include "application.h"
 
-#include <iostream>
-
 #include "contrib/json/json.h"
 
 #include "sources/handlers/hi.h"
@@ -10,7 +8,7 @@
 #include "english/handlers/registration.h"
 
 TApplication::TApplication() {
-    Cout << "Starting server..." << Endl;
+    INFO_LOG << "Starting server..." << Endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
     Server.reset(new httplib::Server());
 
@@ -27,11 +25,11 @@ TApplication::TApplication() {
 }
 
 void TApplication::Start() {
-    Cout << "Started HTTP-server" << Endl;
+    INFO_LOG << "Started HTTP-server" << Endl;
     Server->listen("0.0.0.0", 1234);
 }
 
 TApplication::~TApplication() {
     Server->stop();
-    Cout << "Stopped HTTP-server" << Endl;
+    INFO_LOG << "Stopped HTTP-server" << Endl;
 }

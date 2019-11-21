@@ -22,12 +22,12 @@ namespace NEnglish {
                     }
                 }
             }
-            Cout << result.dump() << Endl;
+            INFO_LOG << result.dump() << Endl;
             res.set_content(result.dump(), "application/json");
         } catch (const std::exception& e) {
             NJson::TJsonValue result;
             result["status"] = e.what();
-            Cout << result << Endl;
+            ERROR_LOG << result << Endl;
             res.set_content(result, "application/json");
         }
     }
