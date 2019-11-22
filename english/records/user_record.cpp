@@ -31,7 +31,6 @@ namespace NEnglish {
         , RepeatPassword(json.value("RepeatPassword", ""))
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
-        , ResetPasswordKey(GenerateConfirmationKey())
         , PasswordHash(GeneratePasswordHash(json.value("Password", "")))
         , ResetPasswordKey(GenerateConfirmationKey()) {}
 
