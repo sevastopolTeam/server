@@ -27,8 +27,8 @@ namespace {
     }
 
     inline char* _GetNowTime() {
-        static char _buffer[20];
-        strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL)));
+        static char _buffer[20] = "TODO";
+        // strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL))); // Don't work on macos
         return _buffer;
     }
 } // namespace

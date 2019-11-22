@@ -1,35 +1,46 @@
 #pragma once
 
 #include "contrib/httplib/httplib.h"
-#include "sources/data_source/data_source.h"
+#include "contrib/json/json.h"
 
 #include "english/collections/user_collection.h"
+#include "english/validators/validator_user.h"
+
+#include "sources/data_source/data_source.h"
 
 #include "util/generic/iostream.h"
 
 namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response;
         try {
-            TRecordUser user(NJson::TJsonValue::parse(req.body));
-            NJson::TJsonValue result;
-            if (user.IsValide(&result)) {
-                if (dataSource.English.CollectionUser.IsAlreadyRegistred(user)) {
-                    result["status"] = "user already register";
+            NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
+            TValidatorUser validator(jsonUser);
+            validator.AddExternalValidation(
+                "Email",
+                dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value("Email", "")),
+                "AlreadyExists"
+            );
+            if (validator.Validate()) {
+                if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
+                    response["Status"] = "InsertError";
                 } else {
-                    if (!dataSource.English.CollectionUser.Register(user)) {
-                        result["status"] = "insert error";
-                    }
+                    response["Status"] = "Ok";
                 }
+            } else {
+                response = {
+                    { "Status", "ValidationError", },
+                    { "ValidationErrors", validator.GetValidationErrors() }
+                };
             }
-            INFO_LOG << result.dump() << Endl;
-            res.set_content(result.dump(), "application/json");
+            INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
-            NJson::TJsonValue result;
-            result["status"] = e.what();
-            ERROR_LOG << result << Endl;
-            res.set_content(result, "application/json");
+            response["Status"] = "FatalError";
+            response["Errors"] = e.what();
+            ERROR_LOG << response.dump() << Endl;
         }
+        res.set_content(response.dump(), "application/json");
     }
 
 }

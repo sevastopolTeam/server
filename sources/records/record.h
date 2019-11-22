@@ -1,6 +1,8 @@
 #pragma once
 
 #include "contrib/json/json.h"
+#include "util/generic/string.h"
+#include "util/generic/vector.h"
 
 class IRecord {
 public:

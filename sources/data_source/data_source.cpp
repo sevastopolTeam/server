@@ -11,7 +11,7 @@ namespace NEnglish {
 }
 
 TEnglishCollections::TEnglishCollections(const NEnglish::TCollectionUser& collectionUser)
-	: CollectionUser(collectionUser) {}
+    : CollectionUser(collectionUser) {}
 
 TDataSource::TDataSource(const TString& uri, const TString& dbName)
     : Master(new NMongo::THelper(uri))

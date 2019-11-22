@@ -6,8 +6,8 @@
 #include "util/generic/iostream.h"
 
 void NumbersHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-	auto numbers = req.matches[1];
-	res.set_content(numbers, "text/plain");
+    auto numbers = req.matches[1];
+    res.set_content(numbers, "text/plain");
 
     NJson::TJsonValue json;
     json["hello"] = TString(numbers);

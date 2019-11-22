@@ -1,10 +1,10 @@
 #include "user_record.h"
-
 #include <ctime>
+#include "contrib/json/json.h"
 
 namespace {
     TString Normalize(const TString& str) {
-        return str;
+        return NString::ToLower(str);
     }
 
     TString GenerateConfirmationKey() {
@@ -23,18 +23,7 @@ namespace NEnglish {
         , RepeatPassword(json.value("RepeatPassword", ""))
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
-        , ResetPasswordKey(GenerateConfirmationKey())
-    {}
-
-    bool TRecordUser::IsValide(NJson::TJsonValue* error) {
-        if (Password != RepeatPassword) {
-            (*error)["status"] = "validation_error";
-            (*error)["validation_errors"] = { { "Password", "is not same" } };
-            return false;
-        }
-        (*error)["status"] = "ok";
-        return true;
-    }
+        , ResetPasswordKey(GenerateConfirmationKey()) {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {
@@ -46,9 +35,5 @@ namespace NEnglish {
             {"Confirmed", Confirmed},
             {"ResetPasswordKey", ResetPasswordKey}
         };
-    }
-
-    NJson::TJsonValue TRecordUser::GetUniqSelector() const {
-        return { { "Email", Email } };
     }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cctype>
 
 using TString = std::string;
 
@@ -18,5 +19,23 @@ struct NString {
             return false;
         }
         return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+    }
+
+    static bool Contains(const TString& value, const char searchSymbol) {
+        return value.find(searchSymbol) != TString::npos;
+    }
+
+    static TString ToLower(TString value) {
+        for (auto c: value) {
+            if (isalpha(c)) {
+                c = tolower(c);
+            }
+        }
+
+        return value;
+    }
+
+    static bool IsDigit(const char c) {
+        return isdigit(c);
     }
 };
