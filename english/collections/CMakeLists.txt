@@ -11,4 +11,5 @@ target_link_libraries(english_collections PUBLIC
   data_source
   english_records
   english_validators
+  md5
 )
