@@ -7,13 +7,12 @@
 
 namespace NEnglish {
 
-	class TCollectionUser : public ICollection {
-	public:
-	    using ICollection::ICollection;
+    class TCollectionUser : public ICollection {
+    public:
+        using ICollection::ICollection;
 
-	    bool Register(const TRecordUser& user);
-	    bool IsAlreadyRegistred(const TRecordUser& user);
-	    bool ExistsWithEmail(const TString& email);
-	};
+        bool Register(const TRecordUser& user);
+        bool ExistsWithEmail(const TString& email);
+    };
 
 }

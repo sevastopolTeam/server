@@ -36,8 +36,4 @@ namespace NEnglish {
             {"ResetPasswordKey", ResetPasswordKey}
         };
     }
-
-    NJson::TJsonValue TRecordUser::GetUniqSelector() const {
-        return { { "Email", Email } };
-    }
 }

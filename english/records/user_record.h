@@ -28,5 +28,4 @@ namespace NEnglish {
         TString Password;
         TString RepeatPassword;
     };
-
 }

@@ -2,14 +2,13 @@
 
 #include "contrib/httplib/httplib.h"
 #include "contrib/json/json.h"
-#include "sources/data_source/data_source.h"
 
 #include "english/collections/user_collection.h"
+#include "english/validators/validator_user.h"
+
+#include "sources/data_source/data_source.h"
 
 #include "util/generic/iostream.h"
-
-#include "english/validators/validator_user.h"
-#include "sources/records/base_record.h"
 
 #include <string>
 
@@ -41,7 +40,6 @@ namespace NEnglish {
             response["Status"] = "FatalError";
             response["Errors"] = e.what();
             ERROR_LOG << response.dump() << Endl;
-            res.set_content(response.dump(), "application/json");
         }
 
         res.set_content(response.dump(), "application/json");
