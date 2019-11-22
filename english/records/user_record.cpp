@@ -8,7 +8,7 @@ namespace {
     }
 
     TString GenerateConfirmationKey() {
-        std::time_t nowTime = std::time(0);
+        std::time_t nowTime = time(NULL);
         return NString::ToString(nowTime) + '-' + NString::ToString(rand());
     }
 }

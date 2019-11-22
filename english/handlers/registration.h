@@ -35,13 +35,15 @@ namespace NEnglish {
                     { "ValidationErrors", validator.GetValidationErrors() }
                 };
             }
+            INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             NJson::TJsonValue response;
             response["Status"] = "FatalError";
             response["Errors"] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+            res.set_content(response.dump(), "application/json");
         }
 
-        Cout << response.dump() << Endl;
         res.set_content(response.dump(), "application/json");
     }
 
