@@ -16,7 +16,7 @@ namespace NEnglish {
 	private:
 		bool ValidatePhone(const TString& field);
 
-		const TString VALIDATION_ERROR_PHONE = "must_be_phone";
+		const TString VALIDATION_ERROR_PHONE = "MustBePhone";
 	};
 
 }

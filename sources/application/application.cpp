@@ -10,8 +10,6 @@
 #include "english/handlers/registration.h"
 
 TApplication::TApplication() {
-    NJson::TJsonValue v;
-    Cout << v.dump() << Endl;
     Cout << "Starting server..." << Endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
     Server.reset(new httplib::Server());

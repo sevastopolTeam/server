@@ -8,16 +8,16 @@ class IValidator {
 public:
     NJson::TJsonValue GetValidationErrors() const;
 
-    void AddValidationError(const TString& field, const TString& error);
+    void AddExternalValidation(const TString& field, const bool resolution, const TString& error);
 	virtual bool Validate() = 0;
 protected:
 	NJson::TJsonValue OriginJson;
 	NJson::TJsonValue ValidationErrors;
 	bool IsValid;
 
-	const TString VALIDATION_ERROR_REQUIRED = "can_not_be_empty";
-	const TString VALIDATION_ERROR_EMAIL = "must_be_email";
-	const TString VALIDATION_ERROR_SAME = "must_be_same";
+	const TString VALIDATION_ERROR_REQUIRED = "CanNotBeEmpty";
+	const TString VALIDATION_ERROR_EMAIL = "MustBeEmail";
+	const TString VALIDATION_ERROR_SAME = "MustBeSame";
 
 	bool ValidateRequired(const TString& field);
     bool ValidateEmail(const TString& field);

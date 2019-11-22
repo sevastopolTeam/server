@@ -16,28 +16,29 @@
 namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response;
         try {
             NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
             TValidatorUser validator(jsonUser);
-
-            if (dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value("Email", ""))) {
-                validator.AddValidationError("Email", "already_exists");
-            }
-
+            validator.AddExternalValidation(
+                "Email",
+                dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value("Email", "")),
+                "AlreadyExists"
+            );
             if (validator.Validate()) {
                 if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
-                    response["status"] = "insert_error";
+                    response["Status"] = "InsertError";
                 }
             } else {
                 response = {
-                    { "status", "validation_error", },
-                    { "validation_errors", validator.GetValidationErrors() }
+                    { "Status", "ValidationError", },
+                    { "ValidationErrors", validator.GetValidationErrors() }
                 };
             }
         } catch (const std::exception& e) {
             NJson::TJsonValue response;
-            response["status"] = "fatal_error";
-            response["error"] = e.what();
+            response["Status"] = "FatalError";
+            response["Errors"] = e.what();
         }
 
         Cout << response.dump() << Endl;

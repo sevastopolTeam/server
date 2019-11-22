@@ -23,23 +23,7 @@ namespace NEnglish {
         , RepeatPassword(json.value("RepeatPassword", ""))
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
-        , ResetPasswordKey(GenerateConfirmationKey())
-    {
-        // // ValidateRequired("Name");
-        // Validate("Name", { EValidationsType::REQUIRED });
-        // Validate("Email", { EValidationsType::REQUIRED, EValidationsType::EMAIL });
-        // Validate("Phone", { EValidationsType::REQUIRED });
-    }
-
-    bool TRecordUser::IsValid(NJson::TJsonValue* error) {
-        if (Password != RepeatPassword) {
-            (*error)["status"] = "validation_error";
-            (*error)["validation_errors"] = { { "Password", "is not same" } };
-            return false;
-        }
-        (*error)["status"] = "ok";
-        return true;
-    }
+        , ResetPasswordKey(GenerateConfirmationKey()) {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {

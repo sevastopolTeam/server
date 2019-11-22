@@ -24,6 +24,8 @@ bool IValidator::ValidateEmail(const TString& field) {
 }
 
 bool IValidator::ValidateSame(const TString& validateField, const TString& sameField) {
+	Cout << OriginJson.value(validateField, "") << Endl;
+	Cout << OriginJson.value(sameField, "") << Endl;
 	bool valid = OriginJson.value(validateField, "") == OriginJson.value(sameField, "");
 
 	if (!valid) {
@@ -34,7 +36,9 @@ bool IValidator::ValidateSame(const TString& validateField, const TString& sameF
 	return valid;
 }
 
-void IValidator::AddValidationError(const TString& field, const TString& error) {
-	ValidationErrors[field].push_back(error);
-	IsValid = false;
+void IValidator::AddExternalValidation(const TString& field, const bool resolution, const TString& error) {
+	if (resolution) {
+		ValidationErrors[field].push_back(error);
+		IsValid = false;
+	}
 }
