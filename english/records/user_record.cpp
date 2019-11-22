@@ -1,6 +1,6 @@
 #include "user_record.h"
-
 #include <ctime>
+#include "contrib/json/json.h"
 
 #include "contrib/json/json.h"
 #include "contrib/md5/md5.h"
@@ -32,7 +32,8 @@ namespace NEnglish {
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
         , ResetPasswordKey(GenerateConfirmationKey())
-        , PasswordHash(GeneratePasswordHash(json.value("Password", ""))) {}
+        , PasswordHash(GeneratePasswordHash(json.value("Password", "")))
+        , ResetPasswordKey(GenerateConfirmationKey()) {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {
