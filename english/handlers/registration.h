@@ -27,6 +27,8 @@ namespace NEnglish {
             if (validator.Validate()) {
                 if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
                     response["Status"] = "InsertError";
+                } else {
+                    response["Status"] = "Ok";
                 }
             } else {
                 response = {
@@ -36,12 +38,10 @@ namespace NEnglish {
             }
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
-            NJson::TJsonValue response;
             response["Status"] = "FatalError";
             response["Errors"] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
-
         res.set_content(response.dump(), "application/json");
     }
 
