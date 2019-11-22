@@ -6,5 +6,5 @@
 
 class IRecord {
 public:
-	virtual NJson::TJsonValue ToJson() const = 0;
+    virtual NJson::TJsonValue ToJson() const = 0;
 };

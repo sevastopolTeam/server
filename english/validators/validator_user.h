@@ -4,19 +4,14 @@
 #include "util/generic/string.h"
 #include "util/generic/vector.h"
 
-#include "sources/validators/validator.h"
+#include "validator_common_english.h"
 
 namespace NEnglish {
 
-	class TValidatorUser : public IValidator {
-	public:
-		TValidatorUser(const NJson::TJsonValue& jsonData);
-		bool Validate() override;
-
-	private:
-		bool ValidatePhone(const TString& field);
-
-		const TString VALIDATION_ERROR_PHONE = "MustBePhone";
-	};
+    class TValidatorUser : public IValidatorCommonEnglish {
+    public:
+        TValidatorUser(const NJson::TJsonValue& jsonData);
+        bool Validate() override;
+    };
 
 }

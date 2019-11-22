@@ -10,7 +10,6 @@ namespace NEnglish {
     public:
         TRecordUser(const NJson::TJsonValue& json);
 
-        bool IsValid(NJson::TJsonValue* error);
         NJson::TJsonValue ToJson() const override;
 
         NJson::TJsonValue GetUniqSelector() const;
