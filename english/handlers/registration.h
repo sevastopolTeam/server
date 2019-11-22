@@ -10,8 +10,6 @@
 
 #include "util/generic/iostream.h"
 
-#include <string>
-
 namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {

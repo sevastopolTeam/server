@@ -25,5 +25,4 @@ namespace NEnglish {
 
         return IsValid;
     }
-
 }

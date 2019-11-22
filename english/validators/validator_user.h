@@ -13,5 +13,4 @@ namespace NEnglish {
         TValidatorUser(const NJson::TJsonValue& jsonData);
         bool Validate() override;
     };
-
 }

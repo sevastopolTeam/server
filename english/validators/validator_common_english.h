@@ -15,5 +15,4 @@ namespace NEnglish {
 
         bool ValidatePhone(const TString& field);
     };
-
 }
