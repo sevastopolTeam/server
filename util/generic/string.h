@@ -34,4 +34,8 @@ struct NString {
 
         return value;
     }
+
+    static bool IsDigit(const char c) {
+        return isdigit(c);
+    }
 };

@@ -1,6 +1,6 @@
 #include "user_record.h"
-
 #include <ctime>
+#include "contrib/json/json.h"
 
 namespace {
     TString Normalize(const TString& str) {

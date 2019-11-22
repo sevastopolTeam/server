@@ -1,6 +1,7 @@
 #pragma once
 
 #include "contrib/httplib/httplib.h"
+#include "contrib/json/json.h"
 #include "sources/data_source/data_source.h"
 
 #include "english/collections/user_collection.h"
@@ -10,32 +11,37 @@
 #include "english/validators/validator_user.h"
 #include "sources/records/base_record.h"
 
+#include <string>
+
 namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         try {
-            TValidatorUser v(NJson::TJsonValue::parse(req.body));
-            // Cout << v.Validate() << Endl;
-            return;
-            TRecordUser user(NJson::TJsonValue::parse(req.body));
-            NJson::TJsonValue result;
-            if (user.IsValid(&result)) {
-                if (dataSource.English.CollectionUser.IsAlreadyRegistred(user)) {
-                    result["status"] = "user already register";
-                } else {
-                    if (!dataSource.English.CollectionUser.Register(user)) {
-                        result["status"] = "insert error";
-                    }
-                }
+            NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
+            TValidatorUser validator(jsonUser);
+
+            if (dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value("Email", ""))) {
+                validator.AddValidationError("Email", "already_exists");
             }
-            Cout << result.dump() << Endl;
-            res.set_content(result.dump(), "application/json");
+
+            if (validator.Validate()) {
+                if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
+                    response["status"] = "insert_error";
+                }
+            } else {
+                response = {
+                    { "status", "validation_error", },
+                    { "validation_errors", validator.GetValidationErrors() }
+                };
+            }
         } catch (const std::exception& e) {
-            NJson::TJsonValue result;
-            result["status"] = e.what();
-            Cout << result << Endl;
-            res.set_content(result, "application/json");
+            NJson::TJsonValue response;
+            response["status"] = "fatal_error";
+            response["error"] = e.what();
         }
+
+        Cout << response.dump() << Endl;
+        res.set_content(response.dump(), "application/json");
     }
 
 }
