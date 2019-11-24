@@ -6,13 +6,13 @@
 
 namespace NEnglish {
 
+    const TString VALIDATION_ERROR_PHONE = "MustBePhone";
+
     class IValidatorCommonEnglish : public IValidator {
     public:
         virtual bool Validate() = 0;
 
     protected:
-        const TString VALIDATION_ERROR_PHONE = "MustBePhone";
-
         bool ValidatePhone(const TString& field);
     };
 }

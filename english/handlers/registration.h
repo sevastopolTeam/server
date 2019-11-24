@@ -1,4 +1,5 @@
 #pragma once
+#include "routing.h"
 
 #include "contrib/httplib/httplib.h"
 #include "contrib/json/json.h"
@@ -18,26 +19,26 @@ namespace NEnglish {
             NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
             TValidatorUser validator(jsonUser);
             validator.AddExternalValidation(
-                "Email",
-                dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value("Email", "")),
-                "AlreadyExists"
+                RECORD_USER_FIELD_EMAIL,
+                dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value(RECORD_USER_FIELD_EMAIL, "")),
+                VALIDATION_ERROR_ALREADY_EXISTS
             );
             if (validator.Validate()) {
                 if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
-                    response["Status"] = "InsertError";
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
                 } else {
-                    response["Status"] = "Ok";
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
                 }
             } else {
                 response = {
-                    { "Status", "ValidationError", },
-                    { "ValidationErrors", validator.GetValidationErrors() }
+                    { RESPONSE_STATUS, RESPONSE_STATUS_VALIDATION_ERRROR },
+                    { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
                 };
             }
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
-            response["Status"] = "FatalError";
-            response["Errors"] = e.what();
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERRORS] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
         res.set_content(response.dump(), "application/json");
