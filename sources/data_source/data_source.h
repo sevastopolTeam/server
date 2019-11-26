@@ -5,11 +5,16 @@
 #include "util/generic/holder.h"
 
 #include "english/collections/user_collection.h"
+#include "english/collections/session_collection.h"
 
 struct TEnglishCollections {
     NEnglish::TCollectionUser CollectionUser;
+    NEnglish::TCollectionSession CollectionSession;
 
-    TEnglishCollections(const NEnglish::TCollectionUser& collectionUser);
+    TEnglishCollections(
+        const NEnglish::TCollectionUser& collectionUser,
+        const NEnglish::TCollectionSession& collectionSession
+    );
 };
 
 class TDataSource {

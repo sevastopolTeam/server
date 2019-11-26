@@ -23,6 +23,10 @@ namespace {
 
 namespace NEnglish {
 
+    TString TRecordUser::GetId() const {
+        return *Id;
+    }
+
     TRecordUser::TRecordUser(const NJson::TJsonValue& json)
         : Email(Normalize(json.value(RECORD_USER_FIELD_EMAIL, "")))
         , Name(json.value(RECORD_USER_FIELD_NAME, ""))
@@ -32,7 +36,8 @@ namespace NEnglish {
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
         , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
-        , ResetPasswordKey(GenerateConfirmationKey()) {}
+        , ResetPasswordKey(GenerateConfirmationKey())
+        , Id(json.value(RECORD_USER_FIELD_ID, "").size() ? new TString(json.value(RECORD_USER_FIELD_ID, "")) : nullptr) {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {
@@ -42,7 +47,12 @@ namespace NEnglish {
             {RECORD_USER_FIELD_PASSWORD_HASH, PasswordHash},
             {RECORD_USER_FIELD_CONFIRMATION_KEY, ConfirmationKey},
             {RECORD_USER_FIELD_CONFIRMED, Confirmed},
-            {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey}
+            {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey},
+            {RECORD_USER_FIELD_ID, Id != nullptr ? *Id : ""}
         };
+    }
+
+    bool TRecordUser::CheckPassword(const TString& password) const {
+        return PasswordHash == GeneratePasswordHash(password);
     }
 }

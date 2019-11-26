@@ -5,7 +5,8 @@
 #include "contrib/json/json.h"
 
 #include "english/collections/user_collection.h"
-#include "english/validators/validator_user.h"
+#include "english/records/user_record.h"
+#include "english/validators/validator_login.h"
 
 #include "sources/data_source/data_source.h"
 
@@ -13,19 +14,33 @@
 
 namespace NEnglish {
 
-    void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+    void LoginHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response;
         try {
-            NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
-            TValidatorUser validator(jsonUser);
+            NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
+            
+            TValidatorLogin validator(jsonLoginInfo);
+
+            const TRecordUser* user = dataSource.English.CollectionUser.FindByEmail(
+                jsonLoginInfo.value(RECORD_USER_FIELD_EMAIL, "")
+            );
+            Cout << "TEST" << Endl;
+            
             validator.Validate();
             validator.AddExternalValidation(
                 RECORD_USER_FIELD_EMAIL,
-                dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value(RECORD_USER_FIELD_EMAIL, "")),
-                VALIDATION_ERROR_ALREADY_EXISTS
+                user == nullptr,
+                VALIDATION_ERROR_NOT_EXISTS
+            );
+            validator.AddExternalValidation(
+                RECORD_USER_FIELD_PASSWORD,
+                user != nullptr && user->CheckPassword(jsonLoginInfo.value("Password", "")),
+                VALIDATION_ERROR_INCORRECT
             );
             if (validator.IsValid()) {
-                if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
+                Cout << user->GetId() << Endl;
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
+                if (!dataSource.English.CollectionSession.Create(TRecordSession(user->GetId()))) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
                 } else {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;

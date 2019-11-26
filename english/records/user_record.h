@@ -6,6 +6,7 @@
 
 namespace NEnglish {
 
+    const TString RECORD_USER_FIELD_ID = "Id";
     const TString RECORD_USER_FIELD_EMAIL = "Email";
     const TString RECORD_USER_FIELD_NAME = "Name";
     const TString RECORD_USER_FIELD_PHONE = "Phone";
@@ -20,12 +21,14 @@ namespace NEnglish {
     public:
         TRecordUser(const NJson::TJsonValue& json);
 
-        NJson::TJsonValue ToJson() const override;
+        TString GetId() const;
 
-        NJson::TJsonValue GetUniqSelector() const;
+        bool CheckPassword(const TString& password) const;
+        NJson::TJsonValue ToJson() const override;
 
     private:
         // DB fields
+        TString* Id;
         TString Email;
         TString Name;
         TString Phone;

@@ -2,18 +2,15 @@
 
 #include "english/records/user_record.h"
 
-#include "util/generic/iostream.h"
-
-
 namespace NEnglish {
 
     TValidatorUser::TValidatorUser(const NJson::TJsonValue& jsonData) {
         OriginJson = jsonData;
-        IsValid = false;
+        Valid = false;
     }
 
     bool TValidatorUser::Validate() {
-        IsValid = true;
+        Valid = true;
         ValidateRequired(RECORD_USER_FIELD_NAME);
 
         ValidateRequired(RECORD_USER_FIELD_EMAIL);
@@ -26,6 +23,6 @@ namespace NEnglish {
 
         ValidateSame(RECORD_USER_FIELD_REPEAT_PASSWORD, RECORD_USER_FIELD_PASSWORD);
 
-        return IsValid;
+        return Valid;
     }
 }
