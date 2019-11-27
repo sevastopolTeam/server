@@ -1,8 +1,6 @@
 #include "user_collection.h"
 #include "contrib/json/json.h"
 
-#include "english/records/user_record.h"
-
 #include "util/generic/iostream.h"
 
 namespace NEnglish {

@@ -5,17 +5,28 @@
 #include "contrib/json/json.h"
 
 #include "english/collections/session_collection.h"
-#include "english/validators/validator_user.h"
 
 #include "sources/data_source/data_source.h"
 
 #include "util/generic/iostream.h"
+
+#include <ctime>
+#include <util/generic/string.h>
 
 namespace NEnglish {
 
     void AdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response;
         try {
+
+            std::time_t nowTime = time(NULL);
+            Cout << NString::ToString(nowTime) << Endl;
+
+            Cout << "Headers" << Endl;
+            // Cout << req.headers["Authoriation"] << Endl;
+            for (auto& p: req.headers) {
+                Cout << p.first << " " << p.second << Endl;
+            }
             const auto& sessions = dataSource.English.CollectionSession.Find();
             response["sessions"] = {};
             for (const auto& session: sessions) {

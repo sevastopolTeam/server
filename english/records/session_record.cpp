@@ -17,7 +17,7 @@ namespace NEnglish {
 
     TRecordSession::TRecordSession(const NJson::TJsonValue& json)
         : UserId(json.value("UserId", ""))
-        , Token(GenerateSessionToken()) {}
+        , Token(json.value("Token", "").size() ? json.value("Token", "") : GenerateSessionToken()) {}
 
     TRecordSession::TRecordSession(const TString& userId)
         : UserId(userId)

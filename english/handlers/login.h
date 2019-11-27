@@ -4,7 +4,9 @@
 #include "contrib/httplib/httplib.h"
 #include "contrib/json/json.h"
 
+#include "english/collections/session_collection.h"
 #include "english/collections/user_collection.h"
+#include "english/records/session_record.h"
 #include "english/records/user_record.h"
 #include "english/validators/validator_login.h"
 
@@ -18,13 +20,10 @@ namespace NEnglish {
         NJson::TJsonValue response;
         try {
             NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
-            
             TValidatorLogin validator(jsonLoginInfo);
-
             const TRecordUser* user = dataSource.English.CollectionUser.FindByEmail(
                 jsonLoginInfo.value(RECORD_USER_FIELD_EMAIL, "")
             );
-            Cout << "TEST" << Endl;
             
             validator.Validate();
             validator.AddExternalValidation(
@@ -38,7 +37,6 @@ namespace NEnglish {
                 VALIDATION_ERROR_INCORRECT
             );
             if (validator.IsValid()) {
-                Cout << user->GetId() << Endl;
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
                 if (!dataSource.English.CollectionSession.Create(TRecordSession(user->GetId()))) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
