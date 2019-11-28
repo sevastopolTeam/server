@@ -1,7 +1,10 @@
 #pragma once
 
+#include "contrib/json/json.h"
+
 #include "library/mongo/wrappers.h"
 
+template <class TRecord>
 class ICollection {
 public:
     ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName)
@@ -10,6 +13,11 @@ public:
         , CollectionName(collectionName)
     {}
 
+    // bool Create(const TRecord& record);
+    // bool Save(const TRecord& record);
+    int Test();
+    // TRecord FindById(const TString& recordId);
+
     ~ICollection() = default;
 
 protected:
@@ -17,3 +25,8 @@ protected:
     TString DbName;
     TString CollectionName;
 };
+
+// template <class TRecord>
+// int ICollection<TRecord>::Test() {
+//     return 5;
+// }

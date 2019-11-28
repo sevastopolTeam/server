@@ -7,11 +7,10 @@
 
 namespace NEnglish {
 
-    class TCollectionUser : public ICollection {
+    class TCollectionUser : public ICollection<TRecordUser> {
     public:
         using ICollection::ICollection;
 
-        bool Register(const TRecordUser& user);
         bool ExistsWithEmail(const TString& email);
     };
 

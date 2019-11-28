@@ -7,4 +7,8 @@
 class IRecord {
 public:
     virtual NJson::TJsonValue ToJson() const = 0;
+
+    bool IsNewRecord() const;
+protected:
+    bool NewRecord = false;
 };
