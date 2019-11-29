@@ -90,17 +90,17 @@ namespace NMongo {
         mongoc_cursor_destroy(*this);
     }
 
-    std::pair<TBsonValue, bool> TCursor::Begin() {
+    TMaybe<TBsonValue> TCursor::Begin() {
         return Next();
     }
 
-    std::pair<TBsonValue, bool> TCursor::Next() {
+    TMaybe<TBsonValue> TCursor::Next() {
         const bson_t* doc;
         if (mongoc_cursor_next(*this, &doc)) {
-            return std::make_pair(TBsonValue(doc), true);
+            return TBsonValue(doc);
         }
         else {
-            return std::make_pair(TBsonValue(), false);
+            return NothingObject;
         }
     }
 
@@ -294,7 +294,7 @@ namespace NMongo {
     }
 
     void THelper::Find(const TString& db, const TString& collectionName,
-            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
             const TReadPreferences& readPrefs) {
         TClient client(ClientPool);
@@ -302,8 +302,8 @@ namespace NMongo {
 
         TCursor cursor(mongoc_collection_find(collection, MONGOC_QUERY_NONE,
             skip, limit, 0, selector, fields, readPrefs));
-        for (auto it = cursor.Begin(); it.second; it = cursor.Next()) {
-            callback(it);
+        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
+            callback(*it);
         }
     }
 
@@ -312,8 +312,8 @@ namespace NMongo {
             const TReadPreferences& readPrefs) {
         TVector<TBsonValue> result;
         Find(db, collectionName,
-            [&result](const std::pair<TBsonValue, bool>& value) {
-                result.push_back(value.first);
+            [&result](const TBsonValue& value) {
+                result.push_back(value);
             },
             selector, skip, limit, fields, readPrefs);
         return result;
@@ -357,7 +357,7 @@ namespace NMongo {
     }
 
     void THelper::Aggregate(const TString& db, const TString& collectionName,
-            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& pipeline,
             const mongoc_query_flags_t flags) {
         TClient client(ClientPool);
@@ -365,8 +365,8 @@ namespace NMongo {
 
         TCursor cursor(mongoc_collection_aggregate(collection, flags,
             pipeline, nullptr, nullptr));
-        for (auto it = cursor.Begin(); it.second; it = cursor.Next()) {
-            callback(it);
+        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
+            callback(*it);
         }
     }
 
@@ -375,9 +375,9 @@ namespace NMongo {
             const mongoc_query_flags_t flags) {
         TVector<TBsonValue> result;
         Aggregate(db, collectionName,
-            [&result](const std::pair<TBsonValue, bool>& value) {
-            result.push_back(value.first);
-        },
+            [&result](const TBsonValue& value) {
+                result.push_back(value);
+            },
             pipeline, flags);
         return result;
     }

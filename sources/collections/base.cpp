@@ -1,5 +1,6 @@
 #include "base.h"
 #include "library/mongo/wrappers.h"
+#include <iostream>
 
 TVector<TRecordBase> TCollectionBase::Find() {
     TVector<NMongo::TBsonValue> result = Master->Find(DbName, CollectionName);

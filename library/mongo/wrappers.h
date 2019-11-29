@@ -6,6 +6,7 @@
 #include "contrib/json/json.h"
 #include "contrib/mongo-c-driver/libbson/src/bson/bson.h"
 #include "contrib/mongo-c-driver/libmongoc/src/mongoc/mongoc.h"
+#include "util/generic/maybe.h"
 #include "util/generic/noncopyable.h"
 #include "util/generic/string.h"
 #include "util/generic/vector.h"
@@ -169,8 +170,8 @@ namespace NMongo {
         TCursor(mongoc_cursor_t* value);
         ~TCursor() noexcept(false) override;
 
-        std::pair<TBsonValue, bool> Begin();
-        std::pair<TBsonValue, bool> Next();
+        TMaybe<TBsonValue> Begin();
+        TMaybe<TBsonValue> Next();
     };
 
     class TBulkOperation : public TMongoStructureHolder<mongoc_bulk_operation_t> {
@@ -209,7 +210,7 @@ namespace NMongo {
             const TBsonValue& selector, TError* error = nullptr);
 
         void Find(const TString& db, const TString& collection,
-            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& selector = TBsonValue(),
             size_t skip = 0, size_t limit = 0,
             const TBsonValue& fields = TBsonValue(),
@@ -228,7 +229,7 @@ namespace NMongo {
             const TBsonValue& selector = TBsonValue(),
             size_t skip = 0, size_t limit = 0, TError* error = nullptr);
         void Aggregate(const TString& db, const TString& collection,
-            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& pipeline,
             const mongoc_query_flags_t flags = MONGOC_QUERY_NONE);
         TVector<TBsonValue> Aggregate(const TString& db, const TString& collection,
