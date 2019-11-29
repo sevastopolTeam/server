@@ -15,6 +15,7 @@ namespace NEnglish {
         if (!result.size()) {
             return nullptr;
         }
+        // get json
         NJson::TJsonValue json = result[0].ToJson();
         json[RECORD_USER_FIELD_ID] = json["_id"].value("$oid", "");
         return new TRecordUser(json);
