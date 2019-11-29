@@ -15,7 +15,6 @@ namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response;
-        Cout << dataSource.English.CollectionUser.Test() << Endl;
         try {
             NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
             TValidatorUser validator(jsonUser);
@@ -25,11 +24,11 @@ namespace NEnglish {
                 VALIDATION_ERROR_ALREADY_EXISTS
             );
             if (validator.Validate()) {
-                // if (!dataSource.English.CollectionUser.Create(TRecordUser(jsonUser))) {
-                //     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
-                // } else {
-                //     response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
-                // }
+                if (!dataSource.English.CollectionUser.Create(TRecordUser(jsonUser))) {
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
+                } else {
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
+                }
             } else {
                 response = {
                     { RESPONSE_STATUS, RESPONSE_STATUS_VALIDATION_ERRROR },

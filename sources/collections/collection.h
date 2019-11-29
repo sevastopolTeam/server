@@ -1,8 +1,9 @@
 #pragma once
 
 #include "contrib/json/json.h"
-
 #include "library/mongo/wrappers.h"
+
+#include "util/generic/vector.h"
 
 template <class TRecord>
 class ICollection {
@@ -13,9 +14,7 @@ public:
         , CollectionName(collectionName)
     {}
 
-    // bool Create(const TRecord& record);
-    // bool Save(const TRecord& record);
-    int Test();
+    bool Create(const TRecord& record);
     // TRecord FindById(const TString& recordId);
 
     ~ICollection() = default;
@@ -26,7 +25,31 @@ protected:
     TString CollectionName;
 };
 
+template <class TRecord>
+bool ICollection<TRecord>::Create(const TRecord& record) {
+    return Master->Insert(DbName, CollectionName, record.ToJson());
+}
+
+template <class TRecord>
+TVector<TRecord> ICollection<TRecord>::Find() {
+    TVector<NMongo::TBsonValue> result = Master->Find(DbName, CollectionName);
+    TVector<TRecord> records;
+    for (const auto& a : result) {
+        records.push_back(TRecord(a.ToJson()));
+    }
+    return records;
+}
+
 // template <class TRecord>
-// int ICollection<TRecord>::Test() {
-//     return 5;
+// bool ICollection<TRecord>::Save(const TRecord& record) {
+//     if (record.IsNewRecord()) {
+//         Master->Insert(DbName, CollectionName, record);
+//     } else {
+//         // TODO
+//     }
+// }
+
+// template <class TRecord>
+// TRecord ICollection::FindById(const TString& recordId) {
+//     return 
 // }
