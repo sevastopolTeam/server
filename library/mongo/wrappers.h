@@ -6,8 +6,8 @@
 #include "contrib/json/json.h"
 #include "contrib/mongo-c-driver/libbson/src/bson/bson.h"
 #include "contrib/mongo-c-driver/libmongoc/src/mongoc/mongoc.h"
-#include "util/generic/maybe.h"
 #include "util/generic/noncopyable.h"
+#include "util/generic/maybe.h"
 #include "util/generic/string.h"
 #include "util/generic/vector.h"
 

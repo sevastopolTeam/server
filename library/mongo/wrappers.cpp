@@ -1,8 +1,8 @@
 #include "wrappers.h"
 
 namespace NMongo {
-    TReadPreferences::TReadPreferences() {
-    }
+    TReadPreferences::TReadPreferences()
+    {}
 
     TReadPreferences::TReadPreferences(mongoc_read_mode_t mode) {
         EnsureCreated(mode);
@@ -40,8 +40,7 @@ namespace NMongo {
 
     TUri::TUri(const TString& connectionString)
         : TMongoStructureHolder(mongoc_uri_new(connectionString.c_str()))
-    {
-    }
+    {}
 
     TUri::~TUri() {
         mongoc_uri_destroy(*this);
@@ -50,8 +49,7 @@ namespace NMongo {
     TClient::TClient(const TClientPool& pool)
         : TMongoStructureHolder(mongoc_client_pool_pop(pool))
         , Pool(pool)
-    {
-    }
+    {}
 
     TClient::~TClient() {
         mongoc_client_pool_push(Pool, *this);
@@ -59,8 +57,7 @@ namespace NMongo {
 
     TClientPool::TClientPool(const TUri& uri)
         : TMongoStructureHolder(mongoc_client_pool_new(uri))
-    {
-    }
+    {}
 
     TClientPool::~TClientPool() {
         mongoc_client_pool_destroy(*this);
@@ -69,8 +66,7 @@ namespace NMongo {
     TCollection::TCollection(const TClient& client, const TString& db,
             const TString& collection)
         : TMongoStructureHolder(mongoc_client_get_collection(client, db.data(), collection.data()))
-    {
-    }
+    {}
 
     TCollection::~TCollection() {
         mongoc_collection_destroy(*this);
@@ -78,8 +74,7 @@ namespace NMongo {
 
     TCursor::TCursor(mongoc_cursor_t* value)
         : TMongoStructureHolder(value)
-    {
-    }
+    {}
 
     TCursor::~TCursor() noexcept(false) {
         bson_error_t error;
@@ -99,15 +94,12 @@ namespace NMongo {
         if (mongoc_cursor_next(*this, &doc)) {
             return TBsonValue(doc);
         }
-        else {
-            return NothingObject;
-        }
+        return Nothing();
     }
 
     TBulkOperation::TBulkOperation(mongoc_bulk_operation_t* value)
         : TMongoStructureHolder(value)
-    {
-    }
+    {}
 
     TBulkOperation::~TBulkOperation() noexcept(false) {
         mongoc_bulk_operation_destroy(*this);
@@ -115,33 +107,27 @@ namespace NMongo {
 
     TBsonValue::TBsonValue()
         : TBsonValue(NJson::TJsonValue::object())
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(bson_t* value, bool shouldCopy)
         : Value(shouldCopy ? bson_copy(value) : value)
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const bson_t* value)
         : Value(bson_copy(value))
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const NJson::TJsonValue& json)
         : Value(bson_new_from_json(reinterpret_cast<const uint8_t*>(json.dump().c_str()), -1, nullptr))
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const TString& json)
         : Value(bson_new_from_json(reinterpret_cast<const uint8_t*>(json.c_str()), json.size(), nullptr))
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const TBsonValue& other)
         : Value(bson_copy(other))
-    {
-    }
+    {}
 
     TBsonValue::~TBsonValue() {
         Destroy();
@@ -176,8 +162,7 @@ namespace NMongo {
 
     THelper::THelper(const TString& connectionString)
         : ClientPool(connectionString)
-    {
-    }
+    {}
 
     bool THelper::Insert(const TString& db, const TString& collectionName,
         const TBsonValue& value, TError* error) {
