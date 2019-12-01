@@ -14,25 +14,18 @@
 namespace {
     inline tm _localtime_xp(time_t timer) {
         tm bt{};
-#if defined(__unix__)
-        localtime_r(&timer, &bt);
-#elif defined(_MSC_VER)
-        localtime_s(&bt, &timer);
-#else
         static std::mutex mtx;
         std::lock_guard<std::mutex> lock(mtx);
         bt = *localtime(&timer);
-#endif
         return bt;
     }
 
     inline char* _GetNowTime() {
-        static char _buffer[20] = "TODO";
-        // strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL))); // Don't work on macos
+        static char _buffer[20];
+        strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL)));
         return _buffer;
     }
 } // namespace
-
 
 void DoInitGlobalLog(const TString& logPath);
 

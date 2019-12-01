@@ -1,6 +1,6 @@
 #include "user_record.h"
+
 #include <ctime>
-#include "contrib/json/json.h"
 
 #include "contrib/json/json.h"
 #include "contrib/md5/md5.h"
@@ -12,8 +12,8 @@ namespace {
     }
 
     TString GenerateConfirmationKey() {
-        std::time_t nowTime = time(NULL);
-        return NString::ToString(nowTime) + '-' + NString::ToString(rand());
+        std::time_t nowTime = time(NULL); // TODO: add salt
+        return NString::ToString(static_cast<int>(nowTime)) + '-' + NString::ToString(rand());
     }
 
     TString GeneratePasswordHash(const TString& password) {
@@ -32,7 +32,8 @@ namespace NEnglish {
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
         , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
-        , ResetPasswordKey(GenerateConfirmationKey()) {}
+        , ResetPasswordKey(GenerateConfirmationKey())
+    {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {

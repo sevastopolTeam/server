@@ -1,8 +1,8 @@
 #include "wrappers.h"
 
 namespace NMongo {
-    TReadPreferences::TReadPreferences() {
-    }
+    TReadPreferences::TReadPreferences()
+    {}
 
     TReadPreferences::TReadPreferences(mongoc_read_mode_t mode) {
         EnsureCreated(mode);
@@ -40,8 +40,7 @@ namespace NMongo {
 
     TUri::TUri(const TString& connectionString)
         : TMongoStructureHolder(mongoc_uri_new(connectionString.c_str()))
-    {
-    }
+    {}
 
     TUri::~TUri() {
         mongoc_uri_destroy(*this);
@@ -50,8 +49,7 @@ namespace NMongo {
     TClient::TClient(const TClientPool& pool)
         : TMongoStructureHolder(mongoc_client_pool_pop(pool))
         , Pool(pool)
-    {
-    }
+    {}
 
     TClient::~TClient() {
         mongoc_client_pool_push(Pool, *this);
@@ -59,8 +57,7 @@ namespace NMongo {
 
     TClientPool::TClientPool(const TUri& uri)
         : TMongoStructureHolder(mongoc_client_pool_new(uri))
-    {
-    }
+    {}
 
     TClientPool::~TClientPool() {
         mongoc_client_pool_destroy(*this);
@@ -69,8 +66,7 @@ namespace NMongo {
     TCollection::TCollection(const TClient& client, const TString& db,
             const TString& collection)
         : TMongoStructureHolder(mongoc_client_get_collection(client, db.data(), collection.data()))
-    {
-    }
+    {}
 
     TCollection::~TCollection() {
         mongoc_collection_destroy(*this);
@@ -78,8 +74,7 @@ namespace NMongo {
 
     TCursor::TCursor(mongoc_cursor_t* value)
         : TMongoStructureHolder(value)
-    {
-    }
+    {}
 
     TCursor::~TCursor() noexcept(false) {
         bson_error_t error;
@@ -90,24 +85,21 @@ namespace NMongo {
         mongoc_cursor_destroy(*this);
     }
 
-    std::pair<TBsonValue, bool> TCursor::Begin() {
+    TMaybe<TBsonValue> TCursor::Begin() {
         return Next();
     }
 
-    std::pair<TBsonValue, bool> TCursor::Next() {
+    TMaybe<TBsonValue> TCursor::Next() {
         const bson_t* doc;
         if (mongoc_cursor_next(*this, &doc)) {
-            return std::make_pair(TBsonValue(doc), true);
+            return TBsonValue(doc);
         }
-        else {
-            return std::make_pair(TBsonValue(), false);
-        }
+        return Nothing();
     }
 
     TBulkOperation::TBulkOperation(mongoc_bulk_operation_t* value)
         : TMongoStructureHolder(value)
-    {
-    }
+    {}
 
     TBulkOperation::~TBulkOperation() noexcept(false) {
         mongoc_bulk_operation_destroy(*this);
@@ -115,33 +107,27 @@ namespace NMongo {
 
     TBsonValue::TBsonValue()
         : TBsonValue(NJson::TJsonValue::object())
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(bson_t* value, bool shouldCopy)
         : Value(shouldCopy ? bson_copy(value) : value)
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const bson_t* value)
         : Value(bson_copy(value))
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const NJson::TJsonValue& json)
         : Value(bson_new_from_json(reinterpret_cast<const uint8_t*>(json.dump().c_str()), -1, nullptr))
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const TString& json)
         : Value(bson_new_from_json(reinterpret_cast<const uint8_t*>(json.c_str()), json.size(), nullptr))
-    {
-    }
+    {}
 
     TBsonValue::TBsonValue(const TBsonValue& other)
         : Value(bson_copy(other))
-    {
-    }
+    {}
 
     TBsonValue::~TBsonValue() {
         Destroy();
@@ -176,8 +162,7 @@ namespace NMongo {
 
     THelper::THelper(const TString& connectionString)
         : ClientPool(connectionString)
-    {
-    }
+    {}
 
     bool THelper::Insert(const TString& db, const TString& collectionName,
         const TBsonValue& value, TError* error) {
@@ -294,7 +279,7 @@ namespace NMongo {
     }
 
     void THelper::Find(const TString& db, const TString& collectionName,
-            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
             const TReadPreferences& readPrefs) {
         TClient client(ClientPool);
@@ -302,8 +287,8 @@ namespace NMongo {
 
         TCursor cursor(mongoc_collection_find(collection, MONGOC_QUERY_NONE,
             skip, limit, 0, selector, fields, readPrefs));
-        for (auto it = cursor.Begin(); it.second; it = cursor.Next()) {
-            callback(it);
+        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
+            callback(*it);
         }
     }
 
@@ -312,8 +297,8 @@ namespace NMongo {
             const TReadPreferences& readPrefs) {
         TVector<TBsonValue> result;
         Find(db, collectionName,
-            [&result](const std::pair<TBsonValue, bool>& value) {
-                result.push_back(value.first);
+            [&result](const TBsonValue& value) {
+                result.push_back(value);
             },
             selector, skip, limit, fields, readPrefs);
         return result;
@@ -357,7 +342,7 @@ namespace NMongo {
     }
 
     void THelper::Aggregate(const TString& db, const TString& collectionName,
-            const std::function<void(const std::pair<TBsonValue, bool>&)>& callback,
+            const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& pipeline,
             const mongoc_query_flags_t flags) {
         TClient client(ClientPool);
@@ -365,8 +350,8 @@ namespace NMongo {
 
         TCursor cursor(mongoc_collection_aggregate(collection, flags,
             pipeline, nullptr, nullptr));
-        for (auto it = cursor.Begin(); it.second; it = cursor.Next()) {
-            callback(it);
+        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
+            callback(*it);
         }
     }
 
@@ -375,9 +360,9 @@ namespace NMongo {
             const mongoc_query_flags_t flags) {
         TVector<TBsonValue> result;
         Aggregate(db, collectionName,
-            [&result](const std::pair<TBsonValue, bool>& value) {
-            result.push_back(value.first);
-        },
+            [&result](const TBsonValue& value) {
+                result.push_back(value);
+            },
             pipeline, flags);
         return result;
     }
