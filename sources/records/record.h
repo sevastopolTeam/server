@@ -9,6 +9,11 @@ public:
     virtual NJson::TJsonValue ToJson() const = 0;
 
     bool IsNewRecord() const;
+
+    TString GetId() {
+        return Id;
+    }
 protected:
     bool NewRecord = false;
+    TString Id;
 };

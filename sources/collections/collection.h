@@ -5,6 +5,7 @@
 
 #include "util/generic/vector.h"
 
+#include "util/generic/iostream.h"
 template <class TRecord>
 class ICollection {
 public:
@@ -15,7 +16,8 @@ public:
     {}
 
     bool Create(const TRecord& record);
-    // TRecord FindById(const TString& recordId);
+    TVector<TRecord> Find();
+    TRecord* FindById(const TString& recordId);
 
     ~ICollection() = default;
 
@@ -40,6 +42,16 @@ TVector<TRecord> ICollection<TRecord>::Find() {
     return records;
 }
 
+template <class TRecord>
+TRecord* ICollection<TRecord>::FindById(const TString& recordId) {
+    Cout << CollectionName << Endl;
+    TVector<NMongo::TBsonValue> result = Master->Find(DbName, CollectionName, NJson::TJsonValue({{ "_id", recordId }}));
+    if (result.empty()) {
+        return nullptr;
+    }
+    return new TRecord(result[0].ToJson());
+}
+
 // template <class TRecord>
 // bool ICollection<TRecord>::Save(const TRecord& record) {
 //     if (record.IsNewRecord()) {
@@ -47,9 +59,4 @@ TVector<TRecord> ICollection<TRecord>::Find() {
 //     } else {
 //         // TODO
 //     }
-// }
-
-// template <class TRecord>
-// TRecord ICollection::FindById(const TString& recordId) {
-//     return 
 // }
