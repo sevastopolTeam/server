@@ -43,13 +43,24 @@ TVector<TRecord> ICollection<TRecord>::Find() {
 }
 
 template <class TRecord>
-TRecord* ICollection<TRecord>::FindById(const TString& recordId) {
-    Cout << CollectionName << Endl;
-    TVector<NMongo::TBsonValue> result = Master->Find(DbName, CollectionName, NJson::TJsonValue({{ "_id", recordId }}));
-    if (result.empty()) {
-        return nullptr;
+bool ICollection<TRecord>::Exists(const NJson::TJsonValue& selection) {
+    return !Master->Find(DbName, CollectionName, selection).empty();
+}
+
+template <class TRecord>
+TMaybe<TRecord> ICollection<TRecord>::FindById(const TString& recordId) {
+    NJson::TJsonValue json;
+    json["_id"]["$oid"] = user;
+    TVector<NMongo::TBsonValue> results = Master->Find(
+        DbName,
+        CollectionName,
+        json
+    );
+    if (results.empty()) {
+        return Nothing();
     }
-    return new TRecord(result[0].ToJson());
+
+    return TRecord(results[0].ToJson());
 }
 
 // template <class TRecord>

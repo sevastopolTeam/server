@@ -14,14 +14,6 @@
 namespace NEnglish {
 
     void RegistrationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        Cout << "T" << Endl;
-
-        TRecordUser* user = dataSource.English.CollectionUser.FindById("5ddbec35a127d00224795b22");
-        if (user != nullptr) {
-            Cout << user->GetId();
-        } else {
-            Cout << "null" << Endl;
-        }
         NJson::TJsonValue response;
         try {
             NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);

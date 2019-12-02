@@ -6,6 +6,7 @@
 #include "sources/handlers/numbers.h"
 
 #include "english/handlers/registration.h"
+#include "english/handlers/user.h"
 
 TApplication::TApplication() {
     INFO_LOG << "Starting server..." << Endl;
@@ -21,6 +22,9 @@ TApplication::TApplication() {
 
     Server->Post("/api/english/registration", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::RegistrationHandler(*DataSource, req, res);
+    });
+    Server->Get(R"(/api/english/user/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::UserHandler(*DataSource, req, res);
     });
 }
 

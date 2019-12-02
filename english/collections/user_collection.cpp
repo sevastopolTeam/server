@@ -4,11 +4,7 @@
 namespace NEnglish {
 
     bool TCollectionUser::ExistsWithEmail(const TString& email) {
-        return Master->Find(
-            DbName,
-            CollectionName,
-            NJson::TJsonValue({{ RECORD_USER_FIELD_EMAIL, email } })
-        ).size();
+        return Exists({{ RECORD_USER_FIELD_EMAIL, email }});
     }
 
 }

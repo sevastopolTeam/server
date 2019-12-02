@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
     try {
         DoInitGlobalLog("console");
         Cout << "Program started" << Endl;
-        srand(static_cast<unsigned int>(time(NULL)));
         if (argc < 2) {
             ERROR_LOG << "missing config file" << Endl;
         }

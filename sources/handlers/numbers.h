@@ -10,7 +10,7 @@ void NumbersHandler(TDataSource& dataSource, const httplib::Request& req, httpli
     res.set_content(numbers, "text/plain");
 
     NJson::TJsonValue json;
-    json["hello"] = TString(numbers);
+    json["Hello"] = TString(numbers);
     if (!dataSource.CollectionBase.Insert(json)) {
         Cout << "error insert" << Endl;
     }

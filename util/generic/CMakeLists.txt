@@ -7,6 +7,8 @@ add_library(generic STATIC
   iostream.cpp
   list.cpp
   map.cpp
+  maybe.cpp
+  maybe_traits.cpp
   noncopyable.cpp
   queue.cpp
   set.cpp

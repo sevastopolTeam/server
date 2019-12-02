@@ -1,7 +1,7 @@
 #include "base_record.h"
 
 TRecordBase::TRecordBase(const NJson::TJsonValue& json) {
-    Hello = json["Hello"].get<TString>();
+    Hello = json.value("Hello", "");
 }
 
 NJson::TJsonValue TRecordBase::ToJson() const {
