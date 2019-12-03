@@ -13,16 +13,33 @@
 
 namespace {
     inline TString _GetNowTime() {
-        using std::chrono::system_clock;
-        auto currentTime = system_clock::now();
+        std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+        auto duration = now.time_since_epoch();
 
-        int millis = static_cast<int>((currentTime.time_since_epoch().count() / 1000000) % 1000);
-        std::time_t tt = system_clock::to_time_t(currentTime);
+        typedef std::chrono::duration<int, std::ratio_multiply<std::chrono::hours::period, std::ratio<21>>::type> Days; /* UTC: -3:00 */
+
+        Days days = std::chrono::duration_cast<Days>(duration);
+        duration -= days;
+        auto hours = std::chrono::duration_cast<std::chrono::hours>(duration);
+        duration -= hours;
+        auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+        duration -= minutes;
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        duration -= seconds;
+        auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+
+        std::time_t tt = std::chrono::system_clock::to_time_t(now);
         auto timeinfo = localtime(&tt);
 
         char buffer[24];
-        strftime(buffer, 24, "%FT%H:%M:%S", timeinfo);
-        sprintf(buffer, "%s.%03d", buffer, millis);
+        strftime(buffer, 24, "%F", timeinfo);
+        sprintf(buffer, "%sT%02d:%02d:%02d.%03d",
+            buffer,
+            static_cast<int>(hours.count()),
+            static_cast<int>(minutes.count()),
+            static_cast<int>(seconds.count()),
+            static_cast<int>(milliseconds.count())
+        );
         return buffer;
     }
 } // namespace
