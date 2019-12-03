@@ -16,7 +16,7 @@ namespace {
         std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
         auto duration = now.time_since_epoch();
 
-        typedef std::chrono::duration<int, std::ratio_multiply<std::chrono::hours::period, std::ratio<21>>::type> Days; /* UTC: -3:00 */
+        typedef std::chrono::duration<int, std::ratio_multiply<std::chrono::hours::period, std::ratio<3>>::type> Days; /* UTC: -3:00 */
 
         Days days = std::chrono::duration_cast<Days>(duration);
         duration -= days;
