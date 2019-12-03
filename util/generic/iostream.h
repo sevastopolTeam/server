@@ -3,7 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <mutex>
+#include <chrono>
 
 #include "string.h"
 
@@ -12,18 +12,18 @@
 #define Endl std::endl
 
 namespace {
-    inline tm _localtime_xp(time_t timer) {
-        tm bt{};
-        static std::mutex mtx;
-        std::lock_guard<std::mutex> lock(mtx);
-        bt = *localtime(&timer);
-        return bt;
-    }
+    inline TString _GetNowTime() {
+        using std::chrono::system_clock;
+        auto currentTime = system_clock::now();
 
-    inline char* _GetNowTime() {
-        static char _buffer[20];
-        strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL)));
-        return _buffer;
+        int millis = static_cast<int>((currentTime.time_since_epoch().count() / 1000000) % 1000);
+        std::time_t tt = system_clock::to_time_t(currentTime);
+        auto timeinfo = localtime(&tt);
+
+        char buffer[24];
+        strftime(buffer, 24, "%FT%H:%M:%S", timeinfo);
+        sprintf(buffer, "%s.%03d", buffer, millis);
+        return buffer;
     }
 } // namespace
 
