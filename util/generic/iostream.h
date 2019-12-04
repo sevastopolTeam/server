@@ -22,7 +22,7 @@ namespace {
 
     inline char* _GetNowTime() {
         static char _buffer[20];
-        // strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL)));
+        strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL)));
         return _buffer;
     }
 } // namespace

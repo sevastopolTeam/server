@@ -2,14 +2,13 @@
 
 #include <exception>
 #include <utility>
-#include <functional>
 
 #include "maybe_traits.h"
 
 namespace NMaybe {
     struct TPolicyUndefinedExcept {
         static void OnEmpty() {
-            throw std::exception();
+            throw std::exception("TMaybe is empty");
         }
     };
 }
@@ -359,8 +358,7 @@ public:
     void Swap(TMaybe& other) {
         if (this->Defined_ == other.Defined_) {
             if (this->Defined_) {
-                // ::DoSwap(this->Data_, other.Data_);
-                std::swap(this->Data_, other.Data_);
+                ::DoSwap(this->Data_, other.Data_);
             }
         }
         else {

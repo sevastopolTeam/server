@@ -1,8 +1,6 @@
 #include "user_collection.h"
 #include "contrib/json/json.h"
 
-#include "util/generic/iostream.h"
-
 namespace NEnglish {
 
     bool TCollectionUser::Register(const TRecordUser& user) {
@@ -17,23 +15,17 @@ namespace NEnglish {
         ).size();
     }
 
-    // TMaybe<NJson::TJsonValue> TCollectionUser::Find(const TString& user) {
-    NJson::TJsonValue TCollectionUser::Find(const TString& user) {
-        Cout << "aaaa" << Endl;
+    TMaybe<NJson::TJsonValue> TCollectionUser::Find(const TString& user) {
         NJson::TJsonValue json;
-        json["query"]["_id"]["$oid"] = user;
-        Cout << "bbbb" << Endl;
-        Cout << json.dump() << Endl;
+        json["_id"]["$oid"] = user;
         TVector<NMongo::TBsonValue> results = Master->Find(
             DbName,
             CollectionName,
             json
         );
-        Cout << "cccc" << Endl;
         if (results.size() == 1) {
             return results[0].ToJson();
         }
-        Cout << "dddd" << Endl;
-        return {};//Nothing();
+        return Nothing();
     }
 }
