@@ -13,7 +13,8 @@ namespace NEnglish {
 
         bool Register(const TRecordUser& user);
         bool ExistsWithEmail(const TString& email);
-        TMaybe<NJson::TJsonValue> Find(const TString& user);
+        // TMaybe<NJson::TJsonValue> Find(const TString& user);
+        NJson::TJsonValue Find(const TString& user);
     };
 
 }
