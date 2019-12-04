@@ -10,7 +10,7 @@
 
 TApplication::TApplication() {
     INFO_LOG << "Starting server..." << Endl;
-    DataSource.reset(new TDataSource("mongodb://localhost:27017", "prod"));
+    DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
     Server.reset(new httplib::Server());
 
     Server->Get("/api/admin/hi", [&](const httplib::Request& req, httplib::Response& res) {

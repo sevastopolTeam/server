@@ -33,6 +33,7 @@ namespace NEnglish {
         , Confirmed(false)
         , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
         , ResetPasswordKey(GenerateConfirmationKey())
+        , Role("User")
     {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
@@ -43,7 +44,8 @@ namespace NEnglish {
             {RECORD_USER_FIELD_PASSWORD_HASH, PasswordHash},
             {RECORD_USER_FIELD_CONFIRMATION_KEY, ConfirmationKey},
             {RECORD_USER_FIELD_CONFIRMED, Confirmed},
-            {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey}
+            {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey},
+            {RECORD_USER_FIELD_ROLE, Role}
         };
     }
 }
