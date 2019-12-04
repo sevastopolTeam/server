@@ -3,12 +3,27 @@
 #include <exception>
 #include <utility>
 
+#include "string.h"
 #include "maybe_traits.h"
 
 namespace NMaybe {
+    class TMaybeException : public std::exception {
+    private:
+        TString Message;
+
+    public:
+        TMaybeException(const TString& message)
+            : Message(message)
+        {}
+
+        const char* what() const noexcept override {
+            return Message.c_str();
+        }
+    };
+
     struct TPolicyUndefinedExcept {
         static void OnEmpty() {
-            throw std::exception("TMaybe is empty");
+            throw TMaybeException("TMaybe is empty");
         }
     };
 }
@@ -358,7 +373,7 @@ public:
     void Swap(TMaybe& other) {
         if (this->Defined_ == other.Defined_) {
             if (this->Defined_) {
-                ::DoSwap(this->Data_, other.Data_);
+                std::swap(this->Data_, other.Data_);
             }
         }
         else {

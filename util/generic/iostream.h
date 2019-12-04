@@ -3,7 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <mutex>
+#include <chrono>
 
 #include "string.h"
 
@@ -12,18 +12,35 @@
 #define Endl std::endl
 
 namespace {
-    inline tm _localtime_xp(time_t timer) {
-        tm bt{};
-        static std::mutex mtx;
-        std::lock_guard<std::mutex> lock(mtx);
-        bt = *localtime(&timer);
-        return bt;
-    }
+    inline TString _GetNowTime() {
+        std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+        auto duration = now.time_since_epoch();
 
-    inline char* _GetNowTime() {
-        static char _buffer[20];
-        strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL)));
-        return _buffer;
+        typedef std::chrono::duration<int, std::ratio_multiply<std::chrono::hours::period, std::ratio<3>>::type> Days; /* UTC: -3:00 */
+
+        Days days = std::chrono::duration_cast<Days>(duration);
+        duration -= days;
+        auto hours = std::chrono::duration_cast<std::chrono::hours>(duration);
+        duration -= hours;
+        auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+        duration -= minutes;
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        duration -= seconds;
+        auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+
+        std::time_t tt = std::chrono::system_clock::to_time_t(now);
+        auto timeinfo = localtime(&tt);
+
+        char buffer[24];
+        strftime(buffer, 24, "%F", timeinfo);
+        sprintf(buffer, "%sT%02d:%02d:%02d.%03d",
+            buffer,
+            static_cast<int>(hours.count()),
+            static_cast<int>(minutes.count()),
+            static_cast<int>(seconds.count()),
+            static_cast<int>(milliseconds.count())
+        );
+        return buffer;
     }
 } // namespace
 
