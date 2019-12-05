@@ -6,18 +6,13 @@
 #include "util/generic/iostream.h"
 
 void HiHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-    TVector<TRecordBase> result = dataSource.CollectionBase.Find();
-
-    TString ans;
-    for (const auto& i : result) {
-        if (!ans.empty()) {
-            ans += ",";
-        }
-        ans += i.ToJson().dump();
+    TVector<TRecordBase> records = dataSource.CollectionBase.Find();
+    NJson::TJsonValue response;
+    for (const auto& record: records) {
+        response.push_back(record.ToJson());
     }
-    ans = "[" + ans + "]";
-    INFO_LOG << ans << Endl;
 
-    res.set_content(ans, "text/plain");
+    INFO_LOG << response.dump() << Endl;
+    res.set_content(response.dump(), "text/plain");
 }
 

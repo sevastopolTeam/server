@@ -6,7 +6,4 @@
 class TCollectionBase : public ICollection<TRecordBase> {
 public:
     using ICollection::ICollection;
-
-    TVector<TRecordBase> Find();
-    bool Insert(const TRecordBase& value);
 };
