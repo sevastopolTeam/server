@@ -16,7 +16,6 @@ namespace NEnglish {
         NJson::TJsonValue response;
         try {
             TString userId = req.matches[1];
-            Cout << userId << Endl;
             TMaybe<NJson::TJsonValue> record = dataSource.English.CollectionUser.Find(userId);
             if (!record) {
                 response = { { "Status", "user not found" } };
@@ -24,7 +23,8 @@ namespace NEnglish {
                 response = *record.Get();
             }
         } catch (std::exception& e) {
-            Cout << e.what() << Endl;
+            response = { { "Status", e.what() } };
+            ERROR_LOG << response.dump() << Endl;
         }
         INFO_LOG << response << Endl;
         res.set_content(response.dump(), "text/plain");
