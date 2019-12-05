@@ -8,7 +8,6 @@
 
 #include "sources/data_source/data_source.h"
 #include "util/generic/iostream.h"
-#include "contrib/mongo-c-driver/libmongoc/src/mongoc/mongoc.h"
 
 namespace NEnglish {
 
@@ -18,13 +17,13 @@ namespace NEnglish {
             TString userId = req.matches[1];
             TMaybe<NJson::TJsonValue> record = dataSource.English.CollectionUser.Find(userId);
             if (!record) {
-                response = { { "Status", "user not found" } };
+                response = { { NEnglish::RESPONSE_STATUS, "user not found" } };
             } else {
                 response = *record.Get();
             }
         } catch (std::exception& e) {
-            response = { { "Status", e.what() } };
-            ERROR_LOG << response.dump() << Endl;
+            response = { { NEnglish::RESPONSE_STATUS, e.what() } };
+            ERROR_LOG << e.what() << Endl;
         }
         INFO_LOG << response << Endl;
         res.set_content(response.dump(), "text/plain");
