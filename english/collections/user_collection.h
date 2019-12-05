@@ -12,7 +12,6 @@ namespace NEnglish {
         using ICollection::ICollection;
 
         bool ExistsWithEmail(const TString& email);
-        TMaybe<NJson::TJsonValue> Find(const TString& user);
     };
 
 }

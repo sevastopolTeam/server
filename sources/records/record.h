@@ -7,13 +7,7 @@
 class IRecord {
 public:
     virtual NJson::TJsonValue ToJson() const = 0;
-
-    bool IsNewRecord() const;
-
-    TString GetId() {
-        return Id;
-    }
+    TString GetId() const;
 protected:
-    bool NewRecord = false;
     TString Id;
 };

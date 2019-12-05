@@ -17,12 +17,14 @@ namespace NEnglish {
     const TString RECORD_USER_FIELD_REPEAT_PASSWORD = "RepeatPassword";
     const TString RECORD_USER_FIELD_ROLE = "Role";
 
+    const TString USER_ROLE_ADMIN = "Admin";
+    const TString USER_ROLE_USER = "User";
+
     class TRecordUser : public IRecord {
     public:
         TRecordUser(const NJson::TJsonValue& json);
 
         NJson::TJsonValue ToJson() const override;
-
         NJson::TJsonValue GetUniqSelector() const;
 
     private:

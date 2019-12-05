@@ -41,7 +41,7 @@ namespace NEnglish {
             response[RESPONSE_ERRORS] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
-        res.set_content(response.dump(), "application/json");
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
 }

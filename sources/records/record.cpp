@@ -1,5 +1,5 @@
 #include "record.h"
 
-bool IRecord::IsNewRecord() const {
-    return NewRecord;
+TString IRecord::GetId() const {
+    return Id;
 }
