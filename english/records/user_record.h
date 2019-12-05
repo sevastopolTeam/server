@@ -16,6 +16,7 @@ namespace NEnglish {
     const TString RECORD_USER_FIELD_RESET_PASSWORD_KEY = "ResetPasswordKey";
     const TString RECORD_USER_FIELD_PASSWORD = "Password";
     const TString RECORD_USER_FIELD_REPEAT_PASSWORD = "RepeatPassword";
+    const TString RECORD_USER_FIELD_ROLE = "Role";
 
     class TRecordUser : public IRecord {
     public:
@@ -36,6 +37,7 @@ namespace NEnglish {
         TString ConfirmationKey;
         bool Confirmed;
         TString ResetPasswordKey;
+        TString Role;
 
         // extra fields
         TString Password;

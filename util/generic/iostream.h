@@ -3,7 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <mutex>
+#include <chrono>
 
 #include "string.h"
 
@@ -12,27 +12,19 @@
 #define Endl std::endl
 
 namespace {
-    inline tm _localtime_xp(time_t timer) {
-        tm bt{};
-#if defined(__unix__)
-        localtime_r(&timer, &bt);
-#elif defined(_MSC_VER)
-        localtime_s(&bt, &timer);
-#else
-        static std::mutex mtx;
-        std::lock_guard<std::mutex> lock(mtx);
-        bt = *localtime(&timer);
-#endif
-        return bt;
-    }
+    inline TString _GetNowTime() {
+        std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+        auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 
-    inline char* _GetNowTime() {
-        static char _buffer[20] = "TODO";
-        // strftime(_buffer, 20, "%Y/%m/%dT%X", &_localtime_xp(time(NULL))); // Don't work on macos
-        return _buffer;
+        std::time_t tt = std::chrono::system_clock::to_time_t(now);
+        auto timeinfo = localtime(&tt);
+
+        char buffer[24];
+        strftime(buffer, 24, "%Y/%m/%dT%X", timeinfo);
+        sprintf(buffer, "%s.%03d", buffer, static_cast<int>(milliseconds.count()));
+        return buffer;
     }
 } // namespace
-
 
 void DoInitGlobalLog(const TString& logPath);
 

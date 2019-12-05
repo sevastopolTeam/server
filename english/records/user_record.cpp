@@ -1,6 +1,6 @@
 #include "user_record.h"
+
 #include <ctime>
-#include "contrib/json/json.h"
 
 #include "contrib/json/json.h"
 #include "contrib/md5/md5.h"
@@ -12,8 +12,8 @@ namespace {
     }
 
     TString GenerateConfirmationKey() {
-        std::time_t nowTime = time(NULL);
-        return NString::ToString(nowTime) + '-' + NString::ToString(rand());
+        std::time_t nowTime = time(NULL); // TODO: add salt
+        return NString::ToString(static_cast<int>(nowTime)) + '-' + NString::ToString(rand());
     }
 
     TString GeneratePasswordHash(const TString& password) {
@@ -37,7 +37,8 @@ namespace NEnglish {
         , Confirmed(false)
         , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
         , ResetPasswordKey(GenerateConfirmationKey())
-        , Id(json.value(RECORD_USER_FIELD_ID, "").size() ? new TString(json.value(RECORD_USER_FIELD_ID, "")) : nullptr) {}
+        , Role("User")
+    {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {
@@ -48,7 +49,7 @@ namespace NEnglish {
             {RECORD_USER_FIELD_CONFIRMATION_KEY, ConfirmationKey},
             {RECORD_USER_FIELD_CONFIRMED, Confirmed},
             {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey},
-            {RECORD_USER_FIELD_ID, Id != nullptr ? *Id : ""}
+            {RECORD_USER_FIELD_ROLE, Role}
         };
     }
 

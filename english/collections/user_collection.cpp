@@ -33,4 +33,17 @@ namespace NEnglish {
         ).size();
     }
 
+    TMaybe<NJson::TJsonValue> TCollectionUser::Find(const TString& user) {
+        NJson::TJsonValue json;
+        json["_id"]["$oid"] = user;
+        TVector<NMongo::TBsonValue> results = Master->Find(
+            DbName,
+            CollectionName,
+            json
+        );
+        if (results.size() == 1) {
+            return results[0].ToJson();
+        }
+        return Nothing();
+    }
 }
