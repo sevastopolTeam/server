@@ -18,10 +18,10 @@ namespace {
 
         std::time_t tt = std::chrono::system_clock::to_time_t(now);
         auto timeinfo = localtime(&tt);
-
         char buffer[24];
         strftime(buffer, 24, "%Y/%m/%dT%X", timeinfo);
         sprintf(buffer, "%s.%03d", buffer, static_cast<int>(milliseconds.count()));
+
         return buffer;
     }
 } // namespace

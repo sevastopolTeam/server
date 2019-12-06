@@ -11,6 +11,7 @@ namespace {
     const TString VALIDATION_ERROR_ALREADY_EXISTS = "AlreadyExists";
     const TString VALIDATION_ERROR_NOT_EXISTS = "NotExists";
     const TString VALIDATION_ERROR_INCORRECT = "Incorrect";
+    const TString VALIDATION_ERROR_NOT_FOUND = "NotFound";
 }
 
 class IValidator {

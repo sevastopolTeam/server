@@ -7,4 +7,7 @@
 class IRecord {
 public:
     virtual NJson::TJsonValue ToJson() const = 0;
+    TString GetId() const;
+protected:
+    TString Id;
 };

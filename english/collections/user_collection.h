@@ -7,14 +7,12 @@
 
 namespace NEnglish {
 
-    class TCollectionUser : public ICollection {
+    class TCollectionUser : public ICollection<TRecordUser> {
     public:
         using ICollection::ICollection;
 
         TRecordUser* FindByEmail(const TString& email);
-        bool Register(const TRecordUser& user);
         bool ExistsWithEmail(const TString& email);
-        TMaybe<NJson::TJsonValue> Find(const TString& user);
     };
 
 }
