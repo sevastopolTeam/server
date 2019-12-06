@@ -24,7 +24,7 @@ namespace NEnglish {
                 VALIDATION_ERROR_ALREADY_EXISTS
             );
             if (validator.Validate()) {
-                if (!dataSource.English.CollectionUser.Register(TRecordUser(jsonUser))) {
+                if (!dataSource.English.CollectionUser.Create(TRecordUser(jsonUser))) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
                 } else {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
@@ -41,7 +41,7 @@ namespace NEnglish {
             response[RESPONSE_ERRORS] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
-        res.set_content(response.dump(), "application/json");
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
 }

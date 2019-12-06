@@ -33,8 +33,12 @@ namespace NEnglish {
         , Confirmed(false)
         , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
         , ResetPasswordKey(GenerateConfirmationKey())
-        , Role("User")
-    {}
+        , Role(USER_ROLE_USER)
+    {
+        if (json.find("_id") != json.end()) {
+            Id = json["_id"].value("$oid", "");
+        }
+    }
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {

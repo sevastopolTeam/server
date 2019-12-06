@@ -6,12 +6,14 @@
 #include "util/generic/iostream.h"
 
 void NumbersHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-    auto numbers = req.matches[1];
-    res.set_content(numbers, "text/plain");
+    const TString& numbers = req.matches[1];
 
     NJson::TJsonValue json;
-    json["Hello"] = TString(numbers);
-    if (!dataSource.CollectionBase.Insert(json)) {
+    json["Hello"] = numbers;
+    if (!dataSource.CollectionBase.Create(json)) {
         Cout << "error insert" << Endl;
+        res.set_content("{ Error: InsertError }", "application/json");
+    } else {
+        res.set_content(json.dump(), "application/json");
     }
 }
