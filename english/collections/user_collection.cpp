@@ -2,23 +2,16 @@
 #include "contrib/json/json.h"
 
 #include "util/generic/iostream.h"
+#include "util/generic/maybe.h"
 
 namespace NEnglish {
 
-    TRecordUser* TCollectionUser::FindByEmail(const TString& email) {
-        TVector<NMongo::TBsonValue> result = Master->Find(
-            DbName,
-            CollectionName,
-            NJson::TJsonValue({{ RECORD_USER_FIELD_EMAIL, email }})
-        );
-
-        if (!result.size()) {
-            return nullptr;
+    TMaybe<TRecordUser> TCollectionUser::FindByEmail(const TString& email) {
+        TVector<TRecordUser> records = FindBy({{ "Email", email }});
+        if (records.empty()) {
+            return Nothing();
         }
-        // get json
-        NJson::TJsonValue json = result[0].ToJson();
-        json[RECORD_USER_FIELD_ID] = json["_id"].value("$oid", "");
-        return new TRecordUser(json);
+        return records[0];
     }
 
     bool TCollectionUser::ExistsWithEmail(const TString& email) {

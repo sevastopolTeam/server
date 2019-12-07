@@ -18,14 +18,7 @@ namespace NEnglish {
         try {
             NJson::TJsonValue jsonUser = NJson::TJsonValue::parse(req.body);
             TValidatorUser validator(jsonUser);
-            validator.Validate();
-            validator.AddExternalValidation(
-                RECORD_USER_FIELD_EMAIL,
-                dataSource.English.CollectionUser.ExistsWithEmail(jsonUser.value(RECORD_USER_FIELD_EMAIL, "")),
-                VALIDATION_ERROR_ALREADY_EXISTS
-            );
-
-            if (validator.Validate()) {
+            if (validator.Validate(dataSource)) {
                 if (!dataSource.English.CollectionUser.Create(TRecordUser(jsonUser))) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
                 } else {

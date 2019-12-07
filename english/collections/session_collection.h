@@ -7,12 +7,9 @@
 
 namespace NEnglish {
 
-    class TCollectionSession : public ICollection {
+    class TCollectionSession : public ICollection<TRecordSession> {
     public:
         using ICollection::ICollection;
-
-        bool Create(const TRecordSession& session);
-        TVector<TRecordSession> Find();
     };
 
 }

@@ -18,14 +18,10 @@ class IValidator {
 public:
     NJson::TJsonValue GetValidationErrors() const;
 
-    void AddExternalValidation(const TString& field, const bool resolution, const TString& error);
-    virtual bool Validate() = 0;
-    bool IsValid() const;
-
 protected:
     NJson::TJsonValue OriginJson;
     NJson::TJsonValue ValidationErrors;
-    bool Valid;
+    bool IsValid;
 
     bool ValidateRequired(const TString& field);
     bool ValidateEmail(const TString& field);

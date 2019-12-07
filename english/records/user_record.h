@@ -3,6 +3,7 @@
 #include "contrib/json/json.h"
 #include "sources/records/record.h"
 #include "util/generic/string.h"
+#include "util/generic/maybe.h"
 
 namespace NEnglish {
 
@@ -33,7 +34,7 @@ namespace NEnglish {
 
     private:
         // DB fields
-        TString* Id;
+        TMaybe<TString> Id;
         TString Email;
         TString Name;
         TString Phone;

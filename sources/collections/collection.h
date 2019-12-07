@@ -14,9 +14,11 @@ public:
         , CollectionName(collectionName)
     {}
 
+
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
     TVector<TRecord> Find();
+    TVector<TRecord> FindBy(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
 
     ~ICollection() = default;
@@ -43,8 +45,18 @@ TVector<TRecord> ICollection<TRecord>::Find() {
 }
 
 template <class TRecord>
+TVector<TRecord> ICollection<TRecord>::FindBy(const NJson::TJsonValue& selection) {
+    TVector<NMongo::TBsonValue> result = Master->Find(DbName, CollectionName, selection);
+    TVector<TRecord> records;
+    for (const auto& a : result) {
+        records.push_back(TRecord(a.ToJson()));
+    }
+    return records;
+}
+
+template <class TRecord>
 bool ICollection<TRecord>::Exists(const NJson::TJsonValue& selection) {
-    return !Master->Find(DbName, CollectionName, selection).empty();
+    return Master->Find(DbName, CollectionName, selection).size();
 }
 
 template <class TRecord>

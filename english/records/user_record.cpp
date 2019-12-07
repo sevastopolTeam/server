@@ -24,7 +24,7 @@ namespace {
 namespace NEnglish {
 
     TString TRecordUser::GetId() const {
-        return *Id;
+        return *Id.Get();
     }
 
     TRecordUser::TRecordUser(const NJson::TJsonValue& json)
@@ -35,12 +35,14 @@ namespace NEnglish {
         , RepeatPassword(json.value(RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
         , ConfirmationKey(GenerateConfirmationKey())
         , Confirmed(false)
-        , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
+        , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
         , ResetPasswordKey(GenerateConfirmationKey())
         , Role(USER_ROLE_USER)
     {
         if (json.find("_id") != json.end()) {
             Id = json["_id"].value("$oid", "");
+        } else {
+            Id = Nothing();
         }
     }
 

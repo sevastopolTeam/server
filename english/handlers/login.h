@@ -21,22 +21,8 @@ namespace NEnglish {
         try {
             NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
             TValidatorLogin validator(jsonLoginInfo);
-            const TRecordUser* user = dataSource.English.CollectionUser.FindByEmail(
-                jsonLoginInfo.value(RECORD_USER_FIELD_EMAIL, "")
-            );
-            
-            validator.Validate();
-            validator.AddExternalValidation(
-                RECORD_USER_FIELD_EMAIL,
-                user == nullptr,
-                VALIDATION_ERROR_NOT_EXISTS
-            );
-            validator.AddExternalValidation(
-                RECORD_USER_FIELD_PASSWORD,
-                user != nullptr && user->CheckPassword(jsonLoginInfo.value("Password", "")),
-                VALIDATION_ERROR_INCORRECT
-            );
-            if (validator.IsValid()) {
+            TMaybe<TRecordUser> user;
+            if (validator.Validate(dataSource, user)) {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
                 if (!dataSource.English.CollectionSession.Create(TRecordSession(user->GetId()))) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
@@ -49,6 +35,7 @@ namespace NEnglish {
                     { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
                 };
             }
+
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
