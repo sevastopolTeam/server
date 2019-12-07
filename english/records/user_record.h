@@ -22,6 +22,7 @@ namespace NEnglish {
 
     class TRecordUser : public IRecord {
     public:
+        TRecordUser() = default;
         TRecordUser(const NJson::TJsonValue& json);
 
         NJson::TJsonValue ToJson() const override;
