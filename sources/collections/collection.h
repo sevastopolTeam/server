@@ -44,7 +44,7 @@ TVector<TRecord> ICollection<TRecord>::Find() {
 
 template <class TRecord>
 bool ICollection<TRecord>::Exists(const NJson::TJsonValue& selection) {
-    return !Master->Find(DbName, CollectionName, selection).empty();
+    return Master->Find(DbName, CollectionName, selection,/* skip */ 0,/* limit */ 1).size();
 }
 
 template <class TRecord>
