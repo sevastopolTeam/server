@@ -8,7 +8,6 @@ add_library(generic STATIC
   list.cpp
   map.cpp
   maybe.cpp
-  maybe_traits.cpp
   noncopyable.cpp
   queue.cpp
   set.cpp

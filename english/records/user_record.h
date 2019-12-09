@@ -24,6 +24,7 @@ namespace NEnglish {
 
     class TRecordUser : public IRecord {
     public:
+        TRecordUser() = default;
         TRecordUser(const NJson::TJsonValue& json);
 
         TString GetId() const;
