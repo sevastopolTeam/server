@@ -7,11 +7,7 @@
 namespace NEnglish {
 
     TMaybe<TRecordUser> TCollectionUser::FindByEmail(const TString& email) {
-        TVector<TRecordUser> records = FindBy({{ "Email", email }});
-        if (records.empty()) {
-            return Nothing();
-        }
-        return records[0];
+        return FindBy({{ "Email", email }});
     }
 
     bool TCollectionUser::ExistsWithEmail(const TString& email) {

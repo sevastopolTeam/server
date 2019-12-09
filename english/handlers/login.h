@@ -16,18 +16,15 @@
 
 namespace NEnglish {
 
-    void LoginHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        NJson::TJsonValue response;
+    void PostLoginHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
             NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
             TValidatorLogin validator(jsonLoginInfo);
             TMaybe<TRecordUser> user;
             if (validator.Validate(dataSource, user)) {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
                 if (!dataSource.English.CollectionSession.Create(TRecordSession(user->GetId()))) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
-                } else {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_OK;
                 }
             } else {
                 response = {
@@ -35,7 +32,6 @@ namespace NEnglish {
                     { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
                 };
             }
-
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;

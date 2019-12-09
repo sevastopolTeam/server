@@ -11,6 +11,7 @@ namespace NEnglish {
 
     class TRecordSession : public IRecord {
     public:
+        TRecordSession() = default;
         TRecordSession(const NJson::TJsonValue& json);
         TRecordSession(const TString& userId);
 

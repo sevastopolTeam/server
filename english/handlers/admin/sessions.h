@@ -15,22 +15,24 @@
 
 namespace NEnglish {
 
-    void AdminGetSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+    void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response;
         try {
 
-            std::time_t nowTime = time(NULL);
-            Cout << NString::ToString(nowTime) << Endl;
+            // std::time_t nowTime = time(NULL);
+            // Cout << NString::ToString(nowTime) << Endl;
 
-            Cout << "Headers" << Endl;
-            // Cout << req.headers["Authoriation"] << Endl;
-            for (auto& p: req.headers) {
-                Cout << p.first << " " << p.second << Endl;
-            }
-            const auto& sessions = dataSource.English.CollectionSession.Find();
-            response["sessions"] = {};
-            for (const auto& session: sessions) {
-                response["sessions"].push_back(session.ToJson());
+            // Cout << "Headers" << Endl;
+            const TString authToken = req.headers.find("Authorization")->second;
+            Cout << authToken << Endl;
+            // for (auto& p: req.headers) {
+            //     Cout << p.first << " " << p.second << Endl;
+            // }
+            const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
+            if (session.Empty()) {
+                Cout << "Empty" << Endl;
+            } else {
+                Cout << session->ToJson() << Endl;
             }
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
