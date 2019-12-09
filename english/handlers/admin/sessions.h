@@ -15,7 +15,7 @@
 
 namespace NEnglish {
 
-    void AdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+    void AdminGetSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response;
         try {
 

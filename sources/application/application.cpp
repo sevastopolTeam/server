@@ -5,11 +5,9 @@
 #include "sources/handlers/hi.h"
 #include "sources/handlers/numbers.h"
 
-#include "english/handlers/registration.h"
-
 #include "english/handlers/login.h"
 #include "english/handlers/admin/sessions.h"
-#include "english/handlers/user.h"
+#include "english/handlers/users.h"
 
 TApplication::TApplication() {
     INFO_LOG << "Starting server..." << Endl;
@@ -37,22 +35,16 @@ TApplication::~TApplication() {
 }
 
 void TApplication::AddEnglishHandlers() {
-    Server->Post("/api/english/registration", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::RegistrationHandler(*DataSource, req, res);
+    Server->Post("/api/english/users", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::PostUserHandler(*DataSource, req, res);
     });
-
+    Server->Get(R"(/api/english/users/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::GetUserHandler(*DataSource, req, res);
+    });
     Server->Post("/api/english/login", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::LoginHandler(*DataSource, req, res);
+        NEnglish::PostLoginHandler(*DataSource, req, res);
     });
-
     Server->Get("/api/english/admin/sessions", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::AdminSessionsHandler(*DataSource, req, res);
-    });
-
-    Server->Post("/api/english/registration", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::RegistrationHandler(*DataSource, req, res);
-    });
-    Server->Get(R"(/api/english/user/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::UserHandler(*DataSource, req, res);
+        NEnglish::GetAdminSessionsHandler(*DataSource, req, res);
     });
 }
