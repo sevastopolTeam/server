@@ -33,11 +33,11 @@ namespace NEnglish {
         , Phone(json.value(RECORD_USER_FIELD_PHONE, ""))
         , Password(json.value(RECORD_USER_FIELD_PASSWORD, ""))
         , RepeatPassword(json.value(RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
-        , ConfirmationKey(GenerateConfirmationKey())
-        , Confirmed(false)
+        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, GenerateConfirmationKey()))
+        , Confirmed(json.value(RECORD_USER_FIELD_CONFIRMED, false))
         , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
-        , ResetPasswordKey(GenerateConfirmationKey())
-        , Role(USER_ROLE_USER)
+        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, GenerateConfirmationKey()))
+        , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
         if (json.find("_id") != json.end()) {
             Id = json["_id"].value("$oid", "");

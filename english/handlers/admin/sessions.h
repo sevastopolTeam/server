@@ -18,21 +18,11 @@ namespace NEnglish {
     void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response;
         try {
-
-            // std::time_t nowTime = time(NULL);
-            // Cout << NString::ToString(nowTime) << Endl;
-
-            // Cout << "Headers" << Endl;
-            const TString authToken = req.headers.find("Authorization")->second;
-            Cout << authToken << Endl;
-            // for (auto& p: req.headers) {
-            //     Cout << p.first << " " << p.second << Endl;
-            // }
-            const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
-            if (session.Empty()) {
+            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+            if (currentUser.Empty()) {
                 Cout << "Empty" << Endl;
             } else {
-                Cout << session->ToJson() << Endl;
+                Cout << currentUser->ToJson() << Endl;
             }
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
