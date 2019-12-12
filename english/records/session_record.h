@@ -18,6 +18,7 @@ namespace NEnglish {
         NJson::TJsonValue ToJson() const override;
 
         TString GetUserId() const;
+        TString GetToken() const;
     private:
         // DB fields
         TString UserId;

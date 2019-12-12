@@ -28,7 +28,7 @@ namespace NEnglish {
         TRecordUser(const NJson::TJsonValue& json);
 
         TString GetId() const;
-
+        bool IsAdmin() const;        
         bool CheckPassword(const TString& password) const;
         NJson::TJsonValue ToJson() const override;
         NJson::TJsonValue GetUniqSelector() const;

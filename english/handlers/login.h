@@ -23,8 +23,12 @@ namespace NEnglish {
             TValidatorLogin validator(jsonLoginInfo);
             TMaybe<TRecordUser> user;
             if (validator.Validate(dataSource, user)) {
-                if (!dataSource.English.CollectionSession.Create(TRecordSession(user->GetId()))) {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
+                const TRecordSession& newSession(user->GetId());
+                if (!dataSource.English.CollectionSession.Create(TRecordSession(newSession))) {
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                    response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_INSERT;
+                } else {
+                    response[RESPONSE_BODY] = {{"SessionToken", newSession.GetToken()}};
                 }
             } else {
                 response = {
@@ -35,7 +39,7 @@ namespace NEnglish {
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERRORS] = e.what();
+            response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
         res.set_content(response.dump(), "application/json");

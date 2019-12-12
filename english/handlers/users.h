@@ -25,7 +25,8 @@ namespace NEnglish {
                 response = record->ToJson();
             }
         } catch (std::exception& e) {
-            response[NEnglish::RESPONSE_STATUS] = e.what();
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << e.what() << Endl;
         }
         INFO_LOG << response << Endl;
@@ -39,7 +40,8 @@ namespace NEnglish {
             TValidatorUser validator(jsonUser);
             if (validator.Validate(dataSource)) {
                 if (!dataSource.English.CollectionUser.Create(TRecordUser(jsonUser))) {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_INSERT_ERROR;
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                    response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
                 }
             } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERRROR;
@@ -48,7 +50,7 @@ namespace NEnglish {
             INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERRORS] = e.what();
+            response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());

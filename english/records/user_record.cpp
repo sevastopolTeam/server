@@ -27,6 +27,10 @@ namespace NEnglish {
         return *Id.Get();
     }
 
+    bool TRecordUser::IsAdmin() const {
+        return Role == USER_ROLE_ADMIN;
+    }
+
     TRecordUser::TRecordUser(const NJson::TJsonValue& json)
         : Email(Normalize(json.value(RECORD_USER_FIELD_EMAIL, "")))
         , Name(json.value(RECORD_USER_FIELD_NAME, ""))

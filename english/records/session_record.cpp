@@ -27,6 +27,10 @@ namespace NEnglish {
         return UserId;
     }
 
+    TString TRecordSession::GetToken() const {
+        return Token;
+    }
+
     NJson::TJsonValue TRecordSession::ToJson() const {
         return {
             {RECORD_SESSION_FIELD_USER_ID, UserId},
