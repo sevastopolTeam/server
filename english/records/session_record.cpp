@@ -6,9 +6,9 @@
 
 namespace {
 
-    TString GenerateSessionToken() {
+    TString GenerateRandomToken() {
         std::time_t nowTime = time(NULL);
-        return NString::ToString(nowTime) + '-' + NString::ToString(rand());
+        return md5(NString::ToString(rand())) + NString::ToString(nowTime);
     }
 
 }
@@ -16,12 +16,12 @@ namespace {
 namespace NEnglish {
 
     TRecordSession::TRecordSession(const NJson::TJsonValue& json)
-        : UserId(json.value("UserId", ""))
-        , Token(json.value("Token", "").size() ? json.value("Token", "") : GenerateSessionToken()) {}
+        : UserId(json.value(RECORD_SESSION_FIELD_USER_ID, ""))
+        , Token(json.value(RECORD_SESSION_FIELD_TOKEN, GenerateRandomToken())) {}
 
     TRecordSession::TRecordSession(const TString& userId)
         : UserId(userId)
-        , Token(GenerateSessionToken()) {}
+        , Token(GenerateRandomToken()) {}
 
     TString TRecordSession::GetUserId() const {
         return UserId;

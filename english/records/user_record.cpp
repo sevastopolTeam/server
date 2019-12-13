@@ -11,9 +11,9 @@ namespace {
         return NString::ToLower(str);
     }
 
-    TString GenerateConfirmationKey() {
-        std::time_t nowTime = time(NULL); // TODO: add salt
-        return NString::ToString(static_cast<int>(nowTime)) + '-' + NString::ToString(rand());
+    TString GenerateRandomToken() {
+        std::time_t nowTime = time(NULL);
+        return md5(NString::ToString(rand())) + NString::ToString(nowTime);
     }
 
     TString GeneratePasswordHash(const TString& password) {
@@ -37,10 +37,10 @@ namespace NEnglish {
         , Phone(json.value(RECORD_USER_FIELD_PHONE, ""))
         , Password(json.value(RECORD_USER_FIELD_PASSWORD, ""))
         , RepeatPassword(json.value(RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
-        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, GenerateConfirmationKey()))
+        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, GenerateRandomToken()))
         , Confirmed(json.value(RECORD_USER_FIELD_CONFIRMED, false))
         , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
-        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, GenerateConfirmationKey()))
+        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, GenerateRandomToken()))
         , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
         if (json.find("_id") != json.end()) {

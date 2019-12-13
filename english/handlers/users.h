@@ -22,7 +22,7 @@ namespace NEnglish {
             if (record.Empty()) {
                 response[NEnglish::RESPONSE_STATUS] = VALIDATION_ERROR_NOT_FOUND;
             } else {
-                response = record->ToJson();
+                response[RESPONSE_BODY] = record->ToJson();
             }
         } catch (std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;

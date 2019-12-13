@@ -24,7 +24,7 @@ namespace NEnglish {
             TMaybe<TRecordUser> user;
             if (validator.Validate(dataSource, user)) {
                 const TRecordSession& newSession(user->GetId());
-                if (!dataSource.English.CollectionSession.Create(TRecordSession(newSession))) {
+                if (!dataSource.English.CollectionSession.Create(newSession)) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                     response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_INSERT;
                 } else {

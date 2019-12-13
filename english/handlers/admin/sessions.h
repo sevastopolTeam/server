@@ -10,19 +10,12 @@
 
 #include "util/generic/iostream.h"
 
-#include <ctime>
-#include <util/generic/string.h>
-
 namespace NEnglish {
 
     void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
             TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            Cout << currentUser.Empty() << Endl;
-            if (!currentUser.Empty()) {
-                Cout << currentUser->ToJson() << Endl;
-            }
             if (IsAdmin(currentUser)) {
                 NJson::TJsonValue jsonSessions;
                 const TVector<TRecordSession>& sessions = dataSource.English.CollectionSession.Find();
