@@ -25,7 +25,7 @@ namespace {
 namespace NEnglish {
 
     TString TRecordUser::GetId() const {
-        return *Id.Get();
+        return *(Id.Get());
     }
 
     bool TRecordUser::IsAdmin() const {
