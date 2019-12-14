@@ -7,8 +7,7 @@
 namespace {
 
     TString GenerateRandomToken() {
-        std::time_t nowTime = time(NULL);
-        return md5(NString::ToString(rand())) + NString::ToString(nowTime);
+        return md5(NString::ToString(rand())) + NString::ToString(time(NULL));
     }
 
 }

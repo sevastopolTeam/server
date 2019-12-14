@@ -14,8 +14,7 @@ namespace {
     }
 
     TString GenerateRandomToken() {
-        std::time_t nowTime = time(NULL);
-        return md5(NString::ToString(rand())) + NString::ToString(nowTime);
+        return md5(NString::ToString(rand())) + NString::ToString(time(NULL));
     }
 
     TString GeneratePasswordHash(const TString& password) {
@@ -26,8 +25,7 @@ namespace {
 namespace NEnglish {
 
     TString TRecordUser::GetId() const {
-        Cout << "id" << !!Id << Endl;
-        return *(Id.Get());
+        return *Id.Get();
     }
 
     bool TRecordUser::IsAdmin() const {
@@ -46,15 +44,10 @@ namespace NEnglish {
         , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, GenerateRandomToken()))
         , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
-        Cout << json.dump() << Endl;
         if (json.find("_id") != json.end()) {
             Id = json["_id"].value("$oid", "");
         } else {
             Id = Nothing();
-        }
-        Cout << !!Id << Endl;
-        if (Id) {
-            Cout << *Id.Get() << Endl;
         }
     }
 

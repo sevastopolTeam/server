@@ -14,7 +14,6 @@ public:
         , CollectionName(collectionName)
     {}
 
-
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
     TVector<TRecord> Find(const NJson::TJsonValue& selection = NJson::TJsonValue());

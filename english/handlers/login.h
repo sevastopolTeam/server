@@ -24,16 +24,6 @@ namespace NEnglish {
             TValidatorLogin validator(jsonLoginInfo);
             TRecordUser user;
             if (validator.Validate(dataSource, &user)) {
-                // Cout << "IsValid" << Endl;
-                // Cout << "Pol" << Endl;
-                // Cout << "us " << !!user << Endl;
-                // if (!user) {
-                //     Cout << "Empty()" << Endl;
-                // } else {
-                //     Cout << "Full" << Endl;
-                // }
-                // Cout << "Admin " << user->IsAdmin() << Endl;
-                Cout << user.GetId() << Endl;
                 const TRecordSession& newSession(user.GetId());
                 if (!dataSource.English.CollectionSession.Create(newSession)) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
@@ -42,7 +32,6 @@ namespace NEnglish {
                     response[RESPONSE_BODY] = {{RESPONSE_BODY_SESSION_TOKEN, newSession.GetToken()}};
                 }
             } else {
-                Cout << "Invalid" << Endl;
                 response = {
                     { RESPONSE_STATUS, RESPONSE_STATUS_VALIDATION_ERRROR },
                     { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
