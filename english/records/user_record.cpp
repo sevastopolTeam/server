@@ -5,6 +5,8 @@
 #include "contrib/json/json.h"
 #include "contrib/md5/md5.h"
 
+#include "util/generic/iostream.h"
+
 namespace {
 
     TString Normalize(const TString& str) {
@@ -24,7 +26,8 @@ namespace {
 namespace NEnglish {
 
     TString TRecordUser::GetId() const {
-        return *Id.Get();
+        Cout << "id" << !!Id << Endl;
+        return *(Id.Get());
     }
 
     bool TRecordUser::IsAdmin() const {
@@ -43,10 +46,15 @@ namespace NEnglish {
         , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, GenerateRandomToken()))
         , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
+        Cout << json.dump() << Endl;
         if (json.find("_id") != json.end()) {
             Id = json["_id"].value("$oid", "");
         } else {
             Id = Nothing();
+        }
+        Cout << !!Id << Endl;
+        if (Id) {
+            Cout << *Id.Get() << Endl;
         }
     }
 

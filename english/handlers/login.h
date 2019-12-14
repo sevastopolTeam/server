@@ -15,22 +15,34 @@
 #include "util/generic/iostream.h"
 
 namespace NEnglish {
+    const TString RESPONSE_BODY_SESSION_TOKEN = "SessionToken";
 
     void PostLoginHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
             NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
             TValidatorLogin validator(jsonLoginInfo);
-            TMaybe<TRecordUser> user;
-            if (validator.Validate(dataSource, user)) {
-                const TRecordSession& newSession(user->GetId());
+            TRecordUser user;
+            if (validator.Validate(dataSource, &user)) {
+                // Cout << "IsValid" << Endl;
+                // Cout << "Pol" << Endl;
+                // Cout << "us " << !!user << Endl;
+                // if (!user) {
+                //     Cout << "Empty()" << Endl;
+                // } else {
+                //     Cout << "Full" << Endl;
+                // }
+                // Cout << "Admin " << user->IsAdmin() << Endl;
+                Cout << user.GetId() << Endl;
+                const TRecordSession& newSession(user.GetId());
                 if (!dataSource.English.CollectionSession.Create(newSession)) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                     response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_INSERT;
                 } else {
-                    response[RESPONSE_BODY] = {{"SessionToken", newSession.GetToken()}};
+                    response[RESPONSE_BODY] = {{RESPONSE_BODY_SESSION_TOKEN, newSession.GetToken()}};
                 }
             } else {
+                Cout << "Invalid" << Endl;
                 response = {
                     { RESPONSE_STATUS, RESPONSE_STATUS_VALIDATION_ERRROR },
                     { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
@@ -42,7 +54,7 @@ namespace NEnglish {
             response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
-        res.set_content(response.dump(), "application/json");
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
 }
