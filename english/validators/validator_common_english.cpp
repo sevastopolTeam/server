@@ -2,7 +2,7 @@
 
 namespace NEnglish {
 
-    bool IValidatorCommonEnglish::ValidatePhone(const TString& field) {
+    void IValidatorCommonEnglish::ValidatePhone(const TString& field) {
         bool valid = true;
         const TString& phone = OriginJson.value(field, "");
         
@@ -19,6 +19,5 @@ namespace NEnglish {
             ValidationErrors[field].push_back(VALIDATION_ERROR_PHONE);
             IsValid = false;
         }
-        return valid;
     }
 }

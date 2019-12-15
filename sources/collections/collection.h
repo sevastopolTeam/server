@@ -16,7 +16,7 @@ public:
 
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
-    TVector<TRecord> Find(const NJson::TJsonValue& selection = NJson::TJsonValue());
+    TVector<TRecord> Find(const NJson::TJsonValue& selection = NJson::TJsonValue::object());
     TMaybe<TRecord> FindBy(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
 

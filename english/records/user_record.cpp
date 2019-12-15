@@ -25,7 +25,10 @@ namespace {
 namespace NEnglish {
 
     TString TRecordUser::GetId() const {
-        return *(Id.Get());
+        // Cout << ("rus ") << (*(Id.Get())) << Endl;
+        // Cout << "ref" << Id.GetRef() << Endl;
+        // return *(Id.Get());
+        return *Id;
     }
 
     bool TRecordUser::IsAdmin() const {
@@ -45,9 +48,11 @@ namespace NEnglish {
         , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
         if (json.find("_id") != json.end()) {
-            Id = json["_id"].value("$oid", "");
+            Id = new TString(json["_id"].value("$oid", ""));
+            Cout << "cons id " << json["_id"].value("$oid", "") << Endl;
         } else {
-            Id = Nothing();
+            Cout << "Test" << Endl;
+            // Id = Nothing();
         }
     }
 

@@ -35,7 +35,8 @@ namespace NEnglish {
 
     private:
         // DB fields
-        TMaybe<TString> Id;
+        TString* Id;
+        // TMaybe<TString> Id;
         TString Email;
         TString Name;
         TString Phone;

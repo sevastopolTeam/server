@@ -25,6 +25,7 @@ namespace NEnglish {
             TRecordUser user;
             if (validator.Validate(dataSource, &user)) {
                 const TRecordSession& newSession(user.GetId());
+                Cout << "userId " << user.GetId() << Endl;
                 if (!dataSource.English.CollectionSession.Create(newSession)) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                     response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_INSERT;

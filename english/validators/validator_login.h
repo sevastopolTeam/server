@@ -14,7 +14,7 @@ namespace NEnglish {
         TValidatorLogin(const NJson::TJsonValue& jsonData);
         
         bool Validate(TDataSource& dataSource, TRecordUser* user);
-        bool ValidateEmailExists(TRecordUser* user);
-        bool ValidateCorrectPassword(TRecordUser* user);
+        void ValidateEmailExists(TRecordUser* user);
+        void ValidateCorrectPassword(TRecordUser* user);
     };
 }
