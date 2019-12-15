@@ -34,7 +34,7 @@ namespace NEnglish {
             return Nothing();
         }
 
-        Cout << "headers" << it->second << Endl;
+        // Cout << "headers" << it->second << Endl;
 
         const TString authToken = it->second;
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
