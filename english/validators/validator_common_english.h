@@ -10,6 +10,6 @@ namespace NEnglish {
 
     class IValidatorCommonEnglish : public IValidator {
     protected:
-        void ValidatePhone(const TString& field);
+        bool ValidatePhone(const TString& field);
     };
 }

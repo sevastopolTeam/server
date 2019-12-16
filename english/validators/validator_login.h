@@ -13,8 +13,8 @@ namespace NEnglish {
     public:
         TValidatorLogin(const NJson::TJsonValue& jsonData);
         
-        bool Validate(TDataSource& dataSource, TRecordUser* user);
-        void ValidateEmailExists(TMaybe<TRecordUser>& user);
-        void ValidateCorrectPassword(TMaybe<TRecordUser>& user);
+        bool Validate(const TMaybe<TRecordUser>& user);
+        bool ValidateEmailExists(const TMaybe<TRecordUser>& user);
+        bool ValidateCorrectPassword(const TMaybe<TRecordUser>& user);
     };
 }

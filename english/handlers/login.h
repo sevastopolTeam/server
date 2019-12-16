@@ -22,10 +22,11 @@ namespace NEnglish {
         try {
             NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
             TValidatorLogin validator(jsonLoginInfo);
-            TRecordUser user;
-            if (validator.Validate(dataSource, &user)) {
-                const TRecordSession& newSession(user.GetId());
-                Cout << "userId " << user.GetId() << Endl;
+            TMaybe<TRecordUser> user = dataSource.English.CollectionUser.FindByEmail(
+                jsonLoginInfo.value(RECORD_USER_FIELD_EMAIL, "")
+            );
+            if (validator.Validate(user)) {
+                const TRecordSession& newSession(user->GetId());
                 if (!dataSource.English.CollectionSession.Create(newSession)) {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                     response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_INSERT;

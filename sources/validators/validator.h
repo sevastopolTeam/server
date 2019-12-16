@@ -20,9 +20,8 @@ public:
 protected:
     NJson::TJsonValue OriginJson;
     NJson::TJsonValue ValidationErrors;
-    bool IsValid;
 
-    void ValidateRequired(const TString& field);
-    void ValidateEmail(const TString& field);
-    void ValidateSame(const TString& validateField, const TString& sameField); 
+    bool ValidateRequired(const TString& field);
+    bool ValidateEmail(const TString& field);
+    bool ValidateSame(const TString& validateField, const TString& sameField); 
 };

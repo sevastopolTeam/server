@@ -2,25 +2,17 @@
 #include <ctime>
 #include "contrib/json/json.h"
 
-#include "contrib/md5/md5.h"
-
-namespace {
-
-    TString GenerateRandomToken() {
-        return md5(NString::ToString(rand())) + NString::ToString(time(NULL));
-    }
-
-}
+#include "util/generic/hash_functions.h"
 
 namespace NEnglish {
 
     TRecordSession::TRecordSession(const NJson::TJsonValue& json)
         : UserId(json.value(RECORD_SESSION_FIELD_USER_ID, ""))
-        , Token(json.value(RECORD_SESSION_FIELD_TOKEN, GenerateRandomToken())) {}
+        , Token(json.value(RECORD_SESSION_FIELD_TOKEN, NHashFunctions::GenerateRandomToken())) {}
 
     TRecordSession::TRecordSession(const TString& userId)
         : UserId(userId)
-        , Token(GenerateRandomToken()) {}
+        , Token(NHashFunctions::GenerateRandomToken()) {}
 
     TString TRecordSession::GetUserId() const {
         return UserId;

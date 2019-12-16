@@ -3,9 +3,9 @@
 #include <ctime>
 
 #include "contrib/json/json.h"
-#include "contrib/md5/md5.h"
 
 #include "util/generic/iostream.h"
+#include "util/generic/hash_functions.h"
 
 namespace {
 
@@ -13,21 +13,11 @@ namespace {
         return NString::ToLower(str);
     }
 
-    TString GenerateRandomToken() {
-        return md5(NString::ToString(rand())) + NString::ToString(time(NULL));
-    }
-
-    TString GeneratePasswordHash(const TString& password) {
-        return md5(password); // TODO: add salt?
-    }
 }
 
 namespace NEnglish {
 
     TString TRecordUser::GetId() const {
-        // Cout << ("rus ") << (*(Id.Get())) << Endl;
-        // Cout << "ref" << Id.GetRef() << Endl;
-        // return *(Id.Get());
         return *Id;
     }
 
@@ -41,18 +31,16 @@ namespace NEnglish {
         , Phone(json.value(RECORD_USER_FIELD_PHONE, ""))
         , Password(json.value(RECORD_USER_FIELD_PASSWORD, ""))
         , RepeatPassword(json.value(RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
-        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, GenerateRandomToken()))
+        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, NHashFunctions::GenerateRandomToken()))
         , Confirmed(json.value(RECORD_USER_FIELD_CONFIRMED, false))
-        , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
-        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, GenerateRandomToken()))
+        , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, NHashFunctions::GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
+        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, NHashFunctions::GenerateRandomToken()))
         , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
         if (json.find("_id") != json.end()) {
-            Id = new TString(json["_id"].value("$oid", ""));
-            Cout << "cons id " << json["_id"].value("$oid", "") << Endl;
+            Id = json["_id"].value("$oid", "");
         } else {
-            Cout << "Test" << Endl;
-            // Id = Nothing();
+            Id = Nothing();
         }
     }
 
@@ -70,6 +58,6 @@ namespace NEnglish {
     }
 
     bool TRecordUser::CheckPassword(const TString& password) const {
-        return PasswordHash == GeneratePasswordHash(password);
+        return PasswordHash == NHashFunctions::GeneratePasswordHash(password);
     }
 }

@@ -8,46 +8,36 @@ namespace NEnglish {
 
     TValidatorLogin::TValidatorLogin(const NJson::TJsonValue& jsonData) {
         OriginJson = jsonData;
-        IsValid = false;
     }
 
-    bool TValidatorLogin::Validate(TDataSource& dataSource, TRecordUser* user) {
-        IsValid = true;
-        TMaybe<TRecordUser> foundUser = dataSource.English.CollectionUser.FindByEmail(
-            OriginJson.value(RECORD_USER_FIELD_EMAIL, "")
-        );
+    bool TValidatorLogin::Validate(const TMaybe<TRecordUser>& user) {
+        bool isValid = true;
 
-        Cout << "user id1-> " << foundUser->GetId() << Endl;
-        Cout << "user id2-> " << foundUser->GetId() << Endl;
+        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_EMAIL);
+        isValid = isValid && ValidateEmail(RECORD_USER_FIELD_EMAIL);
+        isValid = isValid && ValidateEmailExists(user);
 
-        ValidateRequired(RECORD_USER_FIELD_EMAIL);
-        ValidateEmail(RECORD_USER_FIELD_EMAIL);
-        ValidateEmailExists(foundUser);
+        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_PASSWORD);
+        isValid = isValid && ValidateCorrectPassword(user);
 
-        ValidateRequired(RECORD_USER_FIELD_PASSWORD);
-        ValidateCorrectPassword(foundUser);
-
-        Cout << "user id3-> " << foundUser->GetId() << Endl;
-        if (foundUser) {
-            *user = foundUser.value();
-        }
-
-
-        Cout << "user id-> " << user->GetId() << Endl;
-        return IsValid;
+        return isValid;
     }
 
-    void TValidatorLogin::ValidateEmailExists(TMaybe<TRecordUser>& user) {
+    bool TValidatorLogin::ValidateEmailExists(const TMaybe<TRecordUser>& user) {
         if (!user) {
-            IsValid = false;
             ValidationErrors[RECORD_USER_FIELD_EMAIL].push_back(VALIDATION_ERROR_NOT_FOUND);
+            return false;
         }
+
+        return true;
     }
 
-    void TValidatorLogin::ValidateCorrectPassword(TMaybe<TRecordUser>& user) {
+    bool TValidatorLogin::ValidateCorrectPassword(const TMaybe<TRecordUser>& user) {
         if (user && !user->CheckPassword(OriginJson.value(RECORD_USER_FIELD_PASSWORD, ""))) {
-            IsValid = false;
             ValidationErrors[RECORD_USER_FIELD_PASSWORD].push_back(VALIDATION_ERROR_INCORRECT);
+            return false;
         }
+
+        return true;
     }
 }
