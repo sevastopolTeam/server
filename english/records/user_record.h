@@ -27,7 +27,6 @@ namespace NEnglish {
         TRecordUser() = default;
         TRecordUser(const NJson::TJsonValue& json);
 
-        TString GetId() const;
         bool IsAdmin() const;        
         bool CheckPassword(const TString& password) const;
         NJson::TJsonValue ToJson() const override;
@@ -35,7 +34,6 @@ namespace NEnglish {
 
     private:
         // DB fields
-        TMaybe<TString> Id;
         TString Email;
         TString Name;
         TString Phone;

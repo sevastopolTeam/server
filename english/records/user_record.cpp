@@ -17,10 +17,6 @@ namespace {
 
 namespace NEnglish {
 
-    TString TRecordUser::GetId() const {
-        return *Id;
-    }
-
     bool TRecordUser::IsAdmin() const {
         return Role == USER_ROLE_ADMIN;
     }
