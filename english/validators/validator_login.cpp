@@ -13,9 +13,9 @@ namespace NEnglish {
 
     bool TValidatorLogin::Validate(TDataSource& dataSource, TRecordUser* user) {
         IsValid = true;
-        TRecordUser* foundUser = dataSource.English.CollectionUser.FindByEmail(
+        TMaybe<TRecordUser> foundUser = dataSource.English.CollectionUser.FindByEmail(
             OriginJson.value(RECORD_USER_FIELD_EMAIL, "")
-        ).Get();
+        );
 
         Cout << "user id1-> " << foundUser->GetId() << Endl;
         Cout << "user id2-> " << foundUser->GetId() << Endl;
@@ -28,8 +28,8 @@ namespace NEnglish {
         ValidateCorrectPassword(foundUser);
 
         Cout << "user id3-> " << foundUser->GetId() << Endl;
-        if (!!foundUser) {
-            *user = *foundUser;
+        if (foundUser) {
+            *user = foundUser.value();
         }
 
 
@@ -37,14 +37,14 @@ namespace NEnglish {
         return IsValid;
     }
 
-    void TValidatorLogin::ValidateEmailExists(TRecordUser* user) {
+    void TValidatorLogin::ValidateEmailExists(TMaybe<TRecordUser>& user) {
         if (!user) {
             IsValid = false;
             ValidationErrors[RECORD_USER_FIELD_EMAIL].push_back(VALIDATION_ERROR_NOT_FOUND);
         }
     }
 
-    void TValidatorLogin::ValidateCorrectPassword(TRecordUser* user) {
+    void TValidatorLogin::ValidateCorrectPassword(TMaybe<TRecordUser>& user) {
         if (user && !user->CheckPassword(OriginJson.value(RECORD_USER_FIELD_PASSWORD, ""))) {
             IsValid = false;
             ValidationErrors[RECORD_USER_FIELD_PASSWORD].push_back(VALIDATION_ERROR_INCORRECT);

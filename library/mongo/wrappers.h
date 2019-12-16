@@ -97,11 +97,10 @@ namespace NMongo {
     public:
         inline TMongoStructureHolder(T* value)
             : Value(value)
-        {
-        }
+        {}
 
-        virtual ~TMongoStructureHolder() noexcept(false) {
-        }
+        virtual ~TMongoStructureHolder() noexcept(false)
+        {}
 
         inline operator T*() {
             return Value;

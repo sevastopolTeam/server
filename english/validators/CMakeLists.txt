@@ -7,3 +7,7 @@ add_library(english_validators STATIC
   validator_login.cpp
   validator_user.cpp
 )
+
+target_link_libraries(english_validators PUBLIC
+  english_collections
+)
