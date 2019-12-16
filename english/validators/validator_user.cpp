@@ -9,20 +9,20 @@ namespace NEnglish {
     }
 
     bool TValidatorUser::Validate(TDataSource& dataSource) {
-        bool isValid = true;
-        isValid = ValidateRequired(RECORD_USER_FIELD_NAME) && isValid;
+        int isValid = 1;
+        isValid &= ValidateRequired(RECORD_USER_FIELD_NAME);
 
-        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_EMAIL);
-        isValid = isValid && ValidateEmail(RECORD_USER_FIELD_EMAIL);
-        isValid = isValid && ValidateEmailExists(dataSource);
+        isValid &= ValidateRequired(RECORD_USER_FIELD_EMAIL);
+        isValid &= ValidateEmail(RECORD_USER_FIELD_EMAIL);
+        isValid &= ValidateEmailExists(dataSource);
         
-        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_PHONE);
-        isValid = isValid && ValidatePhone(RECORD_USER_FIELD_PHONE);
+        isValid &= ValidateRequired(RECORD_USER_FIELD_PHONE);
+        isValid &= ValidatePhone(RECORD_USER_FIELD_PHONE);
 
-        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_PASSWORD);
+        isValid &= ValidateRequired(RECORD_USER_FIELD_PASSWORD);
 
-        isValid = isValid && ValidateSame(RECORD_USER_FIELD_REPEAT_PASSWORD, RECORD_USER_FIELD_PASSWORD);
-        return isValid;
+        isValid &= ValidateSame(RECORD_USER_FIELD_REPEAT_PASSWORD, RECORD_USER_FIELD_PASSWORD);
+        return (bool)isValid;
     }
 
     bool TValidatorUser::ValidateEmailExists(TDataSource& dataSource) {

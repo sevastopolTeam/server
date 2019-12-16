@@ -11,16 +11,16 @@ namespace NEnglish {
     }
 
     bool TValidatorLogin::Validate(const TMaybe<TRecordUser>& user) {
-        bool isValid = true;
+        int isValid = 1;
 
-        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_EMAIL);
-        isValid = isValid && ValidateEmail(RECORD_USER_FIELD_EMAIL);
-        isValid = isValid && ValidateEmailExists(user);
+        isValid &= ValidateRequired(RECORD_USER_FIELD_EMAIL);
+        isValid &= ValidateEmail(RECORD_USER_FIELD_EMAIL);
+        isValid &= ValidateEmailExists(user);
 
-        isValid = isValid && ValidateRequired(RECORD_USER_FIELD_PASSWORD);
-        isValid = isValid && ValidateCorrectPassword(user);
+        isValid &= ValidateRequired(RECORD_USER_FIELD_PASSWORD);
+        isValid &= ValidateCorrectPassword(user);
 
-        return isValid;
+        return (bool)isValid;
     }
 
     bool TValidatorLogin::ValidateEmailExists(const TMaybe<TRecordUser>& user) {

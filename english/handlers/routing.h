@@ -34,16 +34,11 @@ namespace NEnglish {
             return Nothing();
         }
 
-        // Cout << "headers" << it->second << Endl;
-
         const TString authToken = it->second;
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
-        if (!session.has_value()) {
-            Cout << "Empty()" << Endl;
+        if (!session) {
             return Nothing();
         }
-
-        Cout << "session " << session->GetUserId() << Endl;
 
         return dataSource.English.CollectionUser.FindById(session->GetUserId());
     }
