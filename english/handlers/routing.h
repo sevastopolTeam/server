@@ -38,7 +38,7 @@ namespace NEnglish {
 
         const TString authToken = it->second;
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
-        if (session.Empty()) {
+        if (!session.has_value()) {
             Cout << "Empty()" << Endl;
             return Nothing();
         }

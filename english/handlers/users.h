@@ -19,10 +19,10 @@ namespace NEnglish {
         try {
             const TString& userId = req.matches[1];
             const TMaybe<TRecordUser>& record = dataSource.English.CollectionUser.FindById(userId);
-            if (record.Empty()) {
-                response[NEnglish::RESPONSE_STATUS] = VALIDATION_ERROR_NOT_FOUND;
-            } else {
+            if (record) {
                 response[RESPONSE_BODY] = record->ToJson();
+            } else {
+                response[NEnglish::RESPONSE_STATUS] = VALIDATION_ERROR_NOT_FOUND;
             }
         } catch (std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
