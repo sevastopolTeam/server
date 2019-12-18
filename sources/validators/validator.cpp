@@ -5,37 +5,28 @@ NJson::TJsonValue IValidator::GetValidationErrors() const {
 }
 
 bool IValidator::ValidateRequired(const TString& field) {
-    bool valid = OriginJson.value(field, "").size();
-    if (!valid) {
+    if (OriginJson.value(field, "").empty()) {
         ValidationErrors[field].push_back(VALIDATION_ERROR_REQUIRED);
-        IsValid = false;
+        return false;
     }
-    return valid;
+
+    return true;
 }
 
 bool IValidator::ValidateEmail(const TString& field) {
-    bool valid = NString::Contains(OriginJson.value(field, ""), '@');
-    if (!valid) {
+    if (!NString::Contains(OriginJson.value(field, ""), '@')) {
         ValidationErrors[field].push_back(VALIDATION_ERROR_EMAIL);
-        IsValid = false;
+        return false;
     }
-    return valid;
+
+    return true;
 }
 
 bool IValidator::ValidateSame(const TString& validateField, const TString& sameField) {
-    bool valid = OriginJson.value(validateField, "") == OriginJson.value(sameField, "");
-
-    if (!valid) {
+    if (OriginJson.value(validateField, "") != OriginJson.value(sameField, "")) {
         ValidationErrors[validateField].push_back(VALIDATION_ERROR_SAME);
-        IsValid = false;
-        
+        return false;
     }
-    return valid;
-}
 
-void IValidator::AddExternalValidation(const TString& field, const bool resolution, const TString& error) {
-    if (resolution) {
-        ValidationErrors[field].push_back(error);
-        IsValid = false;
-    }
+    return true;
 }

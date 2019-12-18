@@ -17,8 +17,9 @@ namespace NEnglish {
         }
         if (!valid) {
             ValidationErrors[field].push_back(VALIDATION_ERROR_PHONE);
-            IsValid = false;
+            return false;
         }
-        return valid;
+
+        return true;
     }
 }

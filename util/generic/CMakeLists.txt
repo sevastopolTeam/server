@@ -2,6 +2,7 @@ add_library(generic STATIC
   algorithm.cpp
   ctype.cpp
   deque.cpp
+  hash_functions.cpp
   hashmap.cpp
   hashset.cpp
   holder.cpp

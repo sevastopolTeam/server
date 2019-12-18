@@ -3,7 +3,9 @@
 #include <ctime>
 
 #include "contrib/json/json.h"
-#include "contrib/md5/md5.h"
+
+#include "util/generic/iostream.h"
+#include "util/generic/hash_functions.h"
 
 namespace {
 
@@ -11,17 +13,13 @@ namespace {
         return NString::ToLower(str);
     }
 
-    TString GenerateConfirmationKey() {
-        std::time_t nowTime = time(NULL); // TODO: add salt
-        return NString::ToString(static_cast<int>(nowTime)) + '-' + NString::ToString(rand());
-    }
-
-    TString GeneratePasswordHash(const TString& password) {
-        return md5(password); // TODO: add salt?
-    }
 }
 
 namespace NEnglish {
+
+    bool TRecordUser::IsAdmin() const {
+        return Role == USER_ROLE_ADMIN;
+    }
 
     TRecordUser::TRecordUser(const NJson::TJsonValue& json)
         : Email(Normalize(json.value(RECORD_USER_FIELD_EMAIL, "")))
@@ -29,14 +27,16 @@ namespace NEnglish {
         , Phone(json.value(RECORD_USER_FIELD_PHONE, ""))
         , Password(json.value(RECORD_USER_FIELD_PASSWORD, ""))
         , RepeatPassword(json.value(RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
-        , ConfirmationKey(GenerateConfirmationKey())
-        , Confirmed(false)
-        , PasswordHash(GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, "")))
-        , ResetPasswordKey(GenerateConfirmationKey())
-        , Role(USER_ROLE_USER)
+        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, NHashFunctions::GenerateRandomToken()))
+        , Confirmed(json.value(RECORD_USER_FIELD_CONFIRMED, false))
+        , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, NHashFunctions::GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
+        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, NHashFunctions::GenerateRandomToken()))
+        , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
         if (json.find("_id") != json.end()) {
             Id = json["_id"].value("$oid", "");
+        } else {
+            Id = Nothing();
         }
     }
 
@@ -51,5 +51,9 @@ namespace NEnglish {
             {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey},
             {RECORD_USER_FIELD_ROLE, Role}
         };
+    }
+
+    bool TRecordUser::CheckPassword(const TString& password) const {
+        return PasswordHash == NHashFunctions::GeneratePasswordHash(password);
     }
 }

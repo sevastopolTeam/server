@@ -3,9 +3,11 @@
 #include "contrib/json/json.h"
 #include "sources/records/record.h"
 #include "util/generic/string.h"
+#include "util/generic/maybe.h"
 
 namespace NEnglish {
 
+    const TString RECORD_USER_FIELD_ID = "Id";
     const TString RECORD_USER_FIELD_EMAIL = "Email";
     const TString RECORD_USER_FIELD_NAME = "Name";
     const TString RECORD_USER_FIELD_PHONE = "Phone";
@@ -25,6 +27,8 @@ namespace NEnglish {
         TRecordUser() = default;
         TRecordUser(const NJson::TJsonValue& json);
 
+        bool IsAdmin() const;        
+        bool CheckPassword(const TString& password) const;
         NJson::TJsonValue ToJson() const override;
         NJson::TJsonValue GetUniqSelector() const;
 
