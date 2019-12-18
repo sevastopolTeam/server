@@ -287,7 +287,7 @@ namespace NMongo {
 
         TCursor cursor(mongoc_collection_find(collection, MONGOC_QUERY_NONE,
             skip, limit, 0, selector, fields, readPrefs));
-        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
+        for (auto it = cursor.Begin(); it.has_value(); it = cursor.Next()) {
             callback(*it);
         }
     }
@@ -350,7 +350,7 @@ namespace NMongo {
 
         TCursor cursor(mongoc_collection_aggregate(collection, flags,
             pipeline, nullptr, nullptr));
-        for (auto it = cursor.Begin(); !it.Empty(); it = cursor.Next()) {
+        for (auto it = cursor.Begin(); it.has_value(); it = cursor.Next()) {
             callback(*it);
         }
     }

@@ -13,4 +13,6 @@ public:
 private:
     THolder<TDataSource> DataSource;
     THolder<httplib::Server> Server;
+
+    void AddEnglishHandlers();
  };

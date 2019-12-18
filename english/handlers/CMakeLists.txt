@@ -2,7 +2,10 @@ include_directories(
   ../..
 )
 
+add_subdirectory(admin)
+
 add_library(english_handlers STATIC
-  registration.h
+  login.h
   routing.h
+  users.h
 )

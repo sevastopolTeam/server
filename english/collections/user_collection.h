@@ -11,6 +11,7 @@ namespace NEnglish {
     public:
         using ICollection::ICollection;
 
+        TMaybe<TRecordUser> FindByEmail(const TString& email);
         bool ExistsWithEmail(const TString& email);
     };
 
