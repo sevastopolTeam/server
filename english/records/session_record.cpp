@@ -3,12 +3,13 @@
 #include "contrib/json/json.h"
 
 #include "util/generic/hash_functions.h"
+#include "util/generic/ctype.h"
 
 namespace NEnglish {
 
     TRecordSession::TRecordSession(const NJson::TJsonValue& json)
-        : UserId(json.value(RECORD_SESSION_FIELD_USER_ID, ""))
-        , Token(json.value(RECORD_SESSION_FIELD_TOKEN, NHashFunctions::GenerateRandomToken())) {}
+        : UserId(NJson::GetString(json, RECORD_SESSION_FIELD_USER_ID, ""))
+        , Token(NJson::GetString(json, RECORD_SESSION_FIELD_TOKEN, NHashFunctions::GenerateRandomToken())) {}
 
     TRecordSession::TRecordSession(const TString& userId)
         : UserId(userId)
