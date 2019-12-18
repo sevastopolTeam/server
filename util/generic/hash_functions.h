@@ -1,7 +1,8 @@
 #pragma once
 
-#include "string.h"
+#include <ctime>
 
+#include "string.h"
 #include "contrib/md5/md5.h"
 
 struct NHashFunctions {
