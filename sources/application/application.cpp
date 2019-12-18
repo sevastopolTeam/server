@@ -8,7 +8,13 @@
 #include "english/handlers/registration.h"
 #include "english/handlers/user.h"
 
+#include "util/generic/ctype.h"
+
 TApplication::TApplication() {
+    NJson::TJsonValue v;
+    v["s"] = 123;
+    Cout << NJson::GetString(v, "s", "") << Endl;
+    Cout << NJson::GetInt(v, "s", 0) << Endl;
     INFO_LOG << "Starting server..." << Endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
     Server.reset(new httplib::Server());

@@ -1,5 +1,6 @@
 add_library(generic STATIC
   algorithm.cpp
+  ctype.cpp
   deque.cpp
   hashmap.cpp
   hashset.cpp
