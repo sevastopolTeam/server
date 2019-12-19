@@ -20,5 +20,4 @@ using TMultiMap = std::multimap<Key, T, Compare, Allocator>;
 
 
 namespace NMap {
-
-};
+}

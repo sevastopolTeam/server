@@ -9,5 +9,4 @@ template<
 using TStack = std::stack<T, Container>;
 
 namespace NStack {
-
-};
+}

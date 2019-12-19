@@ -17,5 +17,4 @@ template<
 using TMultiSet = std::multiset<Key, Compare, Allocator>;
 
 namespace NSet {
-
-};
+}

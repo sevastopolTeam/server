@@ -6,6 +6,7 @@
 #include "contrib/json/json.h"
 #include "contrib/mongo-c-driver/libbson/src/bson/bson.h"
 #include "contrib/mongo-c-driver/libmongoc/src/mongoc/mongoc.h"
+#include "util/generic/ctype.h"
 #include "util/generic/noncopyable.h"
 #include "util/generic/maybe.h"
 #include "util/generic/string.h"
@@ -18,7 +19,7 @@ namespace NMongo {
 
     public:
         TMongoException(bson_error_t error) {
-            Message = NString::ToString(static_cast<int>(error.code)) + TString(error.message);
+            Message = NType::ToString(static_cast<int>(error.code)) + TString(error.message);
         }
 
         const char* what() const noexcept override {

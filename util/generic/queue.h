@@ -16,5 +16,4 @@ template<
 using TPriorityQueue = std::priority_queue<T, Container, Compare>;
 
 namespace NQueue {
-
-};
+}
