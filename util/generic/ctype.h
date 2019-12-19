@@ -31,7 +31,7 @@ namespace NJson {
     TString GetString(const TJsonValue& value, const TString& path, const TString& defaultValue);
 
     template <class T>
-    TJsonValue GetVectorJson(const TVector<T>& v);
+    TJsonValue ToVectorJson(const TVector<T>& v);
 }
 
 
@@ -41,7 +41,7 @@ TString NType::ToString(const T& value) {
 }
 
 template <class T>
-NJson::TJsonValue NJson::GetVectorJson(const TVector<T>& v) {
+NJson::TJsonValue NJson::ToVectorJson(const TVector<T>& v) {
     TJsonValue result;
     for (const auto& item: v) {
         result.push_back(item.ToJson());

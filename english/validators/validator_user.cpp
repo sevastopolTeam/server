@@ -27,7 +27,7 @@ namespace NEnglish {
 
     bool TValidatorUser::ValidateEmailExists(TDataSource& dataSource) {
         bool valid = !dataSource.English.CollectionUser.ExistsWithEmail(
-            OriginJson.value(RECORD_USER_FIELD_EMAIL, "")
+            NJson::GetString(OriginJson, RECORD_USER_FIELD_EMAIL, "")
         );
         if (!valid) {
             ValidationErrors[RECORD_USER_FIELD_EMAIL].push_back(VALIDATION_ERROR_ALREADY_EXISTS);

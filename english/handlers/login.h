@@ -12,6 +12,7 @@
 
 #include "sources/data_source/data_source.h"
 
+#include "util/generic/ctype.h"
 #include "util/generic/iostream.h"
 
 namespace NEnglish {
@@ -23,7 +24,7 @@ namespace NEnglish {
             NJson::TJsonValue jsonLoginInfo = NJson::TJsonValue::parse(req.body);
             TValidatorLogin validator(jsonLoginInfo);
             TMaybe<TRecordUser> user = dataSource.English.CollectionUser.FindByEmail(
-                jsonLoginInfo.value(RECORD_USER_FIELD_EMAIL, "")
+                NJson::GetString(jsonLoginInfo, RECORD_USER_FIELD_EMAIL, "")
             );
             if (validator.Validate(user)) {
                 const TRecordSession& newSession(user->GetId());
