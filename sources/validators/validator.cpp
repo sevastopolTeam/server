@@ -1,11 +1,13 @@
 #include "validator.h"
 
+#include "util/generic/ctype.h"
+
 NJson::TJsonValue IValidator::GetValidationErrors() const {
     return ValidationErrors;
 }
 
 bool IValidator::ValidateRequired(const TString& field) {
-    if (OriginJson.value(field, "").empty()) {
+    if (NJson::GetString(OriginJson, field, "").empty()) {
         ValidationErrors[field].push_back(VALIDATION_ERROR_REQUIRED);
         return false;
     }
@@ -14,7 +16,7 @@ bool IValidator::ValidateRequired(const TString& field) {
 }
 
 bool IValidator::ValidateEmail(const TString& field) {
-    if (!NString::Contains(OriginJson.value(field, ""), '@')) {
+    if (!NString::Contains(NJson::GetString(OriginJson, field, ""), '@')) {
         ValidationErrors[field].push_back(VALIDATION_ERROR_EMAIL);
         return false;
     }
@@ -23,7 +25,7 @@ bool IValidator::ValidateEmail(const TString& field) {
 }
 
 bool IValidator::ValidateSame(const TString& validateField, const TString& sameField) {
-    if (OriginJson.value(validateField, "") != OriginJson.value(sameField, "")) {
+    if (NJson::GetString(OriginJson, validateField, "") != NJson::GetString(OriginJson, sameField, "")) {
         ValidationErrors[validateField].push_back(VALIDATION_ERROR_SAME);
         return false;
     }

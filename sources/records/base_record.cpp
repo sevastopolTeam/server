@@ -1,7 +1,9 @@
 #include "base_record.h"
 
+#include "util/generic/ctype.h"
+
 TRecordBase::TRecordBase(const NJson::TJsonValue& json) {
-    Hello = json.value("Hello", "");
+    Hello = NJson::GetString(json, "Hello", "");
 }
 
 NJson::TJsonValue TRecordBase::ToJson() const {

@@ -9,6 +9,8 @@
 #include "english/handlers/login.h"
 #include "english/handlers/users.h"
 
+#include "util/generic/ctype.h"
+
 TApplication::TApplication() {
     INFO_LOG << "Starting server..." << Endl;
     DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));

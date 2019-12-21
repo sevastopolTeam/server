@@ -9,5 +9,4 @@ template<
 using TDeque = std::deque<T, Allocator>;
 
 namespace NDeque {
-
-};
+}

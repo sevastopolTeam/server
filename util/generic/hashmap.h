@@ -22,5 +22,4 @@ using TMultiHashMap = std::unordered_multimap<Key, T, Hash, KeyEqual, Allocator>
 
 
 namespace NHashMap {
-
-};
+}

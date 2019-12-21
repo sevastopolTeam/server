@@ -8,6 +8,7 @@
 
 #include "sources/data_source/data_source.h"
 
+#include "util/generic/ctype.h"
 #include "util/generic/iostream.h"
 
 namespace NEnglish {
@@ -17,12 +18,7 @@ namespace NEnglish {
         try {
             TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
             if (IsAdmin(currentUser)) {
-                NJson::TJsonValue jsonSessions;
-                const TVector<TRecordSession>& sessions = dataSource.English.CollectionSession.Find();
-                for (const auto& session: sessions) {
-                    jsonSessions.push_back(session.ToJson());
-                }
-                response[RESPONSE_BODY] = jsonSessions;
+                response[RESPONSE_BODY] = NJson::ToVectorJson(dataSource.English.CollectionSession.Find());
             } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                 response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;

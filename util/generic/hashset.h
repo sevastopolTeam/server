@@ -19,5 +19,4 @@ template<
 using TMultiHashSet = std::unordered_multiset<Key, Hash, KeyEqual, Allocator>;
 
 namespace NHashSet {
-
-};
+}

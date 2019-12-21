@@ -1,41 +1,19 @@
 #pragma once
 
 #include <string>
-#include <cctype>
 
 using TString = std::string;
 
-struct NString {
-    static int ToInt(const TString& s) {
-        return std::stoi(s);
-    }
+namespace NString {
+    // int ToInt(const TString& s);
 
-    static TString ToString(const int value) {
-        return std::to_string(value);
-    }
+    // TString ToString(const int value);
 
-    static bool EndsWith(const TString& value, const TString& ending) {
-        if (ending.size() > value.size()) {
-            return false;
-        }
-        return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
-    }
+    bool EndsWith(const TString& value, const TString& ending);
 
-    static bool Contains(const TString& value, const char searchSymbol) {
-        return value.find(searchSymbol) != TString::npos;
-    }
+    bool Contains(const TString& value, const char searchSymbol);
 
-    static TString ToLower(TString value) {
-        for (auto c: value) {
-            if (isalpha(c)) {
-                c = tolower(c);
-            }
-        }
+    TString ToLower(TString value);
 
-        return value;
-    }
-
-    static bool IsDigit(const char c) {
-        return isdigit(c);
-    }
-};
+    // bool IsDigit(const char c);
+}

@@ -1,20 +1,12 @@
 #pragma once
 
-#include <algorithm>
-
-struct NAlgorithm {
+namespace NAlgorithm {
     template<class Container>
-    static void Sort(Container& container) {
-        std::sort(container.begin(), container.end());
-    }
+    void Sort(Container& container);
 
     template <class RandomAccessIterator>
-    static void Sort(RandomAccessIterator first, RandomAccessIterator last) {
-        std::sort(first, last);
-    }
+    void Sort(RandomAccessIterator first, RandomAccessIterator last);
 
     template <class RandomAccessIterator, class Compare>
-    static void Sort(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
-        std::sort(first, last, comp);
-    }
-};
+    void Sort(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+}

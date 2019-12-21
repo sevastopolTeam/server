@@ -6,13 +6,12 @@
 
 #include "util/generic/iostream.h"
 #include "util/generic/hash_functions.h"
+#include "util/generic/ctype.h"
 
 namespace {
-
     TString Normalize(const TString& str) {
         return NString::ToLower(str);
     }
-
 }
 
 namespace NEnglish {
@@ -22,22 +21,18 @@ namespace NEnglish {
     }
 
     TRecordUser::TRecordUser(const NJson::TJsonValue& json)
-        : Email(Normalize(json.value(RECORD_USER_FIELD_EMAIL, "")))
-        , Name(json.value(RECORD_USER_FIELD_NAME, ""))
-        , Phone(json.value(RECORD_USER_FIELD_PHONE, ""))
-        , Password(json.value(RECORD_USER_FIELD_PASSWORD, ""))
-        , RepeatPassword(json.value(RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
-        , ConfirmationKey(json.value(RECORD_USER_FIELD_CONFIRMATION_KEY, NHashFunctions::GenerateRandomToken()))
-        , Confirmed(json.value(RECORD_USER_FIELD_CONFIRMED, false))
-        , PasswordHash(json.value(RECORD_USER_FIELD_PASSWORD_HASH, NHashFunctions::GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
-        , ResetPasswordKey(json.value(RECORD_USER_FIELD_RESET_PASSWORD_KEY, NHashFunctions::GenerateRandomToken()))
-        , Role(json.value(RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
+        : Email(Normalize(NJson::GetString(json, RECORD_USER_FIELD_EMAIL, "")))
+        , Name(NJson::GetString(json, RECORD_USER_FIELD_NAME, ""))
+        , Phone(NJson::GetString(json, RECORD_USER_FIELD_PHONE, ""))
+        , Password(NJson::GetString(json, RECORD_USER_FIELD_PASSWORD, ""))
+        , RepeatPassword(NJson::GetString(json, RECORD_USER_FIELD_REPEAT_PASSWORD, ""))
+        , ConfirmationKey(NJson::GetString(json, RECORD_USER_FIELD_CONFIRMATION_KEY, NHashFunctions::GenerateRandomToken()))
+        , Confirmed(NJson::GetBool(json, RECORD_USER_FIELD_CONFIRMED, false))
+        , PasswordHash(NJson::GetString(json, RECORD_USER_FIELD_PASSWORD_HASH, NHashFunctions::GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
+        , ResetPasswordKey(NJson::GetString(json, RECORD_USER_FIELD_RESET_PASSWORD_KEY, NHashFunctions::GenerateRandomToken()))
+        , Role(NJson::GetString(json, RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
     {
-        if (json.find("_id") != json.end()) {
-            Id = json["_id"].value("$oid", "");
-        } else {
-            Id = Nothing();
-        }
+        Id = NJson::GetString(json, "_id.$oid");
     }
 
     NJson::TJsonValue TRecordUser::ToJson() const {

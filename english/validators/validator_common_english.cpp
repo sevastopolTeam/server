@@ -1,5 +1,7 @@
 #include "validator_common_english.h"
 
+#include "util/generic/ctype.h"
+
 namespace NEnglish {
 
     bool IValidatorCommonEnglish::ValidatePhone(const TString& field) {
@@ -8,7 +10,7 @@ namespace NEnglish {
         
         if (phone.size() > 2 && phone[0] == '+') {
             for (size_t i = 1; i < phone.size(); ++i) {
-                if (!NString::IsDigit(phone[i])) {
+                if (!NType::IsDigit(phone[i])) {
                     valid = false;
                 }
             }

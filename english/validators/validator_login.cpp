@@ -33,7 +33,7 @@ namespace NEnglish {
     }
 
     bool TValidatorLogin::ValidateCorrectPassword(const TMaybe<TRecordUser>& user) {
-        if (user && !user->CheckPassword(OriginJson.value(RECORD_USER_FIELD_PASSWORD, ""))) {
+        if (user && !user->CheckPassword(NJson::GetString(OriginJson, RECORD_USER_FIELD_PASSWORD, ""))) {
             ValidationErrors[RECORD_USER_FIELD_PASSWORD].push_back(VALIDATION_ERROR_INCORRECT);
             return false;
         }
