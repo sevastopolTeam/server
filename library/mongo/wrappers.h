@@ -235,6 +235,10 @@ namespace NMongo {
             const TBsonValue& pipeline,
             const mongoc_query_flags_t flags = MONGOC_QUERY_NONE);
 
+        bool CreateIndex(const TString& db, const TString& collectionName,
+            const TString& indexName, bool uniq = false, bool desc = false,
+            int expireAfterSeconds = -1, TError* error = nullptr);
+
         // return true then the connection is established
         bool CheckConnection(const TString& db, TError* error = nullptr);
 

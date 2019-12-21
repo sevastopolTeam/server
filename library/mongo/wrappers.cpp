@@ -63,8 +63,7 @@ namespace NMongo {
         mongoc_client_pool_destroy(*this);
     }
 
-    TCollection::TCollection(const TClient& client, const TString& db,
-            const TString& collection)
+    TCollection::TCollection(const TClient& client, const TString& db, const TString& collection)
         : TMongoStructureHolder(mongoc_client_get_collection(client, db.data(), collection.data()))
     {}
 
@@ -165,7 +164,8 @@ namespace NMongo {
     {}
 
     bool THelper::Insert(const TString& db, const TString& collectionName,
-        const TBsonValue& value, TError* error) {
+        const TBsonValue& value, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -178,7 +178,8 @@ namespace NMongo {
     }
 
     bool THelper::Update(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, const TBsonValue& updater, TError* error) {
+        const TBsonValue& selector, const TBsonValue& updater, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -191,7 +192,8 @@ namespace NMongo {
     }
 
     bool THelper::Upsert(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, const TBsonValue& updater, TError* error) {
+        const TBsonValue& selector, const TBsonValue& updater, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -204,7 +206,8 @@ namespace NMongo {
     }
 
     bool THelper::MultiUpdate(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, const TBsonValue& updater, TError* error) {
+        const TBsonValue& selector, const TBsonValue& updater, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -217,7 +220,8 @@ namespace NMongo {
     }
 
     bool THelper::MultiUpsert(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, const TBsonValue& updater, TError* error) {
+        const TBsonValue& selector, const TBsonValue& updater, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -232,7 +236,8 @@ namespace NMongo {
     }
 
     bool THelper::BulkInsert(const TString& db, const TString& collectionName,
-            const TVector<TBsonValue>& values, bool ordered, TError* error) {
+            const TVector<TBsonValue>& values, bool ordered, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         TBulkOperation bulk(mongoc_collection_create_bulk_operation(collection, ordered, nullptr));
@@ -249,7 +254,8 @@ namespace NMongo {
     }
 
     bool THelper::BulkUpdate(const TString& db, const TString& collectionName,
-            const TVector<TUpdateParams>& ops, bool ordered, TError* error) {
+            const TVector<TUpdateParams>& ops, bool ordered, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         TBulkOperation bulk(mongoc_collection_create_bulk_operation(collection, ordered, nullptr));
@@ -266,7 +272,8 @@ namespace NMongo {
     }
 
     bool THelper::Remove(const TString& db, const TString& collectionName,
-            const TBsonValue& selector, TError* error) {
+            const TBsonValue& selector, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -281,7 +288,8 @@ namespace NMongo {
     void THelper::Find(const TString& db, const TString& collectionName,
             const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
-            const TReadPreferences& readPrefs) {
+            const TReadPreferences& readPrefs)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
 
@@ -294,7 +302,8 @@ namespace NMongo {
 
     TVector<TBsonValue> THelper::Find(const TString& db, const TString& collectionName,
             const TBsonValue& selector, size_t skip, size_t limit, const TBsonValue& fields,
-            const TReadPreferences& readPrefs) {
+            const TReadPreferences& readPrefs)
+    {
         TVector<TBsonValue> result;
         Find(db, collectionName,
             [&result](const TBsonValue& value) {
@@ -307,7 +316,8 @@ namespace NMongo {
     TBsonValue THelper::FindAndModify(const TString& db, const TString& collectionName,
             const TBsonValue& query, const TBsonValue& update,
             const TBsonValue& sort, bool upsert, bool retnew,
-            bool remove, const TBsonValue& fields, TError* error) {
+            bool remove, const TBsonValue& fields, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
 
@@ -329,7 +339,8 @@ namespace NMongo {
     }
 
     long long THelper::Count(const TString& db, const TString& collectionName,
-        const TBsonValue& selector, size_t skip, size_t limit, TError* error) {
+        const TBsonValue& selector, size_t skip, size_t limit, TError* error)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
         bson_error_t err;
@@ -344,7 +355,8 @@ namespace NMongo {
     void THelper::Aggregate(const TString& db, const TString& collectionName,
             const std::function<void(const TBsonValue&)>& callback,
             const TBsonValue& pipeline,
-            const mongoc_query_flags_t flags) {
+            const mongoc_query_flags_t flags)
+    {
         TClient client(ClientPool);
         TCollection collection(client, db, collectionName);
 
@@ -357,13 +369,37 @@ namespace NMongo {
 
     TVector<TBsonValue> THelper::Aggregate(const TString& db,
             const TString& collectionName, const TBsonValue& pipeline,
-            const mongoc_query_flags_t flags) {
+            const mongoc_query_flags_t flags)
+    {
         TVector<TBsonValue> result;
         Aggregate(db, collectionName,
             [&result](const TBsonValue& value) {
                 result.push_back(value);
             },
             pipeline, flags);
+        return result;
+    }
+
+    bool THelper::CreateIndex(const TString& db, const TString& collectionName,
+        const TString& indexName, bool uniq, bool desc, int expireAfterSeconds, TError* error)
+    {
+        TClient client(ClientPool);
+        TCollection collection(client, db, collectionName);
+
+        mongoc_index_opt_t opt;
+        mongoc_index_opt_init(&opt);
+        opt.background = 1;
+        opt.unique = uniq;
+        opt.expire_after_seconds = expireAfterSeconds;
+
+        NJson::TJsonValue json({ {indexName, (desc) ? -1 : 1} });
+        TBsonValue key(json);
+
+        bson_error_t err;
+        bool result = mongoc_collection_create_index(collection, key, &opt, &err);
+        if (error != nullptr) {
+            *error = err;
+        }
         return result;
     }
 

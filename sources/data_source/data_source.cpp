@@ -9,6 +9,8 @@ namespace {
 namespace NEnglish {
     const TString COLLECTION_NAME_USER = "english_user";
     const TString COLLECTION_NAME_SESSION = "english_session";
+
+    const TString COLUMN_NAME_EMAIL = "Email";
 }
 
 TEnglishCollections::TEnglishCollections(
@@ -16,7 +18,10 @@ TEnglishCollections::TEnglishCollections(
     const NEnglish::TCollectionSession& collectionSession
     )
     : CollectionUser(collectionUser)
-    , CollectionSession(collectionSession) {}
+    , CollectionSession(collectionSession)
+{
+    CollectionUser.CreateIndex(NEnglish::COLUMN_NAME_EMAIL, /*uniq*/ true);
+}
 
 TDataSource::TDataSource(const TString& uri, const TString& dbName)
     : Master(new NMongo::THelper(uri))
