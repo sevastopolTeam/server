@@ -20,6 +20,8 @@ public:
     TMaybe<TRecord> FindBy(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
 
+    bool CreateIndex(const TString& index, bool uniq = false, bool desc = false, int expireAfterSeconds = -1);
+
     ~ICollection() = default;
 
 protected:
@@ -80,4 +82,9 @@ TMaybe<TRecord> ICollection<TRecord>::FindById(const TString& recordId) {
     }
 
     return TRecord(result[0].ToJson());
+}
+
+template <class TRecord>
+bool ICollection<TRecord>::CreateIndex(const TString& index, bool uniq, bool desc, int expireAfterSeconds) {
+    return Master->CreateIndex(DbName, CollectionName, index, uniq, desc, expireAfterSeconds);
 }
