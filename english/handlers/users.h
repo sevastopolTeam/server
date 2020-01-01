@@ -44,7 +44,7 @@ namespace NEnglish {
                     response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
                 }
             } else {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERRROR;
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
                 response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
             }
             INFO_LOG << response.dump() << Endl;
