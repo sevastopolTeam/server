@@ -4,8 +4,11 @@ import random
 
 API_URL = "http://localhost:1234/api/"
 
+PATH_TO_REGISTER_USER = "english/users"
+PATH_TO_LOGIN_USER = "english/login"
+
 def register_user(user):
-    r = requests.post(API_URL + "english/users", data=json.dumps(user))
+    r = requests.post(API_URL + PATH_TO_REGISTER_USER, data=json.dumps(user))
     if r.status_code == 200:
         result = r.json()
         if result["Status"] == "Ok":
@@ -16,7 +19,7 @@ def register_user(user):
         print(r.status_code)
 
 def login_user(user):
-    r = requests.post(API_URL + "english/login", data=json.dumps({
+    r = requests.post(API_URL + PATH_TO_LOGIN_USER, data=json.dumps({
         "Email": user["Email"],
         "Password": user["Password"]
     }))
