@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.join(sys.path[0], '../'))
 
 from data_generator import Fake
-from client import register_user, is_dict, login_user
+from client import register_user, login_user
 
 RESPONSE_STATUS = "Status"
 RESPONSE_VALIDATION_ERRORS = "ValidationErrors"
@@ -50,7 +50,7 @@ class TestEnglish:
 
         assert status
         assert response.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response.get(RESPONSE_VALIDATION_ERRORS), dict)
 
         validation_errors = response.get(RESPONSE_VALIDATION_ERRORS)
 
@@ -70,7 +70,7 @@ class TestEnglish:
 
         assert status
         assert response.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response.get(RESPONSE_VALIDATION_ERRORS), dict)
 
         validation_errors = response.get(RESPONSE_VALIDATION_ERRORS)
 
@@ -88,7 +88,7 @@ class TestEnglish:
         assert status2
         assert response1.get(RESPONSE_STATUS) == RESPONSE_STATUS_OK
         assert response2.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response2.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response2.get(RESPONSE_VALIDATION_ERRORS), dict)
 
         validation_errors = response2.get(RESPONSE_VALIDATION_ERRORS)
 
@@ -101,7 +101,7 @@ class TestEnglish:
 
         assert status
         assert response.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response.get(RESPONSE_VALIDATION_ERRORS), dict)
 
         validation_errors = response.get(RESPONSE_VALIDATION_ERRORS)
 
@@ -118,7 +118,7 @@ class TestEnglish:
 
         assert status
         assert response.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response.get(RESPONSE_VALIDATION_ERRORS), dict)
 
         validation_errors = response.get(RESPONSE_VALIDATION_ERRORS)
 
@@ -133,7 +133,7 @@ class TestEnglish:
 
         assert status
         assert response.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response.get(RESPONSE_VALIDATION_ERRORS), dict)
 
         validation_errors = response.get(RESPONSE_VALIDATION_ERRORS)
 
@@ -149,6 +149,6 @@ class TestEnglish:
 
         assert status
         assert response.get(RESPONSE_STATUS) == RESPONSE_STATUS_VALIDATION_ERROR
-        assert is_dict(response.get(RESPONSE_VALIDATION_ERRORS))
+        assert isinstance(response.get(RESPONSE_VALIDATION_ERRORS), dict)
         validation_errors = response.get(RESPONSE_VALIDATION_ERRORS)
         assert validation_errors.get(RECORD_USER_FIELD_PASSWORD)[0] == VALIDATION_ERROR_INCORRECT

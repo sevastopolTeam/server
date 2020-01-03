@@ -7,9 +7,6 @@ API_URL = "http://localhost:1234/api/"
 PATH_TO_REGISTER_USER = "english/users"
 PATH_TO_LOGIN_USER = "english/login"
 
-def is_dict(value):
-    return isinstance(value, dict)
-
 def post_request(url, data):
     r = requests.post(url, data=json.dumps(data))
     if r.status_code == 200:
