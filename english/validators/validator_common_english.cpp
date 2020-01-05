@@ -6,7 +6,7 @@ namespace NEnglish {
 
     bool IValidatorCommonEnglish::ValidatePhone(const TString& field) {
         bool valid = true;
-        const TString& phone = OriginJson.value(field, "");
+        const TString& phone = NJson::GetString(OriginJson, field, "");
         
         if (phone.size() > 2 && phone[0] == '+') {
             for (size_t i = 1; i < phone.size(); ++i) {

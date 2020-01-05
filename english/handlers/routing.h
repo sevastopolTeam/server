@@ -20,7 +20,7 @@ namespace NEnglish {
 
     const TString RESPONSE_STATUS_OK = "Ok";
     const TString RESPONSE_STATUS_ERROR = "Error";
-    const TString RESPONSE_STATUS_VALIDATION_ERRROR = "ValidationError";
+    const TString RESPONSE_STATUS_VALIDATION_ERROR = "ValidationError";
     const TString RESPONSE_STATUS_FATAL_ERROR = "FatalError";
 
     const TString RESPONSE_ERROR_INSERT = "InsertError";

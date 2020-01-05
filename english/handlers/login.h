@@ -36,7 +36,7 @@ namespace NEnglish {
                 }
             } else {
                 response = {
-                    { RESPONSE_STATUS, RESPONSE_STATUS_VALIDATION_ERRROR },
+                    { RESPONSE_STATUS, RESPONSE_STATUS_VALIDATION_ERROR },
                     { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
                 };
             }
