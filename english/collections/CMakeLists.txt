@@ -5,7 +5,7 @@ include_directories(
 add_library(english_collections STATIC
   session_collection.cpp
   user_collection.cpp
-  word_collection.cpp
+  translation_collection.cpp
   main.cpp
 )
 

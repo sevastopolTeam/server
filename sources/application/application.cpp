@@ -6,6 +6,7 @@
 #include "sources/handlers/numbers.h"
 
 #include "english/handlers/admin/sessions.h"
+#include "english/handlers/admin/translations.h"
 #include "english/handlers/login.h"
 #include "english/handlers/users.h"
 
@@ -49,4 +50,8 @@ void TApplication::AddEnglishHandlers() {
     Server->Get("/api/english/admin/sessions", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::GetAdminSessionsHandler(*DataSource, req, res);
     });
+    Server->Post("/api/english/admin/translation", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::PostAdminTranslationHandler(*DataSource, req, res);
+    });
+    
 }
