@@ -20,7 +20,6 @@ namespace NEnglish {
         TRecordTranslation(const NJson::TJsonValue& json);
 
         NJson::TJsonValue ToJson() const override;
-        // NJson::TJsonValue GetUniqSelector() const;
 
     private:
         // DB fields
