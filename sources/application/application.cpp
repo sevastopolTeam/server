@@ -50,8 +50,11 @@ void TApplication::AddEnglishHandlers() {
     Server->Get("/api/english/admin/sessions", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::GetAdminSessionsHandler(*DataSource, req, res);
     });
-    Server->Post("/api/english/admin/translation", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PostAdminTranslationHandler(*DataSource, req, res);
+    Server->Post("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::PostAdminTranslationsHandler(*DataSource, req, res);
+    });
+    Server->Get("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::GetAdminTranslationsHandler(*DataSource, req, res);
     });
     
 }

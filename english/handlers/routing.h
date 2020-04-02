@@ -33,7 +33,6 @@ namespace NEnglish {
         if (it == req.headers.end()) {
             return Nothing();
         }
-
         const TString authToken = it->second;
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
         if (!session) {

@@ -13,5 +13,6 @@ namespace NEnglish {
     public:
         TValidatorTranslation(const NJson::TJsonValue& jsonData);
         bool Validate(TDataSource& dataSource);
+        bool ValidateExists(TDataSource& dataSource);
     };
 }
