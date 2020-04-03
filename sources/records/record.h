@@ -7,6 +7,8 @@
 
 class IRecord {
 public:
+	IRecord() = default;
+	IRecord(const TMaybe<TString>& id);
     virtual NJson::TJsonValue ToJson() const = 0;
     TString GetId() const;
 protected:

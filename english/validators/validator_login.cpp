@@ -6,9 +6,7 @@
 
 namespace NEnglish {
 
-    TValidatorLogin::TValidatorLogin(const NJson::TJsonValue& jsonData) {
-        OriginJson = jsonData;
-    }
+    TValidatorLogin::TValidatorLogin(const NJson::TJsonValue& jsonData): IValidatorCommonEnglish(jsonData) {}
 
     bool TValidatorLogin::Validate(const TMaybe<TRecordUser>& user) {
         int isValid = 1;

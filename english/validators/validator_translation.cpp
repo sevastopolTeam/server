@@ -4,9 +4,7 @@
 
 namespace NEnglish {
 
-    TValidatorTranslation::TValidatorTranslation(const NJson::TJsonValue& jsonData) {
-        OriginJson = jsonData;
-    }
+    TValidatorTranslation::TValidatorTranslation(const NJson::TJsonValue& jsonData): IValidatorCommonEnglish(jsonData) {}
 
     bool TValidatorTranslation::Validate(TDataSource& dataSource) {
         int isValid = 1;

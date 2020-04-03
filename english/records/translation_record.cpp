@@ -22,9 +22,8 @@ namespace NEnglish {
         , LanguageFrom(NJson::GetString(json, RECORD_TRANSLATION_FIELD_LANGUAGE_FROM, ""))
         , LanguageTo(NJson::GetString(json, RECORD_TRANSLATION_FIELD_LANGUAGE_TO, ""))
         , OriginUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_ORIGIN_URL, ""))
-    {
-        Id = NJson::GetString(json, "_id.$oid");
-    }
+        , IRecord(NJson::GetString(json, "_id.$oid"))
+    {}
 
     NJson::TJsonValue TRecordTranslation::ToJson() const {
         return {

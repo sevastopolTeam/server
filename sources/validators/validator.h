@@ -15,6 +15,8 @@ namespace {
 
 class IValidator {
 public:
+    IValidator() = default;
+    IValidator(const NJson::TJsonValue& jsonData);
     NJson::TJsonValue GetValidationErrors() const;
 
 protected:

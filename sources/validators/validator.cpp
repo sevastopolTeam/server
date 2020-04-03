@@ -2,6 +2,8 @@
 
 #include "util/generic/ctype.h"
 
+IValidator::IValidator(const NJson::TJsonValue& jsonData): OriginJson(jsonData) {}
+
 NJson::TJsonValue IValidator::GetValidationErrors() const {
     return ValidationErrors;
 }
