@@ -16,7 +16,7 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_LANGUAGE_TO);
 
         isValid &= ValidateExists(dataSource);
-        return (bool)isValid;
+        return static_cast<bool>(isValid);
     }
 
     bool TValidatorTranslation::ValidateExists(TDataSource& dataSource) {

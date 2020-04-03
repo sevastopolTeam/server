@@ -20,7 +20,7 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_USER_FIELD_PASSWORD);
         isValid &= ValidateCorrectPassword(user);
 
-        return (bool)isValid;
+        return static_cast<bool>(isValid);
     }
 
     bool TValidatorLogin::ValidateEmailExists(const TMaybe<TRecordUser>& user) {

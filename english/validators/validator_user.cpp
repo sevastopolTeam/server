@@ -22,7 +22,7 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_USER_FIELD_PASSWORD);
 
         isValid &= ValidateSame(RECORD_USER_FIELD_REPEAT_PASSWORD, RECORD_USER_FIELD_PASSWORD);
-        return (bool)isValid;
+        return static_cast<bool>(isValid);
     }
 
     bool TValidatorUser::ValidateEmailExists(TDataSource& dataSource) {
