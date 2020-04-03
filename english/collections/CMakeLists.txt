@@ -5,6 +5,8 @@ include_directories(
 add_library(english_collections STATIC
   session_collection.cpp
   user_collection.cpp
+  translation_collection.cpp
+  main.cpp
 )
 
 target_link_libraries(english_collections PUBLIC

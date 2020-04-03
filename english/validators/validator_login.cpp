@@ -6,9 +6,7 @@
 
 namespace NEnglish {
 
-    TValidatorLogin::TValidatorLogin(const NJson::TJsonValue& jsonData) {
-        OriginJson = jsonData;
-    }
+    TValidatorLogin::TValidatorLogin(const NJson::TJsonValue& jsonData): IValidatorCommonEnglish(jsonData) {}
 
     bool TValidatorLogin::Validate(const TMaybe<TRecordUser>& user) {
         int isValid = 1;
@@ -20,7 +18,7 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_USER_FIELD_PASSWORD);
         isValid &= ValidateCorrectPassword(user);
 
-        return (bool)isValid;
+        return static_cast<bool>(isValid);
     }
 
     bool TValidatorLogin::ValidateEmailExists(const TMaybe<TRecordUser>& user) {

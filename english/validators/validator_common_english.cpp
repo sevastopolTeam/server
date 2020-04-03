@@ -3,6 +3,7 @@
 #include "util/generic/ctype.h"
 
 namespace NEnglish {
+    IValidatorCommonEnglish::IValidatorCommonEnglish(const NJson::TJsonValue& jsonData): IValidator(jsonData) {}
 
     bool IValidatorCommonEnglish::ValidatePhone(const TString& field) {
         bool valid = true;

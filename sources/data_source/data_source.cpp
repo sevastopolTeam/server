@@ -6,29 +6,9 @@ namespace {
     const TString COLLECTION_NAME_BASE = "base";
 }
 
-namespace NEnglish {
-    const TString COLLECTION_NAME_USER = "english_user";
-    const TString COLLECTION_NAME_SESSION = "english_session";
-
-    const TString COLUMN_NAME_EMAIL = "Email";
-}
-
-TEnglishCollections::TEnglishCollections(
-    const NEnglish::TCollectionUser& collectionUser,
-    const NEnglish::TCollectionSession& collectionSession
-    )
-    : CollectionUser(collectionUser)
-    , CollectionSession(collectionSession)
-{
-    CollectionUser.CreateIndex(NEnglish::COLUMN_NAME_EMAIL, /*uniq*/ true);
-}
-
 TDataSource::TDataSource(const TString& uri, const TString& dbName)
     : Master(new NMongo::THelper(uri))
-    , English(
-        NEnglish::TCollectionUser(Master.get(), dbName, NEnglish::COLLECTION_NAME_USER),
-        NEnglish::TCollectionSession(Master.get(), dbName, NEnglish::COLLECTION_NAME_SESSION)
-    )
+    , English(Master.get(), dbName)
     , CollectionBase(Master.get(), dbName, COLLECTION_NAME_BASE)
 {
     INFO_LOG << "Started mongoDB" << Endl;

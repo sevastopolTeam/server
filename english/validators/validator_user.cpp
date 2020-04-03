@@ -4,9 +4,7 @@
 
 namespace NEnglish {
 
-    TValidatorUser::TValidatorUser(const NJson::TJsonValue& jsonData) {
-        OriginJson = jsonData;
-    }
+    TValidatorUser::TValidatorUser(const NJson::TJsonValue& jsonData): IValidatorCommonEnglish(jsonData) {}
 
     bool TValidatorUser::Validate(TDataSource& dataSource) {
         int isValid = 1;
@@ -22,7 +20,7 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_USER_FIELD_PASSWORD);
 
         isValid &= ValidateSame(RECORD_USER_FIELD_REPEAT_PASSWORD, RECORD_USER_FIELD_PASSWORD);
-        return (bool)isValid;
+        return static_cast<bool>(isValid);
     }
 
     bool TValidatorUser::ValidateEmailExists(TDataSource& dataSource) {

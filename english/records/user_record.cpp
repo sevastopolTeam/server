@@ -31,9 +31,8 @@ namespace NEnglish {
         , PasswordHash(NJson::GetString(json, RECORD_USER_FIELD_PASSWORD_HASH, NHashFunctions::GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
         , ResetPasswordKey(NJson::GetString(json, RECORD_USER_FIELD_RESET_PASSWORD_KEY, NHashFunctions::GenerateRandomToken()))
         , Role(NJson::GetString(json, RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
-    {
-        Id = NJson::GetString(json, "_id.$oid");
-    }
+        , IRecord(NJson::GetString(json, "_id.$oid"))
+    {}
 
     NJson::TJsonValue TRecordUser::ToJson() const {
         return {
