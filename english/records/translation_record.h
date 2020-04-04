@@ -13,6 +13,7 @@ namespace NEnglish {
     const TString RECORD_TRANSLATION_FIELD_LANGUAGE_FROM = "LanguageFrom";
     const TString RECORD_TRANSLATION_FIELD_LANGUAGE_TO = "LanguageTo";
     const TString RECORD_TRANSLATION_FIELD_ORIGIN_URL = "OriginUrl";
+    const TString RECORD_TRANSLATION_FIELD_DOWNLOAD_URL = "DownloadUrl";
 
     class TRecordTranslation : public IRecord {
     public:
@@ -28,5 +29,6 @@ namespace NEnglish {
         TString LanguageFrom;
         TString LanguageTo;
         TString OriginUrl;
+        TString DownloadUrl;
     };
 }

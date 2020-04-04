@@ -22,6 +22,7 @@ namespace NEnglish {
         , LanguageFrom(NJson::GetString(json, RECORD_TRANSLATION_FIELD_LANGUAGE_FROM, ""))
         , LanguageTo(NJson::GetString(json, RECORD_TRANSLATION_FIELD_LANGUAGE_TO, ""))
         , OriginUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_ORIGIN_URL, ""))
+        , DownloadUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_DOWNLOAD_URL, ""))
         , IRecord(NJson::GetString(json, "_id.$oid"))
     {}
 
@@ -31,7 +32,8 @@ namespace NEnglish {
             {RECORD_TRANSLATION_FIELD_VALUE_TO, ValueTo},
             {RECORD_TRANSLATION_FIELD_LANGUAGE_FROM, LanguageFrom},
             {RECORD_TRANSLATION_FIELD_LANGUAGE_TO, LanguageTo},
-            {RECORD_TRANSLATION_FIELD_ORIGIN_URL, OriginUrl}
+            {RECORD_TRANSLATION_FIELD_ORIGIN_URL, OriginUrl},
+            {RECORD_TRANSLATION_FIELD_DOWNLOAD_URL, DownloadUrl}
         };
     }
 
