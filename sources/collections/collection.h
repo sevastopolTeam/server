@@ -19,6 +19,7 @@ public:
     TVector<TRecord> Find(const NJson::TJsonValue& selection = NJson::TJsonValue::object());
     TMaybe<TRecord> FindBy(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
+    bool Remove(const NJson::TJsonValue& selection);
 
     bool CreateIndex(const TString& index, bool uniq = false, bool desc = false, int expireAfterSeconds = -1);
 
@@ -59,6 +60,15 @@ TMaybe<TRecord> ICollection<TRecord>::FindBy(const NJson::TJsonValue& selection)
     }
 
     return TRecord(result[0].ToJson());
+}
+
+template <class TRecord>
+bool ICollection<TRecord>::Remove(const NJson::TJsonValue& selection) {
+    return Master->Remove(
+        DbName,
+        CollectionName,
+        selection
+    );
 }
 
 template <class TRecord>
