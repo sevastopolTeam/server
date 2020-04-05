@@ -11,6 +11,7 @@ namespace NEnglish {
     public:
         using ICollection::ICollection;
         TMaybe<TRecordSession> FindByToken(const TString& token);
+        bool RemoveByToken(const TString& token);
     };
 
 }

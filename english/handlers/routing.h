@@ -25,6 +25,7 @@ namespace NEnglish {
 
     const TString RESPONSE_ERROR_INSERT = "InsertError";
     const TString RESPONSE_ERROR_ACCESS_DENIED = "AccessDenied";
+    const TString RESPONSE_ERROR_NOT_FOUND = "NotFound";
 
     const TString RESPONSE_CONTENT_TYPE_JSON = "application/json";
 
