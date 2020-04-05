@@ -74,7 +74,7 @@ namespace NEnglish {
                     response[RESPONSE_BODY] = translation->ToJson();
                 } else {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                    response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;    
+                    response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
                 }
             } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
