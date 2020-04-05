@@ -63,4 +63,56 @@ namespace NEnglish {
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
+    void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
+        try {
+            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+            if (IsAdmin(currentUser)) {
+                const TString& translationId = req.matches[1];
+                const auto& translation = dataSource.English.CollectionTranslation.FindById(translationId);
+                if (translation.has_value()) {
+                    response[RESPONSE_BODY] = translation->ToJson();
+                } else {
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                    response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;    
+                }
+            } else {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
+            }
+            INFO_LOG << response.dump() << Endl;
+        } catch (const std::exception& e) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+        }
+
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
+    }
+
+    void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
+        try {
+            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+            if (IsAdmin(currentUser)) {
+                const TString& translationId = req.matches[1];
+                const bool isSuccess = dataSource.English.CollectionTranslation.RemoveById(translationId);
+                if (!isSuccess) {
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                    response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
+                }
+            } else {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
+            }
+            INFO_LOG << response.dump() << Endl;
+        } catch (const std::exception& e) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+        }
+
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
+    }
+
 }

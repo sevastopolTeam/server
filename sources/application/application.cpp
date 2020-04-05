@@ -56,5 +56,11 @@ void TApplication::AddEnglishHandlers() {
     Server->Get("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::GetAdminTranslationsHandler(*DataSource, req, res);
     });
+    Server->Get(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::GetAdminTranslationHandler(*DataSource, req, res);
+    });
+    Server->Delete(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::DeleteAdminTranslationHandler(*DataSource, req, res);
+    });
     
 }

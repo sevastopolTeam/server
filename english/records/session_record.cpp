@@ -23,10 +23,18 @@ namespace NEnglish {
         return Token;
     }
 
-    NJson::TJsonValue TRecordSession::ToJson() const {
+    NJson::TJsonValue TRecordSession::ForDB() const {
         return {
             {RECORD_SESSION_FIELD_USER_ID, UserId},
             {RECORD_SESSION_FIELD_TOKEN, Token}
         };
+    }
+
+    NJson::TJsonValue TRecordSession::ToJson() const {
+        NJson::TJsonValue json = ForDB();
+        if (Id.has_value()) {
+            json[RECORD_SESSION_FIELD_ID] = *Id;
+        }
+        return json;
     }
 }

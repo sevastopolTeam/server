@@ -6,6 +6,7 @@
 
 namespace NEnglish {
 
+    const TString RECORD_SESSION_FIELD_ID = "Id";
     const TString RECORD_SESSION_FIELD_USER_ID = "UserId";
     const TString RECORD_SESSION_FIELD_TOKEN = "Token";
 
@@ -16,6 +17,7 @@ namespace NEnglish {
         TRecordSession(const TString& userId);
 
         NJson::TJsonValue ToJson() const override;
+        NJson::TJsonValue ForDB() const override;
 
         TString GetUserId() const;
         TString GetToken() const;

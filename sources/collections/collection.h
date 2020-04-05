@@ -19,6 +19,8 @@ public:
     TVector<TRecord> Find(const NJson::TJsonValue& selection = NJson::TJsonValue::object());
     TMaybe<TRecord> FindBy(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
+    bool Remove(const NJson::TJsonValue& selection);
+    bool RemoveById(const TString& recordId);
 
     bool CreateIndex(const TString& index, bool uniq = false, bool desc = false, int expireAfterSeconds = -1);
 
@@ -32,7 +34,7 @@ protected:
 
 template <class TRecord>
 bool ICollection<TRecord>::Create(const TRecord& record) {
-    return Master->Insert(DbName, CollectionName, record.ToJson());
+    return Master->Insert(DbName, CollectionName, record.ForDB());
 }
 
 template <class TRecord>
@@ -59,6 +61,26 @@ TMaybe<TRecord> ICollection<TRecord>::FindBy(const NJson::TJsonValue& selection)
     }
 
     return TRecord(result[0].ToJson());
+}
+
+template <class TRecord>
+bool ICollection<TRecord>::Remove(const NJson::TJsonValue& selection) {
+    return Master->Remove(
+        DbName,
+        CollectionName,
+        selection
+    );
+}
+
+template <class TRecord>
+bool ICollection<TRecord>::RemoveById(const TString& recordId) {
+    NJson::TJsonValue json;
+    json["_id"]["$oid"] = recordId;
+    return Master->Remove(
+        DbName,
+        CollectionName,
+        json
+    );
 }
 
 template <class TRecord>
