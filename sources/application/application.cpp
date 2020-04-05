@@ -46,6 +46,9 @@ void TApplication::AddEnglishHandlers() {
     Server->Post("/api/english/login", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::PostLoginHandler(*DataSource, req, res);
     });
+    Server->Delete("/api/english/logout", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::DeleteLogoutHandler(*DataSource, req, res);
+    });
     Server->Get("/api/english/admin/sessions", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::GetAdminSessionsHandler(*DataSource, req, res);
     });
@@ -55,8 +58,5 @@ void TApplication::AddEnglishHandlers() {
     Server->Get("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::GetAdminTranslationsHandler(*DataSource, req, res);
     });
-    Server->Delete("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetAdminTranslationsHandler(*DataSource, req, res);
-    })
     
 }

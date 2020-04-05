@@ -90,5 +90,22 @@ namespace NEnglish {
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
+    void DeleteLogoutHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
+        try {
+            const auto it = req.headers.find(HEADERS_AUTHORIZATION);
+            if (it == req.headers.end() || !dataSource.English.CollectionSession.RemoveByToken(it->second)) {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_NOT_FOUND;
+            }
+            INFO_LOG << response.dump() << Endl;
+        } catch (const std::exception& e) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+        }
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
+    }
+
 
 }
