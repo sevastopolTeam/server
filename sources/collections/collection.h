@@ -23,6 +23,14 @@ public:
         const int skipRecords = 0,
         const int limitRecords = std::numeric_limits<int>::max()
     );
+    TRecord FindAndModify(
+        const NJson::TJsonValue& selection,
+        const NJson::TJsonValue& update
+    );
+    TRecord FindByIdAndModify(
+        const TString& recordId,
+        const TRecord& updateRecord
+    );
     TVector<TRecord> All();
     TMaybe<TRecord> FindFirst(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
@@ -58,6 +66,24 @@ TVector<TRecord> ICollection<TRecord>::Find(const NJson::TJsonValue& selection, 
         records.push_back(TRecord(a.ToJson()));
     }
     return records;
+}
+
+template <class TRecord>
+TRecord ICollection<TRecord>::FindAndModify(const NJson::TJsonValue& selection, const NJson::TJsonValue& update) {
+    NMongo::TBsonValue result = Master->FindAndModify(
+        DbName,
+        CollectionName,
+        selection,
+        update
+    );
+    return TRecord(result.ToJson());
+}
+
+template <class TRecord>
+TRecord ICollection<TRecord>::FindByIdAndModify(const TString& recordId, const TRecord& updateRecord) {
+    NJson::TJsonValue json;
+    json["_id"]["$oid"] = recordId;
+    return FindAndModify(json, updateRecord.ForDB());
 }
 
 template <class TRecord>

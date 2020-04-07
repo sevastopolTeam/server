@@ -17,15 +17,18 @@
 
 namespace NEnglish {
 
+    const TString SIZE_OF_PAGE_PARAM = "PageSize";
+    const TString NUMBER_OF_PAGE_PARAM = "Page";
+
     void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
             TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
             if (IsAdmin(currentUser)) {
-                int limit = NType::ToInt(req.GetParamValue("pageSize", NType::ToString(std::numeric_limits<int>::max())));
-                int skip = NType::ToInt(req.GetParamValue("page", "0")) * limit;
+                int limit = NType::ToInt(req.GetParamValue(SIZE_OF_PAGE_PARAM, "0"));
+                int skip = NType::ToInt(req.GetParamValue(NUMBER_OF_PAGE_PARAM, "0")) * limit;
                 response[RESPONSE_BODY] = {
-                    { 
+                    {
                         "Translations",
                         NJson::ToVectorJson(
                             dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), skip, limit)
@@ -55,13 +58,40 @@ namespace NEnglish {
         try {
             TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
             if (IsAdmin(currentUser)) {
-                NJson::TJsonValue jsonTranslation = NJson::TJsonValue::parse(req.body);
+                const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
                 TValidatorTranslation validator(jsonTranslation);
                 if (validator.Validate(dataSource)) {
                     if (!dataSource.English.CollectionTranslation.Create(TRecordTranslation(jsonTranslation))) {
                         response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                         response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
                     }
+                } else {
+                    response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
+                    response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
+                }
+            } else {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
+            }
+            INFO_LOG << response.dump() << Endl;
+        } catch (const std::exception& e) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+        }
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
+    }
+
+    void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
+        try {
+            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+            if (IsAdmin(currentUser)) {
+                const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
+                TValidatorTranslation validator(jsonTranslation);
+                if (validator.Validate(dataSource)) {
+                    dataSource.English.CollectionTranslation.FindByIdAndModify(
+                        NJson::GetString(jsonTranslation["Id"], ""), TRecordTranslation(jsonTranslation));
                 } else {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
                     response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
