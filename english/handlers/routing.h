@@ -30,12 +30,7 @@ namespace NEnglish {
     const TString RESPONSE_CONTENT_TYPE_JSON = "application/json";
 
     TMaybe<TRecordUser> GetCurrentUser(TDataSource& dataSource, const httplib::Request& req) {
-        const auto it = req.headers.find(HEADERS_AUTHORIZATION);
-        if (it == req.headers.end()) {
-            return Nothing();
-        }
-
-        const TString authToken = it->second;
+        const TString authToken = req.GetHeaderValue(HEADERS_AUTHORIZATION);
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
         if (!session) {
             return Nothing();

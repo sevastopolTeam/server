@@ -93,8 +93,8 @@ namespace NEnglish {
     void DeleteLogoutHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            const auto it = req.headers.find(HEADERS_AUTHORIZATION);
-            if (it == req.headers.end() || !dataSource.English.CollectionSession.RemoveByToken(it->second)) {
+            const TString& authToken = req.GetHeaderValue(HEADERS_AUTHORIZATION);
+            if (!dataSource.English.CollectionSession.RemoveByToken(authToken)) {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                 response[RESPONSE_STATUS_ERROR] = RESPONSE_ERROR_NOT_FOUND;
             }

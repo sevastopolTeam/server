@@ -1,5 +1,7 @@
 #pragma once
 
+#include <limits>
+
 #include "contrib/json/json.h"
 #include "library/mongo/wrappers.h"
 
@@ -16,8 +18,13 @@ public:
 
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
-    TVector<TRecord> Find(const NJson::TJsonValue& selection = NJson::TJsonValue::object());
-    TMaybe<TRecord> FindBy(const NJson::TJsonValue& selection);
+    TVector<TRecord> Find(
+        const NJson::TJsonValue& selection = NJson::TJsonValue::object(),
+        const int skipRecords = 0,
+        const int limitRecords = std::numeric_limits<int>::max()
+    );
+    TVector<TRecord> All();
+    TMaybe<TRecord> FindFirst(const NJson::TJsonValue& selection);
     TMaybe<TRecord> FindById(const TString& recordId);
     bool Remove(const NJson::TJsonValue& selection);
     bool RemoveById(const TString& recordId);
@@ -38,8 +45,14 @@ bool ICollection<TRecord>::Create(const TRecord& record) {
 }
 
 template <class TRecord>
-TVector<TRecord> ICollection<TRecord>::Find(const NJson::TJsonValue& selection) {
-    TVector<NMongo::TBsonValue> result = Master->Find(DbName, CollectionName);
+TVector<TRecord> ICollection<TRecord>::Find(const NJson::TJsonValue& selection, const int skipRecords, const int limitRecords) {
+    TVector<NMongo::TBsonValue> result = Master->Find(
+        DbName,
+        CollectionName,
+        selection,
+        skipRecords,
+        limitRecords
+    );
     TVector<TRecord> records;
     for (const auto& a : result) {
         records.push_back(TRecord(a.ToJson()));
@@ -48,62 +61,41 @@ TVector<TRecord> ICollection<TRecord>::Find(const NJson::TJsonValue& selection) 
 }
 
 template <class TRecord>
-TMaybe<TRecord> ICollection<TRecord>::FindBy(const NJson::TJsonValue& selection) {
-    TVector<NMongo::TBsonValue> result = Master->Find(
-        DbName,
-        CollectionName,
-        selection,
-        /* skip */ 0,
-        /* limit */ 1
-    );
-    if (result.empty()) {
+TVector<TRecord> ICollection<TRecord>::All() {
+    return Find();
+}
+
+template <class TRecord>
+TMaybe<TRecord> ICollection<TRecord>::FindFirst(const NJson::TJsonValue& selection) {
+    TVector<TRecord> records = Find(selection,/* skip */ 0,/* limit */ 1);
+    if (records.empty()) {
         return Nothing();
     }
-
-    return TRecord(result[0].ToJson());
+    return records[0];
 }
 
 template <class TRecord>
 bool ICollection<TRecord>::Remove(const NJson::TJsonValue& selection) {
-    return Master->Remove(
-        DbName,
-        CollectionName,
-        selection
-    );
+    return Master->Remove(DbName, CollectionName, selection);
 }
 
 template <class TRecord>
 bool ICollection<TRecord>::RemoveById(const TString& recordId) {
     NJson::TJsonValue json;
     json["_id"]["$oid"] = recordId;
-    return Master->Remove(
-        DbName,
-        CollectionName,
-        json
-    );
+    return Remove(json);
 }
 
 template <class TRecord>
 bool ICollection<TRecord>::Exists(const NJson::TJsonValue& selection) {
-    return Master->Find(DbName, CollectionName, selection,/* skip */ 0,/* limit */ 1).size();
+    return Find(selection,/* skip */ 0,/* limit */ 1).size();
 }
 
 template <class TRecord>
 TMaybe<TRecord> ICollection<TRecord>::FindById(const TString& recordId) {
     NJson::TJsonValue json;
     json["_id"]["$oid"] = recordId;
-    TVector<NMongo::TBsonValue> result = Master->Find(
-        DbName,
-        CollectionName,
-        json,
-        /* skip */ 0,
-        /* limit */ 1
-    );
-    if (result.empty()) {
-        return Nothing();
-    }
-
-    return TRecord(result[0].ToJson());
+    return FindFirst(json);
 }
 
 template <class TRecord>

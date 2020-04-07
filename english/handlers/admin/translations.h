@@ -1,4 +1,7 @@
 #pragma once
+
+#include <limits>
+
 #include "english/handlers/routing.h"
 
 #include "contrib/httplib/httplib.h"
@@ -19,7 +22,20 @@ namespace NEnglish {
         try {
             TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
             if (IsAdmin(currentUser)) {
-                response[RESPONSE_BODY] = NJson::ToVectorJson(dataSource.English.CollectionTranslation.Find());
+                int limit = NType::ToInt(req.GetParamValue("pageSize", NType::ToString(std::numeric_limits<int>::max())));
+                int skip = NType::ToInt(req.GetParamValue("page", "0")) * limit;
+                response[RESPONSE_BODY] = {
+                    { 
+                        "Translations",
+                        NJson::ToVectorJson(
+                            dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), skip, limit)
+                        )
+                    },
+                    {
+                        "TranslationsCount",
+                        dataSource.English.CollectionTranslation.All().size()
+                    }
+                };
             } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                 response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
