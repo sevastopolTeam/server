@@ -39,12 +39,22 @@ namespace NEnglish {
         return dataSource.English.CollectionUser.FindById(session->GetUserId());
     }
 
-    bool IsRegistered(const TMaybe<TRecordUser>& user) {
+    bool IsRegisteredUser(const TMaybe<TRecordUser>& user) {
         return !!user;
     }
 
-    bool IsAdmin(const TMaybe<TRecordUser>& user) {
+    bool IsAdminUser(const TMaybe<TRecordUser>& user) {
         return !!user && user->IsAdmin();
+    }
+
+    bool IsAdmin(TDataSource& dataSource, const httplib::Request& req) {
+        const TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+        return IsAdminUser(currentUser);
+    }
+
+    bool IsRegistered(TDataSource& dataSource, const httplib::Request& req) {
+        const TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+        return IsRegisteredUser(currentUser);
     }
 
 }

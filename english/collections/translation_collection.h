@@ -5,13 +5,15 @@
 
 #include "english/records/translation_record.h"
 
+#include "util/generic/maybe.h"
+
 namespace NEnglish {
 
     class TCollectionTranslation : public ICollection<TRecordTranslation> {
     public:
         using ICollection::ICollection;
 
-        bool ExistsByFullMatching(
+        TMaybe<TRecordTranslation> FindByFullMatching(
             const TString& valueFrom,
             const TString& valueTo,
             const TString& languageFrom,

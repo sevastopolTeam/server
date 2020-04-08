@@ -1,7 +1,5 @@
 #pragma once
 
-#include <limits>
-
 #include "english/handlers/routing.h"
 
 #include "contrib/httplib/httplib.h"
@@ -20,23 +18,25 @@ namespace NEnglish {
     const TString SIZE_OF_PAGE_PARAM = "PageSize";
     const TString NUMBER_OF_PAGE_PARAM = "Page";
 
+    const TString RESPONSE_FIELD_TRANSLATIONS = "Translations";
+    const TString RESPONSE_FIELD_TRANSLATIONS_COUNT = "TranslationsCount";
+
     void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            if (IsAdmin(currentUser)) {
-                int limit = NType::ToInt(req.GetParamValue(SIZE_OF_PAGE_PARAM, "0"));
-                int skip = NType::ToInt(req.GetParamValue(NUMBER_OF_PAGE_PARAM, "0")) * limit;
+            if (IsAdmin(dataSource, req)) {
+                const int limit = NType::ToInt(req.GetParamValue(SIZE_OF_PAGE_PARAM, "0"));
+                const int skip = NType::ToInt(req.GetParamValue(NUMBER_OF_PAGE_PARAM, "0")) * limit;
                 response[RESPONSE_BODY] = {
                     {
-                        "Translations",
+                        RESPONSE_FIELD_TRANSLATIONS,
                         NJson::ToVectorJson(
                             dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), skip, limit)
                         )
                     },
                     {
-                        "TranslationsCount",
-                        dataSource.English.CollectionTranslation.All().size()
+                        RESPONSE_FIELD_TRANSLATIONS_COUNT,
+                        dataSource.English.CollectionTranslation.Count()
                     }
                 };
             } else {
@@ -56,8 +56,7 @@ namespace NEnglish {
     void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            if (IsAdmin(currentUser)) {
+            if (IsAdmin(dataSource, req)) {
                 const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
                 TValidatorTranslation validator(jsonTranslation);
                 if (validator.Validate(dataSource)) {
@@ -85,13 +84,12 @@ namespace NEnglish {
     void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            if (IsAdmin(currentUser)) {
+            if (IsAdmin(dataSource, req)) {
                 const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
                 TValidatorTranslation validator(jsonTranslation);
                 if (validator.Validate(dataSource)) {
                     dataSource.English.CollectionTranslation.FindByIdAndModify(
-                        NJson::GetString(jsonTranslation["Id"], ""), TRecordTranslation(jsonTranslation));
+                        NJson::GetString(jsonTranslation, RECORD_TRANSLATION_FIELD_ID, ""), TRecordTranslation(jsonTranslation));
                 } else {
                     response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
                     response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
@@ -112,8 +110,7 @@ namespace NEnglish {
     void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            if (IsAdmin(currentUser)) {
+            if (IsAdmin(dataSource, req)) {
                 const TString& translationId = req.matches[1];
                 const auto& translation = dataSource.English.CollectionTranslation.FindById(translationId);
                 if (translation.has_value()) {
@@ -139,8 +136,7 @@ namespace NEnglish {
     void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            if (IsAdmin(currentUser)) {
+            if (IsAdmin(dataSource, req)) {
                 const TString& translationId = req.matches[1];
                 const bool isSuccess = dataSource.English.CollectionTranslation.RemoveById(translationId);
                 if (!isSuccess) {

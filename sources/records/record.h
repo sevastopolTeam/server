@@ -5,6 +5,8 @@
 #include "util/generic/string.h"
 #include "util/generic/vector.h"
 
+const TString PATH_TO_RECORD_ID = "_id.$oid";
+
 class IRecord {
 public:
 	IRecord() = default;
