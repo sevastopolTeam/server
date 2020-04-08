@@ -13,6 +13,8 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_VALUE_TO);
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_LANGUAGE_FROM);
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_LANGUAGE_TO);
+        isValid &= ValidateExists(dataSource);
+
         return static_cast<bool>(isValid);
     }
 

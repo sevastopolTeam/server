@@ -1,7 +1,5 @@
 #pragma once
 
-#include <limits>
-
 #include "contrib/json/json.h"
 #include "library/mongo/wrappers.h"
 
@@ -21,7 +19,7 @@ public:
     TVector<TRecord> Find(
         const NJson::TJsonValue& selection = NJson::TJsonValue::object(),
         const int skipRecords = 0,
-        const int limitRecords = std::numeric_limits<int>::max()
+        const int limitRecords = 0
     );
     TRecord FindAndModify(
         const NJson::TJsonValue& selection,
