@@ -16,8 +16,7 @@ namespace NEnglish {
     void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
-            TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
-            if (IsAdmin(currentUser)) {
+            if (IsAdmin(dataSource, req)) {
                 response[RESPONSE_BODY] = NJson::ToVectorJson(dataSource.English.CollectionSession.Find());
             } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;

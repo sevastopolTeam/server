@@ -5,10 +5,13 @@
 #include "util/generic/string.h"
 #include "util/generic/vector.h"
 
+const TString PATH_TO_RECORD_ID = "_id.$oid";
+
 class IRecord {
 public:
 	IRecord() = default;
 	IRecord(const TMaybe<TString>& id);
+    virtual NJson::TJsonValue ForDB() const = 0;
     virtual NJson::TJsonValue ToJson() const = 0;
     TString GetId() const;
 protected:

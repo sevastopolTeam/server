@@ -203,13 +203,17 @@ struct Request {
 #endif
 
   bool has_header(const char *key) const;
+  bool HasHeader(const std::string& key) const;
   std::string get_header_value(const char *key, size_t id = 0) const;
+  std::string GetHeaderValue(const std::string& key, const std::string& def = "") const;
   size_t get_header_value_count(const char *key) const;
   void set_header(const char *key, const char *val);
   void set_header(const char *key, const std::string &val);
 
   bool has_param(const char *key) const;
+  bool HasParam(const std::string& key) const;
   std::string get_param_value(const char *key, size_t id = 0) const;
+  std::string GetParamValue(const std::string& key, const std::string& def = "") const;
   size_t get_param_value_count(const char *key) const;
 
   bool has_file(const char *key) const;
@@ -223,7 +227,9 @@ struct Response {
   std::string body;
 
   bool has_header(const char *key) const;
+  bool HasHeader(const std::string& key) const;
   std::string get_header_value(const char *key, size_t id = 0) const;
+  std::string GetHeaderValue(const std::string& key, const std::string& def = "") const;
   size_t get_header_value_count(const char *key) const;
   void set_header(const char *key, const char *val);
   void set_header(const char *key, const std::string &val);
@@ -1994,8 +2000,20 @@ inline bool Request::has_header(const char *key) const {
   return detail::has_header(headers, key);
 }
 
+inline bool Request::HasHeader(const std::string& key) const {
+  return has_header(key.c_str());
+}
+
+
 inline std::string Request::get_header_value(const char *key, size_t id) const {
   return detail::get_header_value(headers, key, id, "");
+}
+
+inline std::string Request::GetHeaderValue(const std::string& key, const std::string& def) const {
+  if (!HasHeader(key)) {
+    return def;
+  }
+  return get_header_value(key.c_str());
 }
 
 inline size_t Request::get_header_value_count(const char *key) const {
@@ -2015,11 +2033,22 @@ inline bool Request::has_param(const char *key) const {
   return params.find(key) != params.end();
 }
 
+inline bool Request::HasParam(const std::string& key) const {
+  return has_param(key.c_str());
+}
+
 inline std::string Request::get_param_value(const char *key, size_t id) const {
   auto it = params.find(key);
   std::advance(it, id);
   if (it != params.end()) { return it->second; }
   return std::string();
+}
+
+inline std::string Request::GetParamValue(const std::string& key, const std::string& def) const {
+  if (!HasParam(key)) {
+    return def;
+  }
+  return get_param_value(key.c_str());
 }
 
 inline size_t Request::get_param_value_count(const char *key) const {
@@ -2042,9 +2071,20 @@ inline bool Response::has_header(const char *key) const {
   return headers.find(key) != headers.end();
 }
 
+inline bool Response::HasHeader(const std::string& key) const {
+  return has_header(key.c_str());
+}
+
 inline std::string Response::get_header_value(const char *key,
                                               size_t id) const {
   return detail::get_header_value(headers, key, id, "");
+}
+
+inline std::string Response::GetHeaderValue(const std::string& key, const std::string& def) const {
+  if (!HasHeader(key)) {
+    return def;
+  }
+  return get_header_value(key.c_str());
 }
 
 inline size_t Response::get_header_value_count(const char *key) const {

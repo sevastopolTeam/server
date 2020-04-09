@@ -4,7 +4,8 @@
 
 namespace NEnglish {
 
-    TValidatorTranslation::TValidatorTranslation(const NJson::TJsonValue& jsonData): IValidatorCommonEnglish(jsonData) {}
+    TValidatorTranslation::TValidatorTranslation(const NJson::TJsonValue& jsonData)
+        : IValidatorCommonEnglish(jsonData) {}
 
     bool TValidatorTranslation::Validate(TDataSource& dataSource) {
         int isValid = 1;
@@ -12,19 +13,20 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_VALUE_TO);
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_LANGUAGE_FROM);
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_LANGUAGE_TO);
-
         isValid &= ValidateExists(dataSource);
+
         return static_cast<bool>(isValid);
     }
 
     bool TValidatorTranslation::ValidateExists(TDataSource& dataSource) {
-        bool valid = !dataSource.English.CollectionTranslation.ExistsByFullMatching(
+        const auto foundRecord = dataSource.English.CollectionTranslation.FindByFullMatching(
             NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_VALUE_FROM, ""),
             NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_VALUE_TO, ""),
             NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_LANGUAGE_FROM, ""),
             NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_LANGUAGE_TO, "")
         );
-        if (!valid) {
+
+        if (foundRecord && foundRecord->GetId() != NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_ID, "")) {
             ValidationErrors[RECORD_TRANSLATION_FIELD_VALUE_FROM].push_back(VALIDATION_ERROR_ALREADY_EXISTS);
             return false;
         }

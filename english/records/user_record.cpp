@@ -31,10 +31,10 @@ namespace NEnglish {
         , PasswordHash(NJson::GetString(json, RECORD_USER_FIELD_PASSWORD_HASH, NHashFunctions::GeneratePasswordHash(json.value(RECORD_USER_FIELD_PASSWORD, ""))))
         , ResetPasswordKey(NJson::GetString(json, RECORD_USER_FIELD_RESET_PASSWORD_KEY, NHashFunctions::GenerateRandomToken()))
         , Role(NJson::GetString(json, RECORD_USER_FIELD_ROLE, USER_ROLE_USER))
-        , IRecord(NJson::GetString(json, "_id.$oid"))
+        , IRecord(NJson::GetString(json, PATH_TO_RECORD_ID))
     {}
 
-    NJson::TJsonValue TRecordUser::ToJson() const {
+    NJson::TJsonValue TRecordUser::ForDB() const {
         return {
             {RECORD_USER_FIELD_EMAIL, Email},
             {RECORD_USER_FIELD_NAME, Name},
@@ -45,6 +45,14 @@ namespace NEnglish {
             {RECORD_USER_FIELD_RESET_PASSWORD_KEY, ResetPasswordKey},
             {RECORD_USER_FIELD_ROLE, Role}
         };
+    }
+
+    NJson::TJsonValue TRecordUser::ToJson() const {
+        NJson::TJsonValue json = ForDB();
+        if (Id.has_value()) {
+            json[RECORD_USER_FIELD_ID] = *Id;
+        }
+        return json;
     }
 
     bool TRecordUser::CheckPassword(const TString& password) const {

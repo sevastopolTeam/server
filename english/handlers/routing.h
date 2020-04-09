@@ -30,12 +30,7 @@ namespace NEnglish {
     const TString RESPONSE_CONTENT_TYPE_JSON = "application/json";
 
     TMaybe<TRecordUser> GetCurrentUser(TDataSource& dataSource, const httplib::Request& req) {
-        const auto it = req.headers.find(HEADERS_AUTHORIZATION);
-        if (it == req.headers.end()) {
-            return Nothing();
-        }
-
-        const TString authToken = it->second;
+        const TString authToken = req.GetHeaderValue(HEADERS_AUTHORIZATION);
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
         if (!session) {
             return Nothing();
@@ -44,12 +39,22 @@ namespace NEnglish {
         return dataSource.English.CollectionUser.FindById(session->GetUserId());
     }
 
-    bool IsRegistered(const TMaybe<TRecordUser>& user) {
+    bool IsRegisteredUser(const TMaybe<TRecordUser>& user) {
         return !!user;
     }
 
-    bool IsAdmin(const TMaybe<TRecordUser>& user) {
+    bool IsAdminUser(const TMaybe<TRecordUser>& user) {
         return !!user && user->IsAdmin();
+    }
+
+    bool IsAdmin(TDataSource& dataSource, const httplib::Request& req) {
+        const TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+        return IsAdminUser(currentUser);
+    }
+
+    bool IsRegistered(TDataSource& dataSource, const httplib::Request& req) {
+        const TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
+        return IsRegisteredUser(currentUser);
     }
 
 }
