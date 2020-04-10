@@ -14,6 +14,7 @@ namespace NEnglish {
     const TString RECORD_TRANSLATION_FIELD_LANGUAGE_TO = "LanguageTo";
     const TString RECORD_TRANSLATION_FIELD_ORIGIN_URL = "OriginUrl";
     const TString RECORD_TRANSLATION_FIELD_DOWNLOAD_URL = "DownloadUrl";
+    const TString RECORD_TRANSLATION_FIELD_IS_CHECKED = "IsChecked";
 
     class TRecordTranslation : public IRecord {
     public:
@@ -31,5 +32,6 @@ namespace NEnglish {
         TString LanguageTo;
         TString OriginUrl;
         TString DownloadUrl;
+        bool IsChecked;
     };
 }
