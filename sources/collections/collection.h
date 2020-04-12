@@ -96,7 +96,7 @@ TMaybe<TRecord> ICollection<TRecord>::FindFirst(const NJson::TJsonValue& selecti
     if (records.empty()) {
         return Nothing();
     }
-    return records[0];
+    return records.front();
 }
 
 template <class TRecord>

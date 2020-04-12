@@ -9,7 +9,7 @@ namespace NEnglish {
         bool valid = true;
         const TString& phone = NJson::GetString(OriginJson, field, "");
         
-        if (phone.size() > 2 && phone[0] == '+') {
+        if (phone.size() > 2 && phone.front() == '+') {
             for (size_t i = 1; i < phone.size(); ++i) {
                 if (!NType::IsDigit(phone[i])) {
                     valid = false;
