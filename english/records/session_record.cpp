@@ -33,7 +33,7 @@ namespace NEnglish {
     NJson::TJsonValue TRecordSession::ToJson() const {
         NJson::TJsonValue json = ForDB();
         if (Id.has_value()) {
-            json[RECORD_SESSION_FIELD_ID] = *Id;
+            json[RECORD_FIELD_ID] = *Id;
         }
         return json;
     }

@@ -6,6 +6,7 @@ add_library(english_collections STATIC
   session_collection.cpp
   user_collection.cpp
   translation_collection.cpp
+  word_category_collection.cpp
   main.cpp
 )
 

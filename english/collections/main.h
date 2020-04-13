@@ -1,6 +1,7 @@
 #include "english/collections/user_collection.h"
 #include "english/collections/session_collection.h"
 #include "english/collections/translation_collection.h"
+#include "english/collections/word_category_collection.h"
 
 namespace NEnglish {
 
@@ -8,6 +9,7 @@ namespace NEnglish {
         NEnglish::TCollectionUser CollectionUser;
         NEnglish::TCollectionSession CollectionSession;
         NEnglish::TCollectionTranslation CollectionTranslation;
+        NEnglish::TCollectionWordCategory CollectionWordCategory;
 
         TSetOfCollections(NMongo::THelper* master, const TString& dbName);
     };

@@ -1,11 +1,6 @@
 #include "translation_record.h"
 
-#include <ctime>
-
 #include "contrib/json/json.h"
-
-#include "util/generic/iostream.h"
-#include "util/generic/hash_functions.h"
 #include "util/generic/ctype.h"
 
 namespace {
@@ -42,7 +37,7 @@ namespace NEnglish {
     NJson::TJsonValue TRecordTranslation::ToJson() const {
         NJson::TJsonValue json = ForDB();
         if (Id.has_value()) {
-            json[RECORD_TRANSLATION_FIELD_ID] = *Id;
+            json[RECORD_FIELD_ID] = *Id;
         }
         return json;
     }

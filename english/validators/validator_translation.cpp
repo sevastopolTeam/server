@@ -26,7 +26,7 @@ namespace NEnglish {
             NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_LANGUAGE_TO, "")
         );
 
-        if (foundRecord && foundRecord->GetId() != NJson::GetString(OriginJson, RECORD_TRANSLATION_FIELD_ID, "")) {
+        if (foundRecord && foundRecord->GetId() != NJson::GetString(OriginJson, RECORD_FIELD_ID, "")) {
             ValidationErrors[RECORD_TRANSLATION_FIELD_VALUE_FROM].push_back(VALIDATION_ERROR_ALREADY_EXISTS);
             return false;
         }

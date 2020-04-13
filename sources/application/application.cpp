@@ -7,6 +7,7 @@
 
 #include "english/handlers/admin/sessions.h"
 #include "english/handlers/admin/translations.h"
+#include "english/handlers/admin/word_categories.h"
 #include "english/handlers/users.h"
 
 #include "util/generic/ctype.h"
@@ -66,6 +67,22 @@ void TApplication::AddEnglishHandlers() {
     });
     Server->Delete(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::DeleteAdminTranslationHandler(*DataSource, req, res);
+    });
+
+    Server->Post("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::PostAdminWordCategoriesHandler(*DataSource, req, res);
+    });
+    Server->Put("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::PutAdminWordCategoriesHandler(*DataSource, req, res);
+    });
+    Server->Get("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::GetAdminWordCategoriesHandler(*DataSource, req, res);
+    });
+    Server->Get(R"(/api/english/admin/word_categories/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::GetAdminWordCategoryHandler(*DataSource, req, res);
+    });
+    Server->Delete(R"(/api/english/admin/word_categories/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::DeleteAdminWordCategoryHandler(*DataSource, req, res);
     });
     
 }
