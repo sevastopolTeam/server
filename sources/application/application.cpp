@@ -7,6 +7,7 @@
 
 #include "english/handlers/admin/sessions.h"
 #include "english/handlers/admin/translations.h"
+#include "english/handlers/admin/users.h"
 #include "english/handlers/users.h"
 
 #include "util/generic/ctype.h"
@@ -66,6 +67,10 @@ void TApplication::AddEnglishHandlers() {
     });
     Server->Delete(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::DeleteAdminTranslationHandler(*DataSource, req, res);
+    });
+
+    Server->Get("/api/english/admin/users", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::GetAdminUsersHandler(*DataSource, req, res);
     });
     
 }
