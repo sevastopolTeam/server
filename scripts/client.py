@@ -2,7 +2,7 @@ import requests
 import json
 import random
 
-API_URL = "http://localhost:1234/api/"
+API_URL = "http://localhost:5050/api/"
 
 PATH_TO_REGISTER_USER = "english/users"
 PATH_TO_LOGIN_USER = "english/login"
