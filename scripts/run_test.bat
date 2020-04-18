@@ -4,7 +4,7 @@ echo 'Processing for Linux'
 ./server config/priemka.json &
 mongo mongodb://localhost:1235/priemka scripts/mongo_add_admin.js
 sleep 3
-pytest scripts/tests/test_english.py
+python -m pytest scripts/tests/test_english.py
 kill %1
 
 exit 0
