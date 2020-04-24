@@ -1,0 +1,8 @@
+{
+    "Server": {
+        "Port": 1234,
+        "MongoUri": "mongodb://localhost:1235",
+        "MongoDbName": "test"
+    },
+    "Log": "console"
+}
