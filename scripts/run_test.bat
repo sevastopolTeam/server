@@ -2,9 +2,9 @@ echo >/dev/null # >nul & GOTO WINDOWS & rem ^
 echo 'Processing for Linux'
 
 ./server config/priemka.json &
-mongo mongodb://localhost:1235/priemka scripts/mongo_add_admin.js
+mongo mongodb://localhost:1235/priemka scripts/prepare_script.js
 sleep 3
-pytest scripts/tests/test_english.py
+python -m pytest scripts/tests/test_english.py
 kill %1
 
 exit 0
@@ -15,7 +15,7 @@ exit 0
 echo "Processing for Windows"
 
 start /B Debug\server.exe config\priemka.json
-mongo mongodb://localhost:1235/priemka scripts/mongo_add_admin.js
+mongo mongodb://localhost:1235/priemka scripts/prepare_script.js
 sleep 5
-pytest scripts\tests\test_english.py
+python -m pytest scripts\tests\test_english.py
 taskkill /PID server.exe /f

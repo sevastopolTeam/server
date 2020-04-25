@@ -1,3 +1,4 @@
+db.dropDatabase()
 db.english_user.update(
     {
         "Email": "test@test.ru"
