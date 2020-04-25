@@ -8,6 +8,7 @@
 #include "string.h"
 
 #define Cout std::cout
+#define Cerr std::cerr
 #define Cin std::cin
 #define Endl std::endl
 

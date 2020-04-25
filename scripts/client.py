@@ -2,7 +2,7 @@ import requests
 import json
 import random
 
-API_URL = "http://localhost:1234/api/"
+API_URL = "http://localhost:5050/api/"
 
 PATH_TO_REGISTER_USER = "english/users"
 PATH_TO_LOGIN_USER = "english/login"
@@ -28,3 +28,14 @@ def login_user(user):
         API_URL + PATH_TO_LOGIN_USER,
         user
     )
+
+def login_as_admin():
+    res = post_request(
+        API_URL + PATH_TO_LOGIN_USER,
+        {
+            "Email": "buriksurik@mail.ru",
+            "Password": "123"
+        }
+    )
+
+    return res[1]["Body"]["SessionToken"]

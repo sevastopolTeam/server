@@ -12,9 +12,11 @@
 
 #include "util/generic/ctype.h"
 
-TApplication::TApplication() {
+TApplication::TApplication(NJson::TJsonValue& config)
+    : Config(config)
+{
     INFO_LOG << "Starting server..." << Endl;
-    DataSource.reset(new TDataSource("mongodb://localhost:1235", "prod"));
+    DataSource.reset(new TDataSource(Config["Server"]["MongoUri"], Config["Server"]["MongoDbName"]));
     Server.reset(new httplib::Server());
 
     Server->Get("/api/admin/hi", [&](const httplib::Request& req, httplib::Response& res) {
@@ -28,8 +30,8 @@ TApplication::TApplication() {
 }
 
 void TApplication::Start() {
-    INFO_LOG << "Started HTTP-server" << Endl;
-    Server->listen("0.0.0.0", 1234);
+    INFO_LOG << "Started HTTP-server on port: " << Config["Server"]["Port"] << Endl;
+    Server->listen("0.0.0.0", Config["Server"]["Port"]);
 }
 
 TApplication::~TApplication() {
