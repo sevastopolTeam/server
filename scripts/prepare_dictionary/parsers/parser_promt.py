@@ -3,13 +3,14 @@ import time
 import json
 import sys
 import os
+import requests
 
 import argparse
 
 sys.path.append(os.path.join(sys.path[0], '../../helpers'))
 
 from html_helper import HtmlHelper
-from print_helper
+from io_helper import IOHelper
 
 DICTIONARY_PAGE = "https://www.translate.ru/dictionary/en-ru/"
 SAMPLES_PAGE = "https://www.translate.ru/samples/en-ru/"
@@ -90,7 +91,8 @@ class ParserPromt:
                 # print("------")
 
                 # print_json(current)
-                # print(json.dumps(current, ensure_ascii=False))
+                # print(word + " -> " + current["parts"][0]["part"][0] + " -> " + current["parts"][0]["translates"][0])
+                # IOHelper.print_json(current)
                 self.main_words.append(current)
 
     def get_info(self, word):
@@ -113,8 +115,8 @@ class ParserPromt:
         for word in words:
             try:
                 word_num += 1
-                if word_num % 100 == 0:
-                    print(str(word_num) + " records completed")
+                # if word_num % 100 == 0:
+                #     print(str(word_num) + " records completed")
 
                 word_info = self.get_info(word)
                 if word_info != None:
@@ -148,12 +150,20 @@ class ParserPromt:
         # for ex in self.extra_words:
         #     print(ex[0] + " -> " + ex[1])
 
-        print("-----------")
-        print("Main")
+        up = []
         for mn in self.main_words:
-            print(mn['eng'])
+            if len(mn["parts"][0]["part"]) == 0:
+                mn["parts"][0]["part"].append("")
+            up.append({
+                "ValueFrom": mn["parts"][0]["translates"][0],
+                "ValueTo": mn["eng"],
+                "LanguageFrom": "russian",
+                "LanguageTo": "english",
+                "PartOfSpeech": mn["parts"][0]["part"][0]
+            })
 
-        return results
+        IOHelper.print_json(up)
+        return up
 
 def main():
     parser = argparse.ArgumentParser(description="Configures")
@@ -164,7 +174,12 @@ def main():
 
     parser = ParserPromt(args.path_to_files)
 
-    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:100]
-    parser.parse(words)
+    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:5000]
+    translations = parser.parse(words)
+
+    token = "12215108c4c63c392826561db6abbe301587856945"
+    for translation in translations:
+        r = requests.post("http://localhost:1234/api/english/admin/translations", data=json.dumps(translation), headers={"Authorization": token})
+        print(r.json())
 
 main()
