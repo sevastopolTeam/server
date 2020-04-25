@@ -9,6 +9,7 @@ import argparse
 sys.path.append(os.path.join(sys.path[0], '../../helpers'))
 
 from html_helper import HtmlHelper
+from print_helper
 
 DICTIONARY_PAGE = "https://www.translate.ru/dictionary/en-ru/"
 SAMPLES_PAGE = "https://www.translate.ru/samples/en-ru/"
@@ -17,6 +18,9 @@ GRAMMAR_PAGE = "https://www.translate.ru/grammar/en-ru/"
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0'
 }
+
+def print_json(js):
+    print(json.dumps(js, ensure_ascii=False))
 
 class ParserPromt:
 
@@ -67,7 +71,7 @@ class ParserPromt:
             for form in forms:
                 current_word = form.xpath('div//span[@class="source_only"]/text()')[0]
                 if current_word.lower() != word:
-                    print(current_word + " " + word)
+                    # print(current_word + " " + word)
                     continue
 
                 part = form.xpath('div/span[@class="ref_psp"]/text()')
@@ -84,6 +88,9 @@ class ParserPromt:
                 #     for translation in part["translates"]:
                 #         print(translation)
                 # print("------")
+
+                # print_json(current)
+                # print(json.dumps(current, ensure_ascii=False))
                 self.main_words.append(current)
 
     def get_info(self, word):
@@ -121,16 +128,15 @@ class ParserPromt:
                 print(e)
                 continue
 
-
         # for k in self.main_to_extra:
         #     print('----------')
         #     print(k)
         #     for i in self.main_to_extra[k]:
         #         print(i)
 
-        print("Not Found")
-        for nf in self.not_found_words:
-            print(nf)
+        # print("Not Found")
+        # for nf in self.not_found_words:
+        #     print(nf)
 
         # self.tmp = sorted(self.tmp)
         # for t in self.tmp:
@@ -142,10 +148,10 @@ class ParserPromt:
         # for ex in self.extra_words:
         #     print(ex[0] + " -> " + ex[1])
 
-        # print("-----------")
-        # print("Main")
-        # for mn in self.main_words:
-        #     print(mb[eng])
+        print("-----------")
+        print("Main")
+        for mn in self.main_words:
+            print(mn['eng'])
 
         return results
 
@@ -158,7 +164,7 @@ def main():
 
     parser = ParserPromt(args.path_to_files)
 
-    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:15000]
+    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:100]
     parser.parse(words)
 
 main()
