@@ -32,7 +32,7 @@ namespace NEnglish {
             response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << e.what() << Endl;
         }
-        INFO_LOG << response << Endl;
+        INFO_LOG << response.dump() << Endl;
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
@@ -50,12 +50,12 @@ namespace NEnglish {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
                 response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
             }
-            INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
             response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
+        INFO_LOG << response.dump() << Endl;
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
@@ -81,12 +81,12 @@ namespace NEnglish {
                     { RESPONSE_VALIDATION_ERRORS, validator.GetValidationErrors() }
                 };
             }
-            INFO_LOG << response.dump() << Endl;
         } catch (const std::exception& e) {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
             response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
+        INFO_LOG << response.dump() << Endl;
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
@@ -104,6 +104,7 @@ namespace NEnglish {
             response[RESPONSE_ERROR] = e.what();
             ERROR_LOG << response.dump() << Endl;
         }
+        INFO_LOG << response.dump() << Endl;
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
