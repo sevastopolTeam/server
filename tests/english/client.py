@@ -1,7 +1,7 @@
 import requests
 import json
 
-API_URL = "http://localhost:1234/api/"
+API_URL = "http://localhost:5050/api/"
 
 PATH_TO_REGISTER_USER = "english/users"
 PATH_TO_LOGIN_USER = "english/login"
@@ -21,6 +21,14 @@ class Client:
     @classmethod
     def post_request(self, url, data, headers = dict()):
         r = requests.post(url, data=json.dumps(data), headers=headers)
+        if r.status_code == 200:
+            return [True, r.json()]
+        else:
+            return [False, r.status_code]
+
+    @classmethod
+    def put_request(self, url, data, headers = dict()):
+        r = requests.put(url, data=json.dumps(data), headers=headers)
         if r.status_code == 200:
             return [True, r.json()]
         else:
