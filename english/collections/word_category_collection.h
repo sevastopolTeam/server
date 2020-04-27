@@ -12,6 +12,8 @@ namespace NEnglish {
     class TCollectionWordCategory : public ICollection<TRecordWordCategory> {
     public:
         using ICollection::ICollection;
+
+        TMaybe<TRecordWordCategory> FindByName(const TString& name);
     };
 
 }

@@ -1,10 +1,6 @@
 #include "word_category_record.h"
 
-#include <ctime>
-
 #include "contrib/json/json.h"
-
-#include "util/generic/hash_functions.h"
 #include "util/generic/ctype.h"
 
 namespace NEnglish {
