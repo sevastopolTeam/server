@@ -1,5 +1,6 @@
 #pragma once
 
+#include "english/handlers/pagination.h"
 #include "english/handlers/routing.h"
 
 #include "contrib/httplib/httplib.h"
@@ -15,146 +16,69 @@
 
 namespace NEnglish {
 
-    const TString SIZE_OF_PAGE_PARAM = "PageSize";
-    const TString NUMBER_OF_PAGE_PARAM = "Page";
-
     const TString RESPONSE_FIELD_TRANSLATIONS = "Translations";
     const TString RESPONSE_FIELD_TRANSLATIONS_COUNT = "TranslationsCount";
 
-    void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
-        try {
-            if (IsAdmin(dataSource, req)) {
-                const int limit = NType::ToInt(req.GetParamValue(SIZE_OF_PAGE_PARAM, "0"));
-                const int skip = NType::ToInt(req.GetParamValue(NUMBER_OF_PAGE_PARAM, "0")) * limit;
-                response[RESPONSE_BODY] = {
-                    {
-                        RESPONSE_FIELD_TRANSLATIONS,
-                        NJson::ToVectorJson(
-                            dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), skip, limit)
-                        )
-                    },
-                    {
-                        RESPONSE_FIELD_TRANSLATIONS_COUNT,
-                        dataSource.English.CollectionTranslation.Count()
-                    }
-                };
-            } else {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
+    void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TPagination pagination(req);
+        response[RESPONSE_BODY] = {
+            {
+                RESPONSE_FIELD_TRANSLATIONS,
+                NJson::ToVectorJson(
+                    dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit)
+                )
+            },
+            {
+                RESPONSE_FIELD_TRANSLATIONS_COUNT,
+                dataSource.English.CollectionTranslation.Count()
             }
-            INFO_LOG << response.dump() << Endl;
-        } catch (const std::exception& e) {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERROR] = e.what();
-            ERROR_LOG << response.dump() << Endl;
-        }
-
-        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
+        };
     }
 
-    void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
-        try {
-            if (IsAdmin(dataSource, req)) {
-                const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
-                TValidatorTranslation validator(jsonTranslation);
-                if (validator.Validate(dataSource)) {
-                    if (!dataSource.English.CollectionTranslation.Create(TRecordTranslation(jsonTranslation))) {
-                        response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                        response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
-                    }
-                } else {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
-                    response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
-                }
-            } else {
+    void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
+        TValidatorTranslation validator(jsonTranslation);
+        if (validator.Validate(dataSource)) {
+            if (!dataSource.English.CollectionTranslation.Create(TRecordTranslation(jsonTranslation))) {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
             }
-            INFO_LOG << response.dump() << Endl;
-        } catch (const std::exception& e) {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERROR] = e.what();
-            ERROR_LOG << response.dump() << Endl;
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
+            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
         }
-        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
-    void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
-        try {
-            if (IsAdmin(dataSource, req)) {
-                const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
-                TValidatorTranslation validator(jsonTranslation);
-                if (validator.Validate(dataSource)) {
-                    dataSource.English.CollectionTranslation.FindByIdAndModify(
-                        NJson::GetString(jsonTranslation, RECORD_TRANSLATION_FIELD_ID, ""), TRecordTranslation(jsonTranslation));
-                } else {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
-                    response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
-                }
-            } else {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
-            }
-            INFO_LOG << response.dump() << Endl;
-        } catch (const std::exception& e) {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERROR] = e.what();
-            ERROR_LOG << response.dump() << Endl;
+    void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
+        TValidatorTranslation validator(jsonTranslation);
+        if (validator.Validate(dataSource)) {
+            dataSource.English.CollectionTranslation.FindByIdAndModify(
+                NJson::GetString(jsonTranslation, RECORD_TRANSLATION_FIELD_ID, ""), TRecordTranslation(jsonTranslation));
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
+            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
         }
-        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
-    void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
-        try {
-            if (IsAdmin(dataSource, req)) {
-                const TString& translationId = req.matches[1];
-                const auto& translation = dataSource.English.CollectionTranslation.FindById(translationId);
-                if (translation.has_value()) {
-                    response[RESPONSE_BODY] = translation->ToJson();
-                } else {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                    response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
-                }
-            } else {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
-            }
-            INFO_LOG << response.dump() << Endl;
-        } catch (const std::exception& e) {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERROR] = e.what();
-            ERROR_LOG << response.dump() << Endl;
+    void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TString& translationId = req.matches[1];
+        const auto& translation = dataSource.English.CollectionTranslation.FindById(translationId);
+        if (translation.has_value()) {
+            response[RESPONSE_BODY] = translation->ToJson();
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
         }
-
-        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
-    void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res) {
-        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
-        try {
-            if (IsAdmin(dataSource, req)) {
-                const TString& translationId = req.matches[1];
-                const bool isSuccess = dataSource.English.CollectionTranslation.RemoveById(translationId);
-                if (!isSuccess) {
-                    response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                    response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
-                }
-            } else {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
-            }
-            INFO_LOG << response.dump() << Endl;
-        } catch (const std::exception& e) {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
-            response[RESPONSE_ERROR] = e.what();
-            ERROR_LOG << response.dump() << Endl;
+    void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TString& translationId = req.matches[1];
+        const bool isSuccess = dataSource.English.CollectionTranslation.RemoveById(translationId);
+        if (!isSuccess) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
         }
-
-        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
 }
