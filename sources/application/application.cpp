@@ -73,21 +73,20 @@ void TApplication::AddEnglishHandlers() {
     Server->Delete(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminTranslationHandler);
     });
-
     Server->Post("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PostAdminWordCategoriesHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminWordCategoriesHandler);
     });
     Server->Put("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PutAdminWordCategoriesHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PutAdminWordCategoriesHandler);
     });
     Server->Get("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetAdminWordCategoriesHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminWordCategoriesHandler);
     });
     Server->Get(R"(/api/english/admin/word_categories/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetAdminWordCategoryHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminWordCategoryHandler);
     });
     Server->Delete(R"(/api/english/admin/word_categories/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::DeleteAdminWordCategoryHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminWordCategoryHandler);
     });
     
 }
