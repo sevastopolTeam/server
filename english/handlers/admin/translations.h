@@ -1,5 +1,6 @@
 #pragma once
 
+#include "english/handlers/pagination.h"
 #include "english/handlers/routing.h"
 
 #include "contrib/httplib/httplib.h"
@@ -15,9 +16,6 @@
 
 namespace NEnglish {
 
-    const TString SIZE_OF_PAGE_PARAM = "PageSize";
-    const TString NUMBER_OF_PAGE_PARAM = "Page";
-
     const TString RESPONSE_FIELD_TRANSLATIONS = "Translations";
     const TString RESPONSE_FIELD_TRANSLATIONS_COUNT = "TranslationsCount";
 
@@ -25,13 +23,12 @@ namespace NEnglish {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
             if (IsAdmin(dataSource, req)) {
-                const int limit = NType::ToInt(req.GetParamValue(SIZE_OF_PAGE_PARAM, "0"));
-                const int skip = NType::ToInt(req.GetParamValue(NUMBER_OF_PAGE_PARAM, "0")) * limit;
+                const TPagination pagination(req);
                 response[RESPONSE_BODY] = {
                     {
                         RESPONSE_FIELD_TRANSLATIONS,
                         NJson::ToVectorJson(
-                            dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), skip, limit)
+                            dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit)
                         )
                     },
                     {
