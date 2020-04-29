@@ -5,6 +5,8 @@
 #include "sources/handlers/hi.h"
 #include "sources/handlers/numbers.h"
 
+#include "english/handlers/routing.h"
+
 #include "english/handlers/admin/sessions.h"
 #include "english/handlers/admin/translations.h"
 #include "english/handlers/admin/word_categories.h"
@@ -41,34 +43,35 @@ TApplication::~TApplication() {
 
 void TApplication::AddEnglishHandlers() {
     Server->Post("/api/english/users", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PostUserHandler(*DataSource, req, res);
+        NEnglish::Handler(*DataSource, req, res, NEnglish::PostUserHandler);
     });
     Server->Get(R"(/api/english/users/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetUserHandler(*DataSource, req, res);
+        NEnglish::Handler(*DataSource, req, res, NEnglish::GetUserHandler);
     });
     Server->Post("/api/english/login", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PostLoginHandler(*DataSource, req, res);
+        NEnglish::Handler(*DataSource, req, res, NEnglish::PostLoginHandler);
     });
     Server->Delete("/api/english/logout", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::DeleteLogoutHandler(*DataSource, req, res);
+        NEnglish::Handler(*DataSource, req, res, NEnglish::DeleteLogoutHandler);
     });
     Server->Get("/api/english/admin/sessions", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetAdminSessionsHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminSessionsHandler);
     });
+
     Server->Post("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PostAdminTranslationsHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminTranslationsHandler);
     });
     Server->Put("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::PutAdminTranslationsHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PutAdminTranslationsHandler);
     });
     Server->Get("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetAdminTranslationsHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminTranslationsHandler);
     });
     Server->Get(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::GetAdminTranslationHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminTranslationHandler);
     });
     Server->Delete(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
-        NEnglish::DeleteAdminTranslationHandler(*DataSource, req, res);
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminTranslationHandler);
     });
 
     Server->Post("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
