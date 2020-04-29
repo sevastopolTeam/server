@@ -9,7 +9,8 @@
 namespace NType {
     bool IsDigit(const char c);
     bool IsAlpha(const char c);
-    bool IsInteger(const TString& value);
+    bool IsInt(const TString& value);
+    bool IsUnsignedInt(const TString& value);
     bool IsNumber(const TString& value);
 
     int ToInt(const TString& s);
@@ -27,7 +28,6 @@ namespace NJson {
     int GetInt(const TJsonValue& value, const TString& path, const int defaultValue);
 
     TMaybe<TString> GetString(const TJsonValue& value, const TString& path);
-
 
     TString GetString(const TJsonValue& value, const TString& path, const TString& defaultValue);
 

@@ -10,8 +10,33 @@ namespace NType {
         return isalpha(c);
     }
 
-    bool IsInteger(const TString& value) {
-        if (value.empty() || (value[0] != '+' && value[0] != '-' && !IsDigit(value[0]))) {
+    bool IsInt(const TString& value) {
+        const TString& MAX_INT = "2147483647";
+        const TString& MIN_INT_PLUS = "+2147483648";
+        const TString& MIN_INT = "2147483648";
+
+        if (value.empty()) {
+            return false;
+        }
+
+        if (value.front() == '-') {
+            if (value.size() < 2 || value.size() > MIN_INT.size() || (value.size() == MIN_INT.size() && value > MIN_INT)) {
+                return false;
+            }
+        } else if (value.front() == '+') {
+            if (value.size() < 2 || value.size() > MAX_INT_PLUS.size() || (value.size() == MAX_INT_PLUS.size() && value > MAX_INT_PLUS)) {
+                return false;
+            }
+        } else {
+                        
+        }
+
+
+
+        if (value.empty() || (value.front() != '+' && value.front() != '-' && !IsDigit(value.front()))) {
+            return false;
+        }
+        if ((value.front() == '+' || value.front() == '-') && value.size() < 2) {
             return false;
         }
         for (int i = 0; i < value.length(); i++) {
@@ -21,6 +46,14 @@ namespace NType {
         }
 
         return true;
+    }
+
+    bool IsUnsignedInt(const TString& value) {
+        const TString& MAX_UINT = "4294967295";
+        if (value.size() > MAX_UINT.size() || (value.size() == MAX_UINT.size() && value > MAX_UINT)) {
+            return false;
+        }
+        return !value.empty() && IsDigit(value[0]) && IsInt(value);
     }
 
     bool IsNumber(const TString& value) {

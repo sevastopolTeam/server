@@ -34,7 +34,8 @@ def translation_data(request):
         "LanguageFrom": "russian",
         "LanguageTo": "english",
         "OriginUrl": "origin_url",
-        "DownloadUrl": "download_url"
+        "DownloadUrl": "download_url",
+        "Frequency": 124
     }
 
 class TestAdminTranslations:
@@ -64,6 +65,37 @@ class TestAdminTranslations:
         assert validation_errors.get("ValueTo")[0] == "CanNotBeEmpty"
         assert validation_errors.get("LanguageFrom")[0] == "CanNotBeEmpty"
         assert validation_errors.get("LanguageTo")[0] == "CanNotBeEmpty"
+        assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
+
+    def test_create_with_frequency(self, admin_headers, translation_data):
+        translation_data["Frequency"] = "+"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+
+        translation_data["Frequency"] = "gfsfg"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+
+        translation_data["Frequency"] = "-03535"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+
+        translation_data["Frequency"] = "0.2525"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+
+        translation_data["Frequency"] = "125"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert status
+        assert response.get("Status") == "Ok"
 
     def test_create_validation_error_same(self, admin_headers, translation_data):
         Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)

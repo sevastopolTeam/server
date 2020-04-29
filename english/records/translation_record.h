@@ -16,6 +16,7 @@ namespace NEnglish {
     const TString RECORD_TRANSLATION_FIELD_DOWNLOAD_URL = "DownloadUrl";
     const TString RECORD_TRANSLATION_FIELD_PART_OF_SPEECH = "PartOfSpeech";
     const TString RECORD_TRANSLATION_FIELD_IS_CHECKED = "IsChecked";
+    const TString RECORD_TRANSLATION_FIELD_FREQUENCY = "Frequency";
 
     class TRecordTranslation : public IRecord {
     public:
@@ -34,6 +35,7 @@ namespace NEnglish {
         TString OriginUrl;
         TString DownloadUrl;
         TString PartOfSpeech;
+        unsigned int Frequency;
         bool IsChecked;
     };
 }

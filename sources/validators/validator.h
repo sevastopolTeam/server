@@ -11,6 +11,8 @@ namespace {
     const TString VALIDATION_ERROR_ALREADY_EXISTS = "AlreadyExists";
     const TString VALIDATION_ERROR_INCORRECT = "Incorrect";
     const TString VALIDATION_ERROR_NOT_FOUND = "NotFound";
+    const TString VALIDATION_ERROR_MUST_BE_INT = "MustBeInt";
+    const TString VALIDATION_ERROR_MUST_BE_LESS_THAN = "MustBeLessThan";
 }
 
 class IValidator {
@@ -25,5 +27,7 @@ protected:
 
     bool ValidateRequired(const TString& field);
     bool ValidateEmail(const TString& field);
-    bool ValidateSame(const TString& validateField, const TString& sameField); 
+    bool ValidateSame(const TString& validateField, const TString& sameField);
+    bool ValidateUnsignedInt(const TString& validateField);
+    bool ValidateLessThan(const TString& validateField);
 };
