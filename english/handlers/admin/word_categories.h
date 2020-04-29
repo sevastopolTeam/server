@@ -16,9 +16,6 @@
 
 namespace NEnglish {
 
-    const TString WORD_CATEGORIES_SIZE_OF_PAGE_PARAM = "PageSize";
-    const TString WORD_CATEGORIES_NUMBER_OF_PAGE_PARAM = "Page";
-
     const TString RESPONSE_FIELD_WORD_CATEGORIES = "WordCategories";
     const TString RESPONSE_FIELD_WORD_CATEGORIES_COUNT = "WordCategoriesCount";
 
@@ -26,13 +23,12 @@ namespace NEnglish {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
             if (IsAdmin(dataSource, req)) {
-                const int limit = NType::ToInt(req.GetParamValue(WORD_CATEGORIES_SIZE_OF_PAGE_PARAM, "0"));
-                const int skip = NType::ToInt(req.GetParamValue(WORD_CATEGORIES_NUMBER_OF_PAGE_PARAM, "0")) * limit;
+                const TPagination pagination(req);
                 response[RESPONSE_BODY] = {
                     {
                         RESPONSE_FIELD_WORD_CATEGORIES,
                         NJson::ToVectorJson(
-                            dataSource.English.CollectionWordCategory.Find(NJson::TJsonValue::object(), skip, limit)
+                            dataSource.English.CollectionWordCategory.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit)
                         )
                     },
                     {
