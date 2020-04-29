@@ -7,8 +7,11 @@
 #include "english/records/user_record.h"
 #include "english/records/session_record.h"
 
-#include "util/generic/string.h"
+#include "util/generic/iostream.h"
 #include "util/generic/maybe.h"
+#include "util/generic/string.h"
+
+#include "sources/data_source/data_source.h"
 
 namespace NEnglish {
     const TString HEADERS_AUTHORIZATION = "Authorization";
@@ -55,6 +58,43 @@ namespace NEnglish {
     bool IsRegistered(TDataSource& dataSource, const httplib::Request& req) {
         const TMaybe<TRecordUser> currentUser = GetCurrentUser(dataSource, req);
         return IsRegisteredUser(currentUser);
+    }
+
+    void AdminHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res,
+        std::function<void(TDataSource& dataSource, const httplib::Request&, NJson::TJsonValue&)> handler)
+    {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
+        try {
+            if (IsAdmin(dataSource, req)) {
+                handler(dataSource, req, response);
+            } else {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_ACCESS_DENIED;
+            }
+            INFO_LOG << response.dump() << Endl;
+        } catch (const std::exception& e) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+        }
+
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
+    }
+
+    void Handler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res,
+        std::function<void(TDataSource& dataSource, const httplib::Request&, NJson::TJsonValue&)> handler)
+    {
+        NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
+        try {
+            handler(dataSource, req, response);
+            INFO_LOG << response.dump() << Endl;
+        } catch (const std::exception& e) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_FATAL_ERROR;
+            response[RESPONSE_ERROR] = e.what();
+            ERROR_LOG << response.dump() << Endl;
+        }
+
+        res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
 }
