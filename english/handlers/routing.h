@@ -14,6 +14,9 @@
 #include "sources/data_source/data_source.h"
 
 namespace NEnglish {
+
+    using THandlerFn = std::function<void(TDataSource& dataSource, const httplib::Request&, NJson::TJsonValue&)>;
+
     const TString HEADERS_AUTHORIZATION = "Authorization";
 
     const TString RESPONSE_STATUS = "Status";
@@ -60,8 +63,7 @@ namespace NEnglish {
         return IsRegisteredUser(currentUser);
     }
 
-    void AdminHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res,
-        std::function<void(TDataSource& dataSource, const httplib::Request&, NJson::TJsonValue&)> handler)
+    void AdminHandler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res, const THandlerFn& handler)
     {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
@@ -81,8 +83,7 @@ namespace NEnglish {
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
-    void Handler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res,
-        std::function<void(TDataSource& dataSource, const httplib::Request&, NJson::TJsonValue&)> handler)
+    void Handler(TDataSource& dataSource, const httplib::Request& req, httplib::Response& res, const THandlerFn& handler)
     {
         NJson::TJsonValue response = {{ RESPONSE_STATUS, RESPONSE_STATUS_OK }};
         try {
