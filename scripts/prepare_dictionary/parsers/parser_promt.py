@@ -42,7 +42,7 @@ class ParserPromt:
         links = tree.xpath('//div[contains(@id, "vc_fltrSampTranslation")]//a[contains(@class, "search-translation-box")]')
 
         max_count = 0
-        for link in links[1:4]:
+        for link in links[1:6]:
             frequence =  int(link.xpath('span/text()')[0]) if len(link.xpath('span/text()')) > 0 else 0
             if frequence > max_count // 10 and (max_count == 0 or frequence > 10):
                 max_count = max(max_count, frequence)
@@ -67,7 +67,6 @@ class ParserPromt:
             self.extra_words.append([word, sourceTxt[0]])
         else:
             forms = tree.xpath('//div[@class="cforms_result"]')
-
             current = { "eng": word, "parts": [] }
             for form in forms:
                 current_word = form.xpath('div//span[@class="source_only"]/text()')[0]
@@ -84,6 +83,8 @@ class ParserPromt:
                 self.main_words.append(current)
 
     def get_info(self, word):
+        # if (word != "night"):
+        #     return
         grammar = self.get_grammar(word)
         self.get_samples(word)
         self.get_dictionary(word)
@@ -96,8 +97,6 @@ class ParserPromt:
 
         # return dictionary
 
-        return None
-
     def parse(self, words):
         results = []
         word_num = 0
@@ -107,14 +106,10 @@ class ParserPromt:
                 if word_num % 100 == 0:
                     print(str(word_num) + " records completed")
 
-                word_info = self.get_info(word)
-                if word_info != None:
-                    # print(word_info)
-                    results.append(word_info)
-                    # for part in word_info["parts"]:
-                    #     for item in part["part"]:
-                    #         print(item)
-                    # print("----")
+                # word_info = 
+                self.get_info(word)
+                # if word_info != None:
+                #     results.append(word_info)
             except Exception as e:
                 print(e)
                 continue
@@ -153,15 +148,19 @@ class ParserPromt:
         # print("_______________")
         # print("\n\n\n")
 
+
+        # IOHelper.print_json(self.main_words)
         for mn in self.main_words:
+            # if mn["eng"] != "night":
+            #     continue
             for part in mn["parts"]:
                 if len(part["part"]) == 0:
-                    mn["parts"][0]["part"].append("")
-            for tr in part["translates"]:
-                if (mn["eng"], tr) in self.word_frequence:
-                    print(mn["eng"] + " -> " + tr + " -> " + str(self.word_frequence[(mn["eng"], tr)]))
-                else:
-                    print(mn["eng"] + " -> " + tr + " -> NOT")
+                    part["part"].append("")
+                for tr in part["translates"]:
+                    if (mn["eng"], tr) in self.word_frequence:
+                        print(mn["eng"] + " -> " + tr + " -> " + part["part"][0] + " -> " + str(self.word_frequence[(mn["eng"], tr)]))
+                    # else:
+                    #     print(mn["eng"] + " -> " + tr + " -> NOT")
 
         # print("WORDS FREQUENCE")
         # IOHelper.print_json(self.word_frequence)
@@ -192,7 +191,7 @@ def main():
 
     parser = ParserPromt(args.path_to_files)
 
-    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:50]
+    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:500]
     translations = parser.parse(words)
 
     # token = "12215108c4c63c392826561db6abbe301587856945"
