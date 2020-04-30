@@ -24,6 +24,7 @@ namespace NEnglish {
         , OriginUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_ORIGIN_URL, ""))
         , DownloadUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_DOWNLOAD_URL, ""))
         , PartOfSpeech(NJson::GetString(json, RECORD_TRANSLATION_FIELD_PART_OF_SPEECH, ""))
+        , Frequency(NJson::GetInt(json, RECORD_TRANSLATION_FIELD_FREQUENCY, 0))
         , IsChecked(NJson::GetBool(json, RECORD_TRANSLATION_FIELD_IS_CHECKED, false))
         , IRecord(NJson::GetString(json, PATH_TO_RECORD_ID))
     {}
@@ -37,6 +38,7 @@ namespace NEnglish {
             {RECORD_TRANSLATION_FIELD_ORIGIN_URL, OriginUrl},
             {RECORD_TRANSLATION_FIELD_DOWNLOAD_URL, DownloadUrl},
             {RECORD_TRANSLATION_FIELD_PART_OF_SPEECH, PartOfSpeech},
+            {RECORD_TRANSLATION_FIELD_FREQUENCY, Frequency},
             {RECORD_TRANSLATION_FIELD_IS_CHECKED, IsChecked}
         };
     }
