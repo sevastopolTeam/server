@@ -195,7 +195,7 @@ def main():
 
     parser = ParserPromt(args.path_to_files)
 
-    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:5000]
+    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')
     translations = parser.parse(words)
 
     token = "12215108c4c63c392826561db6abbe301587856945"
