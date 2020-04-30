@@ -4,5 +4,5 @@
         "MongoUri": "mongodb://localhost:1235",
         "MongoDbName": "priemka"
     },
-    "Log": "logs/tests.log"
+    "Log": "preimka"
 }
