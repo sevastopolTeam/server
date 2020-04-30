@@ -152,3 +152,4 @@ class TestAdminTranslations:
         assert status
         assert response["Status"] == "Error"
         assert response["Error"] == "AccessDenied"
+

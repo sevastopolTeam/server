@@ -6,6 +6,7 @@ namespace NEnglish {
     const TString COLLECTION_NAME_TRANSLATION = "english_translation";
 
     const TString COLUMN_NAME_EMAIL = "Email";
+    const TString COLUMN_NAME_FREQUENCY = "Frequency";
 
     TSetOfCollections::TSetOfCollections(NMongo::THelper* master, const TString& dbName)
         : CollectionUser(master, dbName, COLLECTION_NAME_USER)
@@ -13,5 +14,6 @@ namespace NEnglish {
         , CollectionTranslation(master, dbName, COLLECTION_NAME_TRANSLATION)
     {
         CollectionUser.CreateIndex(NEnglish::COLUMN_NAME_EMAIL, /*uniq*/ true);
+        CollectionTranslation.CreateIndex(NEnglish::COLUMN_NAME_FREQUENCY, /*uniq*/ false, /*desc*/ true);
     }
 }
