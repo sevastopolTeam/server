@@ -67,7 +67,7 @@ class TestAdminTranslations:
         assert validation_errors.get("LanguageTo")[0] == "CanNotBeEmpty"
         assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
 
-    def test_create_with_frequency(self, admin_headers, translation_data):
+    def test_create_with_incorrect_frequency(self, admin_headers, translation_data):
         translation_data["Frequency"] = "+"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
         assert response.get("Status") == "ValidationError"
@@ -85,6 +85,12 @@ class TestAdminTranslations:
         assert response.get("Status") == "ValidationError"
         validation_errors = response.get("ValidationErrors")
         assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
+
+        translation_data["Frequency"] = ""
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
 
         translation_data["Frequency"] = "0.2525"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
@@ -104,9 +110,18 @@ class TestAdminTranslations:
         validation_errors = response.get("ValidationErrors")
         assert validation_errors.get("Frequency")[0] == "MustBeLessThan"
 
+
+    def test_create_with_correct_frequency(self, admin_headers, translation_data):
         translation_data["Frequency"] = "125"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
         assert status
+        assert response.get("Status") == "Ok"
+
+    def test_create_with_zero_frequency(self, admin_headers, translation_data):
+        translation_data["Frequency"] = "0"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert status
+        print(response)
         assert response.get("Status") == "Ok"
 
     def test_create_validation_error_same(self, admin_headers, translation_data):
