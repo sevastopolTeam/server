@@ -102,7 +102,8 @@ class Client:
             "LanguageFrom": "russian",
             "LanguageTo": "english",
             "OriginUrl": "origin_url",
-            "DownloadUrl": "download_url"
+            "DownloadUrl": "download_url",
+            "Frequency": 12345
         }
 
     @classmethod

@@ -57,12 +57,66 @@ class TestAdminTranslations:
         assert validation_errors.get("ValueTo")[0] == "CanNotBeEmpty"
         assert validation_errors.get("LanguageFrom")[0] == "CanNotBeEmpty"
         assert validation_errors.get("LanguageTo")[0] == "CanNotBeEmpty"
+        assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
+
+    def test_create_with_incorrect_frequency(self, admin_headers, translation_data):
+        translation_data["Frequency"] = "+"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
+
+        translation_data["Frequency"] = "gfsfg"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
+
+        translation_data["Frequency"] = "-03535"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
+
+        translation_data["Frequency"] = ""
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
+
+        translation_data["Frequency"] = "0.2525"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
+
+        translation_data["Frequency"] = "9999999999"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeLessThan"
+
+        translation_data["Frequency"] = "945834863496394867389467398467398674999999999"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeLessThan"
+
+    def test_create_with_correct_frequency(self, admin_headers, translation_data):
+        translation_data["Frequency"] = "125"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert status
+        assert response.get("Status") == "Ok"
+
+    def test_create_with_zero_frequency(self, admin_headers, translation_data):
+        translation_data["Frequency"] = "0"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert status
+        assert response.get("Status") == "Ok"
 
     def test_create_validation_error_same(self, admin_headers, translation_data):
         Client.create_translation(translation_data)
         status, response = Client.create_translation(translation_data)
-        # Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
-        # status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
 
         assert status
         assert response.get("Status") == "ValidationError"
