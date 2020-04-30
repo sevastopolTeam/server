@@ -16,6 +16,7 @@ public:
 
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
+    TMaybe<TRecord> CreateAndReturn(const TRecord& record);
     TVector<TRecord> Find(
         const NJson::TJsonValue& selection = NJson::TJsonValue::object(),
         const int skipRecords = 0,
@@ -49,6 +50,14 @@ protected:
 template <class TRecord>
 bool ICollection<TRecord>::Create(const TRecord& record) {
     return Master->Insert(DbName, CollectionName, record.ForDB());
+}
+
+template <class TRecord>
+TMaybe<TRecord> ICollection<TRecord>::CreateAndReturn(const TRecord& record) {
+    if (Create(record.ForDB())) {
+        return FindFirst(record.ForDB());
+    }
+    return Nothing();
 }
 
 template <class TRecord>
