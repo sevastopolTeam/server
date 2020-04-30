@@ -26,7 +26,7 @@ namespace NString {
         return value;
     }
 
-    TVector<TString> Split(const TString& value, const char del, bool skipEmpty = false) {
+    TVector<TString> Split(const TString& value, const char del, bool skipEmpty) {
         TVector<TString> result;
         TString currentPart;
         for (auto c: value) {
