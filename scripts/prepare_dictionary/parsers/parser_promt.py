@@ -31,7 +31,7 @@ class ParserPromt:
         self.main_words = []
         self.extra_words = []
         self.main_to_extra = {}
-        self.word_frequence = {}
+        self.word_frequency = {}
 
     def get_tree(self, url):
         return HtmlHelper.get_tree(self.path_to_files + "cache/", url, headers)
@@ -43,10 +43,10 @@ class ParserPromt:
 
         max_count = 0
         for link in links[1:6]:
-            frequence =  int(link.xpath('span/text()')[0]) if len(link.xpath('span/text()')) > 0 else 0
-            if frequence > max_count // 10 and (max_count == 0 or frequence > 10):
-                max_count = max(max_count, frequence)
-                self.word_frequence[(word, link.text)] = frequence
+            frequency =  int(link.xpath('span/text()')[0]) if len(link.xpath('span/text()')) > 0 else 0
+            if frequency > max_count // 10 and (max_count == 0 or frequency > 10):
+                max_count = max(max_count, frequency)
+                self.word_frequency[(word, link.text)] = frequency
 
     def get_grammar(self, word):
         url = GRAMMAR_PAGE + word
@@ -89,7 +89,7 @@ class ParserPromt:
         self.get_samples(word)
         self.get_dictionary(word)
 
-        # dictionary["frequence"] = self.get_samples(word)
+        # dictionary["frequency"] = self.get_samples(word)
 
         # if len(dictionary["parts"]) == 0:
         #     print(word + " isn't found")
@@ -151,36 +151,40 @@ class ParserPromt:
 
         # IOHelper.print_json(self.main_words)
         for mn in self.main_words:
-            # if mn["eng"] != "night":
-            #     continue
             for part in mn["parts"]:
                 if len(part["part"]) == 0:
                     part["part"].append("")
                 for tr in part["translates"]:
-                    if (mn["eng"], tr) in self.word_frequence:
-                        print(mn["eng"] + " -> " + tr + " -> " + part["part"][0] + " -> " + str(self.word_frequence[(mn["eng"], tr)]))
+                    if (mn["eng"], tr) in self.word_frequency:
+                        print(mn["eng"] + " -> " + tr + " -> " + part["part"][0] + " -> " + str(self.word_frequency[(mn["eng"], tr)]))
                     # else:
                     #     print(mn["eng"] + " -> " + tr + " -> NOT")
 
-        # print("WORDS FREQUENCE")
-        # IOHelper.print_json(self.word_frequence)
+        # print("WORDS FREQUENCY")
+        # IOHelper.print_json(self.word_frequency)
         # print("_______________")
         # print("\n\n\n")
         # return self.main_words
 
-        # up = []
-        # for mn in self.main_words:
-        #     if len(mn["parts"][0]["part"]) == 0:
-        #         mn["parts"][0]["part"].append("")
-        #     up.append({
-        #         "ValueFrom": mn["parts"][0]["translates"][0],
-        #         "ValueTo": mn["eng"],
-        #         "LanguageFrom": "russian",
-        #         "LanguageTo": "english",
-        #         "PartOfSpeech": mn["parts"][0]["part"][0]
-        #     })
 
-        # return up
+        up = []        
+        for mn in self.main_words:
+            for part in mn["parts"]:
+                if len(part["part"]) == 0:
+                    part["part"].append("")
+                for tr in part["translates"]:
+                    if (mn["eng"], tr) in self.word_frequency:
+                        # print(mn["eng"] + " -> " + tr + " -> " + part["part"][0] + " -> " + str(self.word_frequency[(mn["eng"], tr)]))
+                        up.append({
+                            "ValueFrom": tr,
+                            "ValueTo": mn["eng"],
+                            "LanguageFrom": "russian",
+                            "LanguageTo": "english",
+                            "PartOfSpeech": part["part"][0],
+                            "Frequency": str(self.word_frequency[(mn["eng"], tr)])
+                        })
+
+        return up
 
 def main():
     parser = argparse.ArgumentParser(description="Configures")
@@ -191,12 +195,12 @@ def main():
 
     parser = ParserPromt(args.path_to_files)
 
-    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:500]
+    words = open(args.path_to_files + "all_words.txt", "r").read().strip().split('\n')[:5000]
     translations = parser.parse(words)
 
-    # token = "12215108c4c63c392826561db6abbe301587856945"
-    # for translation in translations:
-    #     r = requests.post("http://localhost:1234/api/english/admin/translations", data=json.dumps(translation), headers={"Authorization": token})
-    #     print(r.json())
+    token = "12215108c4c63c392826561db6abbe301587856945"
+    for translation in translations:
+        r = requests.post("http://localhost:1234/api/english/admin/translations", data=json.dumps(translation), headers={"Authorization": token})
+        print(r.json())
 
 main()

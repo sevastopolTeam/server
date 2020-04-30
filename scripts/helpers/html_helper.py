@@ -3,8 +3,8 @@ import hashlib
 from lxml import html
 from lxml import etree
 
-class HtmlHelper:  
-    
+class HtmlHelper:
+
     @classmethod
     def get_tree(self, path_to_cache, url, headers = {}):
         hash = hashlib.md5(url.encode('utf-8')).hexdigest()
