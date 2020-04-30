@@ -15,6 +15,7 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_LANGUAGE_TO);
         isValid &= ValidateRequired(RECORD_TRANSLATION_FIELD_FREQUENCY);
         isValid &= ValidateUnsignedInt(RECORD_TRANSLATION_FIELD_FREQUENCY);
+        isValid &= ValidateLessThan(RECORD_TRANSLATION_FIELD_FREQUENCY, 1e9);
         isValid &= ValidateExists(dataSource);
 
         return static_cast<bool>(isValid);

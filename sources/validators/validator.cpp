@@ -27,9 +27,28 @@ bool IValidator::ValidateEmail(const TString& field) {
     return true;
 }
 
+bool IValidator::ValidateInt(const TString& field) {
+    if (!NType::IsInt(NJson::GetString(OriginJson, field, ""))) {
+        ValidationErrors[field].push_back(VALIDATION_ERROR_MUST_BE_INT);
+        return false;
+    }
+
+    return true;
+}
+
 bool IValidator::ValidateUnsignedInt(const TString& field) {
     if (!NType::IsUnsignedInt(NJson::GetString(OriginJson, field, ""))) {
-        ValidationErrors[field].push_back(VALIDATION_ERROR_MUST_BE_INT);
+        ValidationErrors[field].push_back(VALIDATION_ERROR_MUST_BE_UNSIGNED_INT);
+        return false;
+    }
+
+    return true;
+}
+
+bool IValidator::ValidateLessThan(const TString& field, const int value) {
+    const TString& strValue = NJson::GetString(OriginJson, field, "");
+    if (!NType::IsInt32(strValue) || !NType::LessThan(strValue, value)) {
+        ValidationErrors[field].push_back(VALIDATION_ERROR_MUST_BE_LESS_THAN);
         return false;
     }
 

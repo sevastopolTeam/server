@@ -12,6 +12,7 @@ namespace {
     const TString VALIDATION_ERROR_INCORRECT = "Incorrect";
     const TString VALIDATION_ERROR_NOT_FOUND = "NotFound";
     const TString VALIDATION_ERROR_MUST_BE_INT = "MustBeInt";
+    const TString VALIDATION_ERROR_MUST_BE_UNSIGNED_INT = "MustBeUnsignedInt";
     const TString VALIDATION_ERROR_MUST_BE_LESS_THAN = "MustBeLessThan";
 }
 
@@ -28,6 +29,7 @@ protected:
     bool ValidateRequired(const TString& field);
     bool ValidateEmail(const TString& field);
     bool ValidateSame(const TString& validateField, const TString& sameField);
+    bool ValidateInt(const TString& validateField);
     bool ValidateUnsignedInt(const TString& validateField);
-    bool ValidateLessThan(const TString& validateField);
+    bool ValidateLessThan(const TString& validateField, const int value);
 };

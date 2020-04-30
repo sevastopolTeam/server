@@ -11,7 +11,10 @@ namespace NType {
     bool IsAlpha(const char c);
     bool IsInt(const TString& value);
     bool IsUnsignedInt(const TString& value);
+    bool IsInt32(const TString& value);
+    bool IsUnsignedInt32(const TString& value);
     bool IsNumber(const TString& value);
+    bool LessThan(const TString& value, const int compareValue);
 
     int ToInt(const TString& s);
 

@@ -1,7 +1,17 @@
 #include "ctype.h"
 #include <cctype>
 
+#include "string.h"
+
+#include "iostream.h"
+
 namespace NType {
+
+    const TString& MAX_INT_32 = "2147483647";
+    const TString& MAX_INT_32_PLUS = "+2147483648";
+    const TString& MIN_INT_32 = "2147483648";
+    const TString& MAX_UINT_32 = "4294967295";
+
     bool IsDigit(const char c) {
         return isdigit(c);
     }
@@ -11,35 +21,17 @@ namespace NType {
     }
 
     bool IsInt(const TString& value) {
-        const TString& MAX_INT = "2147483647";
-        const TString& MIN_INT_PLUS = "+2147483648";
-        const TString& MIN_INT = "2147483648";
-
         if (value.empty()) {
             return false;
         }
-
-        if (value.front() == '-') {
-            if (value.size() < 2 || value.size() > MIN_INT.size() || (value.size() == MIN_INT.size() && value > MIN_INT)) {
+        size_t startDigit = 0;
+        if (value.front() == '+' || value.front() == '-') {
+            if (value.size() < 2) {
                 return false;
             }
-        } else if (value.front() == '+') {
-            if (value.size() < 2 || value.size() > MAX_INT_PLUS.size() || (value.size() == MAX_INT_PLUS.size() && value > MAX_INT_PLUS)) {
-                return false;
-            }
-        } else {
-                        
+            startDigit = 1;
         }
-
-
-
-        if (value.empty() || (value.front() != '+' && value.front() != '-' && !IsDigit(value.front()))) {
-            return false;
-        }
-        if ((value.front() == '+' || value.front() == '-') && value.size() < 2) {
-            return false;
-        }
-        for (int i = 0; i < value.length(); i++) {
+        for (int i = startDigit; i < value.length(); i++) {
             if (!IsDigit(value[i])) {
                 return false;
             }
@@ -48,28 +40,58 @@ namespace NType {
         return true;
     }
 
-    bool IsUnsignedInt(const TString& value) {
-        const TString& MAX_UINT = "4294967295";
-        if (value.size() > MAX_UINT.size() || (value.size() == MAX_UINT.size() && value > MAX_UINT)) {
+    bool IsInt32(const TString& value) {
+        if (!IsInt(value)) {
             return false;
         }
-        return !value.empty() && IsDigit(value[0]) && IsInt(value);
+
+        if (value.front() == '-') {
+            if (value.size() > MIN_INT_32.size() || (value.size() == MIN_INT_32.size() && value > MIN_INT_32)) {
+                return false;
+            }
+        } else if (value.front() == '+') {
+            if (value.size() > MAX_INT_32_PLUS.size() || (value.size() == MAX_INT_32_PLUS.size() && value > MAX_INT_32_PLUS)) {
+                return false;
+            }
+        } else {
+            if (value.size() > MAX_INT_32.size() || (value.size() == MAX_INT_32.size() && value > MAX_INT_32)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool IsUnsignedInt(const TString& value) {
+        return IsInt(value) && IsDigit(value.front());
+    }
+
+    bool IsUnsignedInt32(const TString& value) {
+        if (!IsUnsignedInt(value)) {
+            return false;
+        }
+        return value.size() < MAX_UINT_32.size() || (value.size() == MAX_UINT_32.size() && value < MAX_UINT_32);
     }
 
     bool IsNumber(const TString& value) {
-        if (value.empty() || (value[0] != '+' && value[0] != '-' && !IsDigit(value[0]))) {
+        if (value.empty()) {
             return false;
         }
+        size_t startDigit = 0;
+        if (value.front() == '+' || value.front() == '-') {
+            if (value.size() < 2 || !IsDigit(value[1])) {
+                return false;
+            }
+            startDigit = 1;
+        }
         bool wasPoint = false;
-        for (int i = 0; i < value.length(); i++) {
+        for (int i = startDigit; i < value.length(); i++) {
             if (value[i] == '.') {
                 if (wasPoint) {
                     return false;
                 }
                 wasPoint = true;
-                continue;
-            }
-            if (!IsDigit(value[i])) {
+            } else if (!IsDigit(value[i])) {
                 return false;
             }
         }
@@ -79,6 +101,13 @@ namespace NType {
 
     int ToInt(const TString& s) {
         return std::stoi(s);
+    }
+
+    bool LessThan(const TString& value, const int compareValue) {
+        if (!IsInt(value)) {
+            throw("Value bust be int");
+        }
+        return IsInt32(value) && ToInt(value) < compareValue;
     }
 
 }

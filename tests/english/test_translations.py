@@ -72,25 +72,37 @@ class TestAdminTranslations:
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
         assert response.get("Status") == "ValidationError"
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
 
         translation_data["Frequency"] = "gfsfg"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
         assert response.get("Status") == "ValidationError"
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
 
         translation_data["Frequency"] = "-03535"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
         assert response.get("Status") == "ValidationError"
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
 
         translation_data["Frequency"] = "0.2525"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
         assert response.get("Status") == "ValidationError"
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("Frequency")[0] == "MustBeInt"
+        assert validation_errors.get("Frequency")[0] == "MustBeUnsignedInt"
+
+        translation_data["Frequency"] = "9999999999"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeLessThan"
+
+        translation_data["Frequency"] = "945834863496394867389467398467398674999999999"
+        status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
+        assert response.get("Status") == "ValidationError"
+        validation_errors = response.get("ValidationErrors")
+        assert validation_errors.get("Frequency")[0] == "MustBeLessThan"
 
         translation_data["Frequency"] = "125"
         status, response = Client.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation_data, admin_headers)
