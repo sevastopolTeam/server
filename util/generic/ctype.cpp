@@ -3,8 +3,6 @@
 
 #include "string.h"
 
-#include "iostream.h"
-
 namespace NType {
 
     const TString& MAX_INT_32 = "2147483647";
