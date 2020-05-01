@@ -1,3 +1,5 @@
+#pragma once
+
 #include "contrib/httplib/httplib.h"
 
 #include "util/generic/ctype.h"

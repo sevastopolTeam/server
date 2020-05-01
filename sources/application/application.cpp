@@ -5,9 +5,10 @@
 #include "sources/handlers/hi.h"
 #include "sources/handlers/numbers.h"
 
+// #include "english/handlers/routing.h"
+
 #include "english/handlers/admin/sessions.h"
 #include "english/handlers/admin/translations.h"
-#include "english/handlers/routing.h"
 #include "english/handlers/users.h"
 
 #include "util/generic/ctype.h"

@@ -13,6 +13,8 @@
 
 #include "sources/data_source/data_source.h"
 
+#include "pagination.h"
+
 namespace NEnglish {
 
     using THandlerFn = std::function<void(TDataSource& dataSource, const httplib::Request&, NJson::TJsonValue&)>;
@@ -98,24 +100,72 @@ namespace NEnglish {
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
-
-    template <class TCollection, class TRecord, class TValidator>
-    void RestGetHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+    template <class TCollection, class TRecord>
+    void RestGetHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const TPagination pagination(req);
         response[RESPONSE_BODY] = {
             {
-                TCollection::COLLECTION_NAME,
+                "Translations",
                 NJson::ToVectorJson(
-                    TCollection.Find(
-                        NJson::TJsonValue::object(), pagination.skip, pagination.limit, {{RECORD_TRANSLATION_FIELD_FREQUENCY, -1}}
+                    collection.Find(
+                        NJson::TJsonValue::object(), pagination.skip, pagination.limit, NJson::TJsonValue::object()
                     )
                 )
             },
             {
-                RESPONSE_FIELD_TRANSLATIONS_COUNT,
-                dataSource.English.CollectionTranslation.Count()
+                "TranslationsCount",
+                collection.Count()
             }
         };
     }
 
+    template <class TCollection, class TRecord>
+    void RestGetByIdHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TString& recordId = req.matches[1];
+        const auto& record = collection.FindById(recordId);
+        if (record.has_value()) {
+            response[RESPONSE_BODY] = record->ToJson();
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
+        }
+    }
+
+    template <class TCollection, class TRecord, class TValidator>
+    void RestPostHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+        const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
+        TValidator validator(jsonRecord);
+        if (validator.Validate(dataSource)) {
+            if (!collection.Create(TRecord(jsonRecord))) {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
+            }
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
+            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
+        }
+    }
+
+    template <class TCollection, class TRecord, class TValidator>
+    void RestPutHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+        const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
+        TValidator validator(jsonRecord);
+        if (validator.Validate(dataSource)) {
+            collection.FindByIdAndModify(
+                NJson::GetString(jsonRecord, RECORD_FIELD_ID, ""), TRecord(jsonRecord));
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
+            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
+        }
+    }
+
+    template <class TCollection, class TRecord>
+    void RestDeleteHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TString& recordId = req.matches[1];
+        const bool isSuccess = collection.RemoveById(recordId);
+        if (!isSuccess) {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
+        }
+    }
 }

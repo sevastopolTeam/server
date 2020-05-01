@@ -1,4 +1,5 @@
 #pragma once
+
 #include "english/handlers/routing.h"
 
 #include "contrib/httplib/httplib.h"
@@ -14,6 +15,8 @@
 namespace NEnglish {
 
     void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        response[RESPONSE_BODY] = NJson::ToVectorJson(dataSource.English.CollectionSession.Find());
+        RestGetHandler<TCollectionSession, TRecordSession>(
+            dataSource, dataSource.English.CollectionSession, req, response
+        );
     }
 }

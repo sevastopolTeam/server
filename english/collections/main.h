@@ -1,3 +1,5 @@
+#pragma once
+
 #include "english/collections/user_collection.h"
 #include "english/collections/session_collection.h"
 #include "english/collections/translation_collection.h"

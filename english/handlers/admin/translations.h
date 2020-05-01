@@ -16,71 +16,34 @@
 
 namespace NEnglish {
 
-    const TString RESPONSE_FIELD_TRANSLATIONS = "Translations";
-    const TString RESPONSE_FIELD_TRANSLATIONS_COUNT = "TranslationsCount";
-
     void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        const TPagination pagination(req);
-        response[RESPONSE_BODY] = {
-            {
-                RESPONSE_FIELD_TRANSLATIONS,
-                NJson::ToVectorJson(
-                    dataSource.English.CollectionTranslation.Find(
-                        NJson::TJsonValue::object(), pagination.skip, pagination.limit, {{RECORD_TRANSLATION_FIELD_FREQUENCY, -1}}
-                    )
-                )
-            },
-            {
-                RESPONSE_FIELD_TRANSLATIONS_COUNT,
-                dataSource.English.CollectionTranslation.Count()
-            }
-        };
+        RestGetHandler<TCollectionTranslation, TRecordTranslation>(
+            dataSource, dataSource.English.CollectionTranslation, req, response
+        );
     }
 
     void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
-        TValidatorTranslation validator(jsonTranslation);
-        if (validator.Validate(dataSource)) {
-            if (!dataSource.English.CollectionTranslation.Create(TRecordTranslation(jsonTranslation))) {
-                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-                response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
-            }
-        } else {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
-            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
-        }
+        RestPostHandler<TCollectionTranslation, TRecordTranslation, TValidatorTranslation>(
+            dataSource, dataSource.English.CollectionTranslation, req, response
+        );
     }
 
     void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
-        TValidatorTranslation validator(jsonTranslation);
-        if (validator.Validate(dataSource)) {
-            dataSource.English.CollectionTranslation.FindByIdAndModify(
-                NJson::GetString(jsonTranslation, RECORD_TRANSLATION_FIELD_ID, ""), TRecordTranslation(jsonTranslation));
-        } else {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
-            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
-        }
+        RestPutHandler<TCollectionTranslation, TRecordTranslation, TValidatorTranslation>(
+            dataSource, dataSource.English.CollectionTranslation, req, response
+        );
     }
 
     void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        const TString& translationId = req.matches[1];
-        const auto& translation = dataSource.English.CollectionTranslation.FindById(translationId);
-        if (translation.has_value()) {
-            response[RESPONSE_BODY] = translation->ToJson();
-        } else {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
-        }
+        RestGetByIdHandler<TCollectionTranslation, TRecordTranslation>(
+            dataSource, dataSource.English.CollectionTranslation, req, response
+        );
     }
 
     void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        const TString& translationId = req.matches[1];
-        const bool isSuccess = dataSource.English.CollectionTranslation.RemoveById(translationId);
-        if (!isSuccess) {
-            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
-            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
-        }
+        RestDeleteHandler<TCollectionTranslation, TRecordTranslation>(
+            dataSource, dataSource.English.CollectionTranslation, req, response
+        );
     }
 
 }
