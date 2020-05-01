@@ -1,4 +1,3 @@
-import requests
 import json
 import random
 import sys
@@ -18,15 +17,11 @@ class TestAdminTranslations:
 
     @pytest.fixture()
     def translation_data(self, request):
-        return Client.get_random_translation_data()
+        return Fake.translation()
 
     @pytest.fixture()
     def registered_headers(self, request):
-        user = Fake.user()
-        Client.register_user(user)
-        response = Client.login_user(user)[1]
-
-        return { "Authorization": response["Body"]["SessionToken"] }
+        return Client.registered_headers()
 
     @pytest.fixture()
     def admin_headers(self, request):
@@ -154,7 +149,7 @@ class TestAdminTranslations:
     def test_get_some(self):
         translations_count = 10
         for i in range(translations_count):
-            Client.create_translation(Client.get_random_translation_data())
+            Client.create_translation(Fake.translation())
 
         status, response = Client.get_translations()
         assert status
@@ -164,7 +159,7 @@ class TestAdminTranslations:
     def test_get_with_pagination(self):
         translations_count = 10
         for i in range(translations_count):
-            Client.create_translation(Client.get_random_translation_data())
+            Client.create_translation(Fake.translation())
 
         status, response = Client.get_translations({"PageSize": 5, "Page": 0})
         assert status

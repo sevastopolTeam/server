@@ -81,4 +81,18 @@ namespace NEnglish {
         }
     }
 
+    void PostAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const NJson::TJsonValue& jsonTranslationCategory = NJson::TJsonValue::parse(req.body);
+        TValidatorTranslationToCategory validator(jsonWordCategory);
+        if (validator.Validate(dataSource)) {
+            if (!dataSource.English.CollectionTranslationToCategory.Create(TRecordTranslationToCategory(jsonTranslationToCategory))) {
+                response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+                response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
+            }
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
+            response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
+        }
+    }
+
 }

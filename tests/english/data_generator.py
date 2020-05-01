@@ -42,3 +42,15 @@ class Fake:
             "Password": password,
             "RepeatPassword": password
         }
+
+    @classmethod
+    def translation(self):
+        return {
+            "ValueFrom": self.string(5),
+            "ValueTo": self.string(5),
+            "LanguageFrom": "russian",
+            "LanguageTo": "english",
+            "OriginUrl": "origin_url",
+            "DownloadUrl": "download_url",
+            "Frequency": random.randint(0, 1000000)
+        }

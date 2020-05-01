@@ -9,6 +9,7 @@ namespace NEnglish {
 
     const TString COLUMN_USER_EMAIL = "Email";
     const TString COLUMN_WORD_CATEGORY_NAME = "Name";
+    const TString COLUMN_NAME_FREQUENCY = "Frequency";
 
     TSetOfCollections::TSetOfCollections(NMongo::THelper* master, const TString& dbName)
         : CollectionUser(master, dbName, COLLECTION_NAME_USER)
@@ -19,5 +20,6 @@ namespace NEnglish {
     {
         CollectionUser.CreateIndex(NEnglish::COLUMN_USER_EMAIL, /*uniq*/ true);
         CollectionWordCategory.CreateIndex(NEnglish::COLUMN_WORD_CATEGORY_NAME, /*uniq*/ true);
+        CollectionTranslation.CreateIndex(NEnglish::COLUMN_NAME_FREQUENCY, /*uniq*/ false, /*desc*/ true);
     }
 }

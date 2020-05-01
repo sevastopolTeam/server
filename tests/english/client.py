@@ -1,5 +1,6 @@
 import requests
 import json
+import random
 from data_generator import Fake
 
 API_URL = "http://localhost:5050/api/"
@@ -48,10 +49,17 @@ class Client:
             return [False, r.status_code]
 
     @classmethod
+    def registered_headers(self):
+        user = Fake.user()
+        Client.register_user(user)
+        response = Client.login_user(user)[1]
+
+        return { "Authorization": response["Body"]["SessionToken"] }
+
+    @classmethod
     def admin_headers(self):
         response = Client.login_user({"Email": "admin@admin.ru", "Password": "admin"})[1]
         return { "Authorization": response["Body"]["SessionToken"] }
-
 
     @classmethod
     def filter_dict(self, input, keys):
@@ -93,18 +101,6 @@ class Client:
     @classmethod
     def logout(self, token):
         return self.delete_request(API_URL + PATH_TO_LOGOUT, {})
-
-    @classmethod
-    def get_random_translation_data(self):
-        return {
-            "ValueFrom": Fake.string(5),
-            "ValueTo": Fake.string(5),
-            "LanguageFrom": "russian",
-            "LanguageTo": "english",
-            "OriginUrl": "origin_url",
-            "DownloadUrl": "download_url",
-            "Frequency": 12345
-        }
 
     @classmethod
     def get_translations(self, params = {}):
