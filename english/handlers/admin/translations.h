@@ -25,7 +25,9 @@ namespace NEnglish {
             {
                 RESPONSE_FIELD_TRANSLATIONS,
                 NJson::ToVectorJson(
-                    dataSource.English.CollectionTranslation.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit)
+                    dataSource.English.CollectionTranslation.Find(
+                        NJson::TJsonValue::object(), pagination.skip, pagination.limit, {{RECORD_TRANSLATION_FIELD_FREQUENCY, -1}}
+                    )
                 )
             },
             {

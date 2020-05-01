@@ -25,7 +25,6 @@ def admin_headers(request):
 
     return { "Authorization": response["Body"]["SessionToken"] }
 
-
 @pytest.fixture()
 def translation_data(request):
     return {
@@ -153,3 +152,4 @@ class TestAdminTranslations:
         assert status
         assert response["Status"] == "Error"
         assert response["Error"] == "AccessDenied"
+
