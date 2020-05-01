@@ -98,4 +98,24 @@ namespace NEnglish {
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
+
+    template <class TCollection, class TRecord, class TValidator>
+    void RestGetHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TPagination pagination(req);
+        response[RESPONSE_BODY] = {
+            {
+                TCollection::COLLECTION_NAME,
+                NJson::ToVectorJson(
+                    TCollection.Find(
+                        NJson::TJsonValue::object(), pagination.skip, pagination.limit, {{RECORD_TRANSLATION_FIELD_FREQUENCY, -1}}
+                    )
+                )
+            },
+            {
+                RESPONSE_FIELD_TRANSLATIONS_COUNT,
+                dataSource.English.CollectionTranslation.Count()
+            }
+        };
+    }
+
 }
