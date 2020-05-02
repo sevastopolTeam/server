@@ -41,8 +41,8 @@ namespace NEnglish {
         const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
         TValidatorTranslation validator(jsonTranslation);
         if (validator.Validate(dataSource)) {
-            const TMaybe<TRecordTranslation> createdTranslation
-                = dataSource.English.CollectionTranslation.CreateAndReturn(TRecordTranslation(jsonTranslation));
+            const TMaybe<TRecordTranslation> createdTranslation =
+                dataSource.English.CollectionTranslation.CreateAndReturn(TRecordTranslation(jsonTranslation));
             if (createdTranslation.has_value()) {
                 response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, createdTranslation->GetId() }};
             } else {
