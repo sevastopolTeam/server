@@ -105,7 +105,7 @@ namespace NEnglish {
         const TPagination pagination(req);
         response[RESPONSE_BODY] = {
             {
-                "Translations",
+                "Records",
                 NJson::ToVectorJson(
                     collection.Find(
                         NJson::TJsonValue::object(), pagination.skip, pagination.limit, NJson::TJsonValue::object()
@@ -113,7 +113,7 @@ namespace NEnglish {
                 )
             },
             {
-                "TranslationsCount",
+                "RecordsCount",
                 collection.Count()
             }
         };
@@ -136,7 +136,10 @@ namespace NEnglish {
         const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
         TValidator validator(jsonRecord);
         if (validator.Validate(dataSource)) {
-            if (!collection.Create(TRecord(jsonRecord))) {
+            const TMaybe<TRecord> newRecord = collection.CreateAndReturn(TRecord(jsonRecord));
+            if (newRecord.has_value()) {
+                response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, newRecord->GetId() }};
+            } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                 response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
             }
@@ -151,8 +154,9 @@ namespace NEnglish {
         const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
         TValidator validator(jsonRecord);
         if (validator.Validate(dataSource)) {
-            collection.FindByIdAndModify(
-                NJson::GetString(jsonRecord, RECORD_FIELD_ID, ""), TRecord(jsonRecord));
+            const TString& recordId = NJson::GetString(jsonRecord, RECORD_FIELD_ID, "");
+            collection.FindByIdAndModify(recordId, TRecord(jsonRecord));
+            response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, recordId }};
         } else {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
             response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
