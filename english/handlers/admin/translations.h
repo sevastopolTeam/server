@@ -44,7 +44,7 @@ namespace NEnglish {
             const TMaybe<TRecordTranslation> createdTranslation
                 = dataSource.English.CollectionTranslation.CreateAndReturn(TRecordTranslation(jsonTranslation));
             if (createdTranslation.has_value()) {
-                response[RESPONSE_BODY] = {{ "Id", createdTranslation->GetId() }};
+                response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, createdTranslation->GetId() }};
             } else {
                 response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
                 response[RESPONSE_ERROR] = RESPONSE_ERROR_INSERT;
@@ -59,9 +59,9 @@ namespace NEnglish {
         const NJson::TJsonValue& jsonTranslation = NJson::TJsonValue::parse(req.body);
         TValidatorTranslation validator(jsonTranslation);
         if (validator.Validate(dataSource)) {
-            const TString& recordId = NJson::GetString(jsonTranslation, RECORD_TRANSLATION_FIELD_ID, "");
+            const TString& recordId = NJson::GetString(jsonTranslation, RECORD_FIELD_ID, "");
             dataSource.English.CollectionTranslation.FindByIdAndModify(recordId , TRecordTranslation(jsonTranslation));
-            response[RESPONSE_BODY] = {{ "Id", recordId }};
+            response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, recordId }};
         } else {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;
             response[RESPONSE_VALIDATION_ERRORS] = validator.GetValidationErrors();
