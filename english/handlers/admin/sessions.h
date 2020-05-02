@@ -15,7 +15,7 @@
 namespace NEnglish {
 
     void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetHandler<TCollectionSession, TRecordSession>(
+        RestGetHandler<TCollectionSession>(
             dataSource, dataSource.English.CollectionSession, req, response
         );
     }

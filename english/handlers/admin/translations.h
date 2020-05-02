@@ -17,9 +17,7 @@
 namespace NEnglish {
 
     void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetHandler<TCollectionTranslation, TRecordTranslation>(
-            dataSource, dataSource.English.CollectionTranslation, req, response
-        );
+        RestGetHandler(dataSource, dataSource.English.CollectionTranslation, req, response);
     }
 
     void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
@@ -35,15 +33,11 @@ namespace NEnglish {
     }
 
     void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetByIdHandler<TCollectionTranslation, TRecordTranslation>(
-            dataSource, dataSource.English.CollectionTranslation, req, response
-        );
+        RestGetByIdHandler(dataSource, dataSource.English.CollectionTranslation, req, response);
     }
 
     void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestDeleteHandler<TCollectionTranslation, TRecordTranslation>(
-            dataSource, dataSource.English.CollectionTranslation, req, response
-        );
+        RestDeleteHandler(dataSource, dataSource.English.CollectionTranslation, req, response);
     }
 
 }

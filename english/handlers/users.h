@@ -19,7 +19,7 @@ namespace NEnglish {
     const TString RESPONSE_BODY_SESSION_TOKEN = "SessionToken";
 
     void GetUserHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetByIdHandler<TCollectionUser, TRecordUser>(
+        RestGetByIdHandler<TCollectionUser>(
             dataSource, dataSource.English.CollectionUser, req, response
         );
     }

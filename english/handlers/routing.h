@@ -100,7 +100,7 @@ namespace NEnglish {
         res.set_content(response.dump(), RESPONSE_CONTENT_TYPE_JSON.c_str());
     }
 
-    template <class TCollection, class TRecord>
+    template <class TCollection>
     void RestGetHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const TPagination pagination(req);
         response[RESPONSE_BODY] = {
@@ -119,7 +119,7 @@ namespace NEnglish {
         };
     }
 
-    template <class TCollection, class TRecord>
+    template <class TCollection>
     void RestGetByIdHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const TString& recordId = req.matches[1];
         const auto& record = collection.FindById(recordId);
@@ -159,7 +159,7 @@ namespace NEnglish {
         }
     }
 
-    template <class TCollection, class TRecord>
+    template <class TCollection>
     void RestDeleteHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const TString& recordId = req.matches[1];
         const bool isSuccess = collection.RemoveById(recordId);
