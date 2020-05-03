@@ -3,15 +3,14 @@ include_directories(
 )
 
 add_library(english_collections STATIC
-  session_collection.cpp
-  user_collection.cpp
-  translation_collection.cpp
-  main.cpp
+    session_collection.cpp
+    user_collection.cpp
+    translation_collection.cpp
+    common_set.cpp
 )
 
 target_link_libraries(english_collections PUBLIC
-  mongo
-  data_source
-  english_records
-  md5
+    collections
+    english_records
+    generic
 )

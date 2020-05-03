@@ -1,10 +1,11 @@
 #pragma once
 
 #include "library/mongo/wrappers.h"
-#include "util/generic/holder.h"
 
 #include "sources/collections/base.h"
-#include "english/collections/main.h"
+#include "english/collections/common_set.h"
+
+#include "util/generic/holder.h"
 
 class TDataSource {
 public:

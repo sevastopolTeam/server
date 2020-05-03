@@ -1,5 +1,5 @@
 include_directories(
-  ../..
+    ../..
 )
 
 add_library(collections STATIC
@@ -8,5 +8,8 @@ add_library(collections STATIC
 )
 
 target_link_libraries(collections PUBLIC
-  records
+    mongo
+    records
+    json
+    generic
 )

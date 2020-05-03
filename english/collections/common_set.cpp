@@ -1,4 +1,4 @@
-#include "main.h"
+#include "common_set.h"
 
 namespace NEnglish {
     const TString COLLECTION_NAME_USER = "english_user";

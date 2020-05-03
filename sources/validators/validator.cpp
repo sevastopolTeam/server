@@ -1,9 +1,6 @@
 #include "validator.h"
 
-#include "sources/data_source/data_source.h"
-
 #include "util/generic/ctype.h"
-#include "util/generic/iostream.h"
 
 IValidator::IValidator(const NJson::TJsonValue& jsonData): OriginJson(jsonData), ValidationErrors(NJson::TJsonValue::object()) {}
 

@@ -4,6 +4,9 @@
 
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
+#include "util/generic/maybe.h"
+
+#include "english/records/user_record.h"
 
 namespace NEnglish {
 
