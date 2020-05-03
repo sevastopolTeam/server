@@ -37,6 +37,9 @@ namespace NEnglish {
 
     const TString RESPONSE_CONTENT_TYPE_JSON = "application/json";
 
+    const TString RESPONSE_FIELD_RECORDS = "Records";
+    const TString RESPONSE_FIELD_RECORDS_COUNT = "RecordsCount";
+
     TMaybe<TRecordUser> GetCurrentUser(TDataSource& dataSource, const httplib::Request& req) {
         const TString authToken = req.GetHeaderValue(HEADERS_AUTHORIZATION);
         const TMaybe<TRecordSession>& session = dataSource.English.CollectionSession.FindByToken(authToken);
@@ -101,26 +104,16 @@ namespace NEnglish {
     }
 
     template <class TCollection>
-    void RestGetHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+    void RestGetHandler(TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const TPagination pagination(req);
-        response[RESPONSE_BODY] = {
-            {
-                "Records",
-                NJson::ToVectorJson(
-                    collection.Find(
-                        NJson::TJsonValue::object(), pagination.skip, pagination.limit, NJson::TJsonValue::object()
-                    )
-                )
-            },
-            {
-                "RecordsCount",
-                collection.Count()
-            }
-        };
+        response[RESPONSE_BODY] = NJson::TJsonValue::object();
+        response[RESPONSE_BODY][RESPONSE_FIELD_RECORDS] = NJson::ToVectorJson(
+            collection.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit, NJson::TJsonValue::object()));
+        response[RESPONSE_BODY][RESPONSE_FIELD_RECORDS_COUNT] = collection.Count();
     }
 
     template <class TCollection>
-    void RestGetByIdHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+    void RestGetByIdHandler(TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const TString& recordId = req.matches[1];
         const auto& record = collection.FindById(recordId);
         if (record.has_value()) {
@@ -131,12 +124,13 @@ namespace NEnglish {
         }
     }
 
-    template <class TCollection, class TRecord, class TValidator>
-    void RestPostHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+    template <class TCollection, class TValidator>
+    void RestPostHandler(TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
+        // auto validator = collection.GetValidator(jsonRecord);
         TValidator validator(jsonRecord);
-        if (validator.Validate(dataSource)) {
-            const TMaybe<TRecord> newRecord = collection.CreateAndReturn(TRecord(jsonRecord));
+        if (validator.Validate(collection)) {
+            const auto& newRecord = collection.CreateAndReturn(collection.ToRecord(jsonRecord));
             if (newRecord.has_value()) {
                 response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, newRecord->GetId() }};
             } else {
@@ -153,7 +147,7 @@ namespace NEnglish {
     void RestPutHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
         TValidator validator(jsonRecord);
-        if (validator.Validate(dataSource)) {
+        if (validator.Validate(collection)) {
             const TString& recordId = NJson::GetString(jsonRecord, RECORD_FIELD_ID, "");
             collection.FindByIdAndModify(recordId, TRecord(jsonRecord));
             response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, recordId }};

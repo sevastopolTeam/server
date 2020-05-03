@@ -5,14 +5,14 @@
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
 
-#include "sources/data_source/data_source.h"
+#include "english/collections/user_collection.h"
 
 namespace NEnglish {
 
     class TValidatorUser : public IValidatorCommonEnglish {
     public:
         TValidatorUser(const NJson::TJsonValue& jsonData);
-        bool Validate(TDataSource& dataSource);
-        bool ValidateEmailExists(TDataSource& dataSource);
+        bool Validate(TCollectionUser& collectionUser);
+        bool ValidateEmailExists(TCollectionUser& collectionUser);
     };
 }

@@ -6,6 +6,6 @@ add_subdirectory(admin)
 
 add_library(english_handlers STATIC
   pagination.h
-  routing.h
+  common.h
   users.h
 )

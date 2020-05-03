@@ -1,7 +1,7 @@
 #pragma once
 
 #include "english/handlers/pagination.h"
-#include "english/handlers/routing.h"
+#include "english/handlers/common.h"
 
 #include "contrib/httplib/httplib.h"
 #include "contrib/json/json.h"
@@ -17,12 +17,12 @@
 namespace NEnglish {
 
     void GetAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetHandler(dataSource, dataSource.English.CollectionTranslation, req, response);
+        RestGetHandler(dataSource.English.CollectionTranslation, req, response);
     }
 
     void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestPostHandler<TCollectionTranslation, TRecordTranslation, TValidatorTranslation>(
-            dataSource, dataSource.English.CollectionTranslation, req, response
+        RestPostHandler<TCollectionTranslation, TValidatorTranslation>(
+            dataSource.English.CollectionTranslation, req, response
         );
     }
 
@@ -33,7 +33,7 @@ namespace NEnglish {
     }
 
     void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetByIdHandler(dataSource, dataSource.English.CollectionTranslation, req, response);
+        RestGetByIdHandler(dataSource.English.CollectionTranslation, req, response);
     }
 
     void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {

@@ -9,5 +9,4 @@ add_library(collections STATIC
 
 target_link_libraries(collections PUBLIC
   records
-  validators
 )

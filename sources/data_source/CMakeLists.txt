@@ -9,6 +9,5 @@ add_library(data_source STATIC
 target_link_libraries(data_source PUBLIC
   mongo
   collections
-
   english_collections
 )

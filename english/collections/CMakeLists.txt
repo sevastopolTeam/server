@@ -13,6 +13,5 @@ target_link_libraries(english_collections PUBLIC
   mongo
   data_source
   english_records
-  english_validators
   md5
 )

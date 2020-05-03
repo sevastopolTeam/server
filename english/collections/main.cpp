@@ -8,10 +8,10 @@ namespace NEnglish {
     const TString COLUMN_NAME_EMAIL = "Email";
     const TString COLUMN_NAME_FREQUENCY = "Frequency";
 
-    TSetOfCollections::TSetOfCollections(NMongo::THelper* master, const TString& dbName)
-        : CollectionUser(master, dbName, COLLECTION_NAME_USER)
-        , CollectionSession(master, dbName, COLLECTION_NAME_SESSION)
-        , CollectionTranslation(master, dbName, COLLECTION_NAME_TRANSLATION)
+    TSetOfCollections::TSetOfCollections(NMongo::THelper* master, const TString& dbName, TDataSource* dataSource)
+        : CollectionUser(master, dbName, COLLECTION_NAME_USER, dataSource)
+        , CollectionSession(master, dbName, COLLECTION_NAME_SESSION, dataSource)
+        , CollectionTranslation(master, dbName, COLLECTION_NAME_TRANSLATION, dataSource)
     {
         CollectionUser.CreateIndex(NEnglish::COLUMN_NAME_EMAIL, /*uniq*/ true);
         CollectionTranslation.CreateIndex(NEnglish::COLUMN_NAME_FREQUENCY, /*uniq*/ false, /*desc*/ true);

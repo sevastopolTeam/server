@@ -1,11 +1,11 @@
 #pragma once
 
-#include "routing.h"
 
 #include "contrib/httplib/httplib.h"
 #include "contrib/json/json.h"
 
 #include "english/collections/user_collection.h"
+#include "english/handlers/common.h"
 #include "english/validators/validator_user.h"
 #include "english/validators/validator_login.h"
 
@@ -19,14 +19,12 @@ namespace NEnglish {
     const TString RESPONSE_BODY_SESSION_TOKEN = "SessionToken";
 
     void GetUserHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetByIdHandler<TCollectionUser>(
-            dataSource, dataSource.English.CollectionUser, req, response
-        );
+        RestGetByIdHandler(dataSource.English.CollectionUser, req, response);
     }
 
     void PostUserHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestPostHandler<TCollectionUser, TRecordUser, TValidatorUser>(
-            dataSource, dataSource.English.CollectionUser, req, response
+        RestPostHandler<TCollectionUser, TValidatorUser>(
+            dataSource.English.CollectionUser, req, response
         );
     }
 

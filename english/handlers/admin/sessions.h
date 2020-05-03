@@ -1,6 +1,6 @@
 #pragma once
 
-#include "english/handlers/routing.h"
+#include "english/handlers/common.h"
 
 #include "contrib/httplib/httplib.h"
 #include "contrib/json/json.h"
@@ -15,8 +15,6 @@
 namespace NEnglish {
 
     void GetAdminSessionsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetHandler<TCollectionSession>(
-            dataSource, dataSource.English.CollectionSession, req, response
-        );
+        RestGetHandler(dataSource.English.CollectionSession, req, response);
     }
 }
