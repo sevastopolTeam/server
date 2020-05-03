@@ -5,7 +5,7 @@
 #include "util/generic/maybe.h"
 
 namespace NEnglish {
-    
+
     class TCollectionTranslation : public ICollection<TRecordTranslation> {
     public:
         using ICollection::ICollection;
