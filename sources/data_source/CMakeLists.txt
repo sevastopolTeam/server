@@ -1,7 +1,3 @@
-include_directories(
-    ../..
-)
-
 add_library(data_source STATIC
     data_source.cpp
 )

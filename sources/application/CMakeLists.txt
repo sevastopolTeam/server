@@ -1,7 +1,3 @@
-include_directories(
-    ../..
-)
-
 add_library(application STATIC
     application.cpp
 )

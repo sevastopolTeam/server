@@ -1,7 +1,3 @@
-include_directories(
-    ../..
-)
-
 add_library(english_handlers STATIC
     pagination.cpp
     common.cpp

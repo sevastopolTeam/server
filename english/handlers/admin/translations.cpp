@@ -1,4 +1,4 @@
-#pragma once
+#include "translations.h"
 
 #include "english/handlers/pagination.h"
 #include "english/handlers/common.h"
