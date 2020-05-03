@@ -2,6 +2,8 @@
 
 #include "contrib/httplib/httplib.h"
 
+#include "sources/collections/collection.h"
+
 #include "english/handlers/pagination.h"
 #include "english/collections/user_collection.h"
 #include "english/records/user_record.h"
@@ -83,13 +85,13 @@ namespace NEnglish {
         }
     }
 
-    template <class TCollection, class TRecord, class TValidator>
-    void RestPutHandler(TDataSource& dataSource, TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
+    template <class TCollection, class TValidator>
+    void RestPutHandler(TCollection& collection, const httplib::Request& req, NJson::TJsonValue& response) {
         const NJson::TJsonValue& jsonRecord = NJson::TJsonValue::parse(req.body);
         TValidator validator(jsonRecord);
         if (validator.Validate(collection)) {
             const TString& recordId = NJson::GetString(jsonRecord, RECORD_FIELD_ID, "");
-            collection.FindByIdAndModify(recordId, TRecord(jsonRecord));
+            collection.FindByIdAndModify(recordId, collection.ToRecord(jsonRecord));
             response[RESPONSE_BODY] = {{ RECORD_FIELD_ID, recordId }};
         } else {
             response[RESPONSE_STATUS] = RESPONSE_STATUS_VALIDATION_ERROR;

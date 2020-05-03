@@ -22,8 +22,8 @@ namespace NEnglish {
     }
 
     void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestPutHandler<TCollectionTranslation, TRecordTranslation, TValidatorTranslation>(
-            dataSource, dataSource.English.CollectionTranslation, req, response
+        RestPutHandler<TCollectionTranslation, TValidatorTranslation>(
+            dataSource.English.CollectionTranslation, req, response
         );
     }
 
