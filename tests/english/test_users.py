@@ -5,17 +5,20 @@ import sys
 import os
 import pytest
 
+sys.path.append(os.path.join(sys.path[0], '../../scripts/english'))
+
 from data_generator import Fake
 from client import Client
 
-@pytest.fixture()
-def user(request):
-    return Fake.user()
+client = Client("http://localhost:5050/api/")
 
 class TestUsers:
+    @pytest.fixture()
+    def user(request):
+        return Fake.user()
 
     def test_register_empty_user(self):
-        status, response = Client.register_user({})
+        status, response = client.register_user({})
 
         assert status
         assert response.get("Status") == "ValidationError"
@@ -29,7 +32,7 @@ class TestUsers:
         assert validation_errors.get("Password")[0] == "CanNotBeEmpty"
 
     def test_register_wrong_user(self):
-        status, response = Client.register_user({
+        status, response = client.register_user({
             "Email": Fake.string(10),
             "Name": Fake.name(),
             "Phone": Fake.string(5),
@@ -48,8 +51,8 @@ class TestUsers:
         assert validation_errors.get("RepeatPassword")[0] == "MustBeSame"
 
     def test_register_exist_user(self, user):
-        status1, response1 = Client.register_user(user)
-        status2, response2 = Client.register_user(user)
+        status1, response1 = client.register_user(user)
+        status2, response2 = client.register_user(user)
 
         assert status1
         assert status2
@@ -63,7 +66,7 @@ class TestUsers:
 
     def test_register_different_passwords_user(self, user):
         user["RepeatPassword"] = Fake.password()
-        status, response = Client.register_user(user)
+        status, response = client.register_user(user)
 
         assert status
         assert response.get("Status") == "ValidationError"
@@ -74,13 +77,13 @@ class TestUsers:
         assert validation_errors.get("RepeatPassword")[0] == "MustBeSame"
 
     def test_register_valid_user(self, user):
-        status, response = Client.register_user(user)
+        status, response = client.register_user(user)
 
         assert status
         assert response.get("Status") == "Ok"
 
     def test_login_empty_user(self):
-        status, response = Client.login_user({})
+        status, response = client.login_user({})
 
         assert status
         assert response.get("Status") == "ValidationError"
@@ -92,7 +95,7 @@ class TestUsers:
         assert validation_errors.get("Password")[0] == "CanNotBeEmpty"
 
     def test_login_not_found_user(self):
-        status, response = Client.login_user({
+        status, response = client.login_user({
             "Email": Fake.email(),
             "Password": Fake.password()
         })
@@ -106,11 +109,11 @@ class TestUsers:
         assert validation_errors.get("Email")[0] == "NotFound"
 
     def test_login_password_is_incorrect_user(self, user):
-        Client.register_user(user)
+        client.register_user(user)
 
         test_user = user.copy()
         test_user["Password"] = Fake.password()
-        status, response = Client.login_user(test_user)
+        status, response = client.login_user(test_user)
 
         assert status
         assert response.get("Status") == "ValidationError"
@@ -119,16 +122,16 @@ class TestUsers:
         assert validation_errors.get("Password")[0] == "Incorrect"
 
     def test_login_valid_user(self, user):
-        Client.register_user(user)
-        status, response = Client.login_user(user)
+        client.register_user(user)
+        status, response = client.login_user(user)
 
         assert status
         assert len(response["Body"]["SessionToken"]) == 42
 
     def test_logout(self, user):
-        Client.register_user(user)
-        response = Client.login_user(user)[1]
-        status, response = Client.logout(response["Body"]["SessionToken"])
+        client.register_user(user)
+        response = client.login_user(user)[1]
+        status, response = client.logout(response["Body"]["SessionToken"])
 
         assert status
         assert response["Status"] == "Ok"
