@@ -2,7 +2,7 @@
 
 #include "english/records/user_record.h"
 
-#include "util/generic/iostream.h"
+#include "util/generic/ctype.h"
 
 namespace NEnglish {
 

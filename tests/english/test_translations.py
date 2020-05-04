@@ -154,8 +154,8 @@ class TestAdminTranslations:
         status, response = client.get_translations()
         
         assert status
-        assert int(response["Body"]["TranslationsCount"]) == 0
-        assert not response["Body"]["Translations"]
+        assert int(response["Body"]["RecordsCount"]) == 0
+        assert not response["Body"]["Records"]
 
     def test_get_some(self):
         translations_count = 10
@@ -164,8 +164,8 @@ class TestAdminTranslations:
 
         status, response = client.get_translations()
         assert status
-        assert response["Body"]["TranslationsCount"] == translations_count
-        assert len(response["Body"]["Translations"]) == translations_count
+        assert response["Body"]["RecordsCount"] == translations_count
+        assert len(response["Body"]["Records"]) == translations_count
 
     def test_get_with_pagination(self):
         translations_count = 10
@@ -174,18 +174,18 @@ class TestAdminTranslations:
 
         status, response = client.get_translations({"PageSize": 5, "Page": 0})
         assert status
-        assert response["Body"]["TranslationsCount"] == translations_count
-        assert len(response["Body"]["Translations"]) == 5
+        assert response["Body"]["RecordsCount"] == translations_count
+        assert len(response["Body"]["Records"]) == 5
 
         status, response = client.get_translations({"PageSize": 8, "Page": 1})
         assert status
-        assert response["Body"]["TranslationsCount"] == translations_count
-        assert len(response["Body"]["Translations"]) == 2
+        assert response["Body"]["RecordsCount"] == translations_count
+        assert len(response["Body"]["Records"]) == 2
 
         status, response = client.get_translations({"PageSize": 2, "Page": 9})
         assert status
-        assert response["Body"]["TranslationsCount"] == translations_count
-        assert not response["Body"]["Translations"]
+        assert response["Body"]["RecordsCount"] == translations_count
+        assert not response["Body"]["Records"]
 
     def test_delete_access_denied_for_unregistered(self):
         status, response = client.delete_translation({"Id": "5eab1d602fecf51b250f31e4"}, {})

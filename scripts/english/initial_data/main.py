@@ -11,6 +11,8 @@ from client import Client
 
 def main():
     print("Task is started")
+    client = Client("http://localhost:1234/api/")
+
     users = []
     for i in range(50):
         users.append(Fake.user())
@@ -21,6 +23,9 @@ def main():
     for user in users:
         for i in range(random.randint(0, 2)):
             Client.login_user(user)
+
+    translations = json.load(open("translations_for_uploading.json"))
+    print(json.dumps(translations, ensure_ascii=False))
 
     print("Task is finished")
 
