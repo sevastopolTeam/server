@@ -6,14 +6,14 @@ namespace NEnglish {
 
     TValidatorUser::TValidatorUser(const NJson::TJsonValue& jsonData): IValidatorCommonEnglish(jsonData) {}
 
-    bool TValidatorUser::Validate(TDataSource& dataSource) {
+    bool TValidatorUser::Validate(TCollectionUser& userCollection) {
         int isValid = 1;
         isValid &= ValidateRequired(RECORD_USER_FIELD_NAME);
 
         isValid &= ValidateRequired(RECORD_USER_FIELD_EMAIL);
         isValid &= ValidateEmail(RECORD_USER_FIELD_EMAIL);
-        isValid &= ValidateEmailExists(dataSource);
-        
+        isValid &= ValidateEmailExists(userCollection);
+
         isValid &= ValidateRequired(RECORD_USER_FIELD_PHONE);
         isValid &= ValidatePhone(RECORD_USER_FIELD_PHONE);
 
@@ -23,8 +23,8 @@ namespace NEnglish {
         return static_cast<bool>(isValid);
     }
 
-    bool TValidatorUser::ValidateEmailExists(TDataSource& dataSource) {
-        bool valid = !dataSource.English.CollectionUser.ExistsWithEmail(
+    bool TValidatorUser::ValidateEmailExists(TCollectionUser& userCollection) {
+        bool valid = !userCollection.ExistsWithEmail(
             NJson::GetString(OriginJson, RECORD_USER_FIELD_EMAIL, "")
         );
         if (!valid) {

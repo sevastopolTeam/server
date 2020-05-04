@@ -136,8 +136,8 @@ class Client:
     @classmethod
     def clear_translations(self):
         _, response = self.get_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, {}, self.admin_headers())
-        if response["Body"]["Translations"]:
-            for translation in response["Body"]["Translations"]:
+        if response["Body"]["Records"]:
+            for translation in response["Body"]["Records"]:
                 self.delete_translation(translation)
 
 

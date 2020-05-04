@@ -5,15 +5,21 @@
 
 #include "util/generic/vector.h"
 
+class TDataSource;
+
 template <class TRecord>
 class ICollection {
 public:
-    ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName)
+    TDataSource* DataSource;
+
+    ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName, TDataSource* dataSource)
         : Master(master)
         , DbName(dbName)
         , CollectionName(collectionName)
+        , DataSource(dataSource)
     {}
 
+    TRecord ToRecord(const NJson::TJsonValue& jsonRecord);
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
     TMaybe<TRecord> CreateAndReturn(const TRecord& record);
@@ -47,6 +53,11 @@ protected:
     TString DbName;
     TString CollectionName;
 };
+
+template <class TRecord>
+TRecord ICollection<TRecord>::ToRecord(const NJson::TJsonValue& jsonRecord) {
+    return TRecord(jsonRecord);
+}
 
 template <class TRecord>
 bool ICollection<TRecord>::Create(const TRecord& record) {
