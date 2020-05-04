@@ -5,21 +5,29 @@
 
 #include "util/generic/vector.h"
 
+class TDataSource;
+
 template <class TRecord>
 class ICollection {
 public:
-    ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName)
+    TDataSource* DataSource;
+
+    ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName, TDataSource* dataSource)
         : Master(master)
         , DbName(dbName)
         , CollectionName(collectionName)
+        , DataSource(dataSource)
     {}
 
+    TRecord ToRecord(const NJson::TJsonValue& jsonRecord);
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
+    TMaybe<TRecord> CreateAndReturn(const TRecord& record);
     TVector<TRecord> Find(
-        const NJson::TJsonValue& selection = NJson::TJsonValue::object(),
+        const NJson::TJsonValue& where = NJson::TJsonValue::object(),
         const int skipRecords = 0,
-        const int limitRecords = 0
+        const int limitRecords = 0,
+        const NJson::TJsonValue& orderBy = NJson::TJsonValue::object()
     );
     TRecord FindAndModify(
         const NJson::TJsonValue& selection,
@@ -47,12 +55,28 @@ protected:
 };
 
 template <class TRecord>
+TRecord ICollection<TRecord>::ToRecord(const NJson::TJsonValue& jsonRecord) {
+    return TRecord(jsonRecord);
+}
+
+template <class TRecord>
 bool ICollection<TRecord>::Create(const TRecord& record) {
     return Master->Insert(DbName, CollectionName, record.ForDB());
 }
 
 template <class TRecord>
-TVector<TRecord> ICollection<TRecord>::Find(const NJson::TJsonValue& selection, const int skipRecords, const int limitRecords) {
+TMaybe<TRecord> ICollection<TRecord>::CreateAndReturn(const TRecord& record) {
+    if (Create(record.ForDB())) {
+        return FindFirst(record.ForDB());
+    }
+    return Nothing();
+}
+
+template <class TRecord>
+TVector<TRecord> ICollection<TRecord>::Find(
+    const NJson::TJsonValue& where, const int skipRecords, const int limitRecords, const NJson::TJsonValue& orderBy)
+{
+    const NJson::TJsonValue& selection = { {"$query", where}, {"$orderby", orderBy} };
     TVector<NMongo::TBsonValue> result = Master->Find(
         DbName,
         CollectionName,

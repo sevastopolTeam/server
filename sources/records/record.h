@@ -6,6 +6,7 @@
 #include "util/generic/vector.h"
 
 const TString PATH_TO_RECORD_ID = "_id.$oid";
+const TString RECORD_FIELD_ID = "Id";
 
 class IRecord {
 public:

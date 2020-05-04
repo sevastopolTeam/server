@@ -25,4 +25,21 @@ namespace NString {
 
         return value;
     }
+
+    TVector<TString> Split(const TString& value, const char del, bool skipEmpty) {
+        TVector<TString> result;
+        TString currentPart;
+        for (auto c: value) {
+            if (c == del) {
+                if (!skipEmpty || !currentPart.empty()) {
+                    result.push_back(currentPart);
+                }
+                currentPart.clear();
+            } else {
+                currentPart.push_back(c);
+            }
+        }
+
+        return result;
+    }
 }

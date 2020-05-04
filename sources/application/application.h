@@ -5,7 +5,7 @@
 
 class TApplication {
 public:
-    TApplication();
+    TApplication(NJson::TJsonValue& config);
 
     void Start();
 
@@ -15,4 +15,6 @@ private:
     THolder<httplib::Server> Server;
 
     void AddEnglishHandlers();
+
+    NJson::TJsonValue& Config;
  };
