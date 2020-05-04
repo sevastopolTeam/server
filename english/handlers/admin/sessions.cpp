@@ -1,4 +1,4 @@
-#pragma once
+#include "sessions.h"
 
 #include "english/handlers/common.h"
 #include "english/collections/session_collection.h"
