@@ -1,11 +1,18 @@
-include_directories(
-  ../..
+add_library(english_handlers STATIC
+    pagination.cpp
+    common.cpp
+    users.cpp
+    ./admin/translations.cpp
+    ./admin/sessions.cpp
+    ./admin/word_categories.cpp
 )
 
-add_subdirectory(admin)
-
-add_library(english_handlers STATIC
-  pagination.h
-  routing.h
-  users.h
+target_link_libraries(english_handlers PUBLIC
+    json
+    httplib
+    english_records
+    english_collections
+    english_validators
+    data_source
+    generic
 )

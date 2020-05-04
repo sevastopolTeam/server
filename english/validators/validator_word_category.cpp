@@ -7,16 +7,16 @@ namespace NEnglish {
     TValidatorWordCategory::TValidatorWordCategory(const NJson::TJsonValue& jsonData)
         : IValidatorCommonEnglish(jsonData) {}
 
-    bool TValidatorWordCategory::Validate(TDataSource& dataSource) {
+    bool TValidatorWordCategory::Validate(TCollectionWordCategory& collection) {
         int isValid = 1;
         isValid &= ValidateRequired(RECORD_WORD_CATEGORY_FIELD_NAME);
-        isValid &= ValidateExists(dataSource);
+        isValid &= ValidateExists(collection);
 
         return static_cast<bool>(isValid);
     }
 
-    bool TValidatorWordCategory::ValidateExists(TDataSource& dataSource) {
-        const auto foundRecord = dataSource.English.CollectionWordCategory.FindByName(
+    bool TValidatorWordCategory::ValidateExists(TCollectionWordCategory& collection) {
+        const auto foundRecord = collection.FindByName(
             NJson::GetString(OriginJson, RECORD_WORD_CATEGORY_FIELD_NAME, "")
         );
 

@@ -1,12 +1,10 @@
-include_directories(
-  ../..
-)
-
 add_library(application STATIC
-  application.cpp
+    application.cpp
 )
 
 target_link_libraries(application PUBLIC
-  httplib
-  data_source
+    httplib
+    data_source
+    json
+    english_handlers
 )

@@ -8,8 +8,8 @@ namespace {
 
 TDataSource::TDataSource(const TString& uri, const TString& dbName)
     : Master(new NMongo::THelper(uri))
-    , English(Master.get(), dbName)
-    , CollectionBase(Master.get(), dbName, COLLECTION_NAME_BASE)
+    , English(Master.get(), dbName, this)
+    , CollectionBase(Master.get(), dbName, COLLECTION_NAME_BASE, this)
 {
     INFO_LOG << "Connected to mongoDB: " << uri << Endl;
 }

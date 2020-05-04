@@ -1,5 +1,7 @@
 #include "translation_collection.h"
 
+#include "contrib/json/json.h"
+
 namespace NEnglish {
     TMaybe<TRecordTranslation> TCollectionTranslation::FindByFullMatching(
             const TString& valueFrom,
@@ -14,4 +16,5 @@ namespace NEnglish {
             { RECORD_TRANSLATION_FIELD_LANGUAGE_TO, languageTo }
         });
     }
+
 }

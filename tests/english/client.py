@@ -91,8 +91,8 @@ class Client:
         res = self.post_request(
             API_URL + PATH_TO_LOGIN_USER,
             {
-                "Email": "buriksurik@mail.ru",
-                "Password": "123"
+                "Email": "admin@admin.ru",
+                "Password": "admin"
             }
         )
 
@@ -119,6 +119,44 @@ class Client:
         _, response = self.get_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, {}, self.admin_headers())
         if response["Body"]["Translations"]:
             for translation in response["Body"]["Translations"]:
+                self.delete_translation(translation)
+
+
+    @classmethod
+    def get_translation_by_id(self, translation, headers = None):
+        if headers == None:
+            headers = self.admin_headers()
+        return self.get_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS + "/" + translation["Id"], {}, headers)
+
+    @classmethod
+    def get_translations(self, params = {}, headers = None):
+        if headers == None:
+            headers = self.admin_headers()
+        return self.get_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, params, headers)
+
+    @classmethod
+    def delete_translation(self, translation, headers = None):
+        if headers == None:
+            headers = self.admin_headers()
+        return self.delete_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS + "/" + translation["Id"], {}, headers)
+
+    @classmethod
+    def create_translation(self, translation, headers = None):
+        if headers == None:
+            headers = self.admin_headers()
+        return self.post_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation, headers)
+
+    @classmethod
+    def edit_translation(self, translation, headers = None):
+        if headers == None:
+            headers = self.admin_headers()
+        return self.put_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, translation, headers)
+
+    @classmethod
+    def clear_translations(self):
+        _, response = self.get_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, {}, self.admin_headers())
+        if response["Body"]["Records"]:
+            for translation in response["Body"]["Records"]:
                 self.delete_translation(translation)
 
 

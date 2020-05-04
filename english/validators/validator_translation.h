@@ -5,16 +5,18 @@
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
 
-#include "sources/data_source/data_source.h"
+#include "english/collections/translation_collection.h"
+
+class TCollectionTranslation;
 
 namespace NEnglish {
 
     class TValidatorTranslation : public IValidatorCommonEnglish {
     public:
         TValidatorTranslation(const NJson::TJsonValue& jsonData);
-        bool Validate(TDataSource& dataSource);
+        bool Validate(TCollectionTranslation& collectionTranslation);
 
     private:
-        bool ValidateExists(TDataSource& dataSource);
+        bool ValidateExists(TCollectionTranslation& collectionTranslation);
     };
 }

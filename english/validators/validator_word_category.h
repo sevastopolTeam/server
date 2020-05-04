@@ -5,14 +5,14 @@
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
 
-#include "sources/data_source/data_source.h"
+#include "english/collections/word_category_collection.h"
 
 namespace NEnglish {
 
     class TValidatorWordCategory : public IValidatorCommonEnglish {
     public:
         TValidatorWordCategory(const NJson::TJsonValue& jsonData);
-        bool Validate(TDataSource& dataSource);
-        bool ValidateExists(TDataSource& dataSource);
+        bool Validate(TCollectionWordCategory& collection);
+        bool ValidateExists(TCollectionWordCategory& collection);
     };
 }
