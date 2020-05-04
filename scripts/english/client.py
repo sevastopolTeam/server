@@ -114,7 +114,7 @@ class Client:
         return self.put_request(self.api_url + PATH_TO_ADMIN_TRANSLATIONS, translation, headers)
 
     def clear_translations(self):
-        _, response = self.get_request(API_URL + PATH_TO_ADMIN_TRANSLATIONS, {}, self.admin_headers())
+        _, response = self.get_request(self.api_url + PATH_TO_ADMIN_TRANSLATIONS, {}, self.admin_headers())
         if response["Body"]["Records"]:
             for translation in response["Body"]["Records"]:
                 self.delete_translation(translation)
