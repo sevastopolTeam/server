@@ -74,7 +74,6 @@ void TApplication::AddEnglishHandlers() {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminTranslationHandler);
     });
 
-
     Server->Post("/api/english/admin/users", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminUsersHandler);
     });

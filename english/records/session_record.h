@@ -6,7 +6,6 @@
 
 namespace NEnglish {
 
-    const TString RECORD_SESSION_FIELD_ID = "Id";
     const TString RECORD_SESSION_FIELD_USER_ID = "UserId";
     const TString RECORD_SESSION_FIELD_TOKEN = "Token";
 

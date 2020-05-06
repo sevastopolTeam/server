@@ -2,7 +2,7 @@
 
 #include "english/handlers/common.h"
 #include "english/collections/user_collection.h"
-#include "english/validators/validator_user.h"
+#include "english/validators/admin/validator_admin_user.h"
 
 #include "util/generic/ctype.h"
 #include "util/generic/iostream.h"
@@ -14,13 +14,13 @@ namespace NEnglish {
     }
 
     void PostAdminUsersHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestPostHandler<TCollectionUser, TValidatorUser>(
+        RestPostHandler<TCollectionUser, TValidatorAdminUser>(
             dataSource.English.CollectionUser, req, response
         );
     }
 
     void PutAdminUsersHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestPutHandler<TCollectionUser, TValidatorUser>(
+        RestPutHandler<TCollectionUser, TValidatorAdminUser>(
             dataSource.English.CollectionUser, req, response
         );
     }
