@@ -9,6 +9,7 @@
 #include "english/handlers/admin/sessions.h"
 #include "english/handlers/admin/translations.h"
 #include "english/handlers/admin/word_categories.h"
+#include "english/handlers/admin/users.h"
 #include "english/handlers/users.h"
 
 #include "util/generic/ctype.h"
@@ -56,7 +57,6 @@ void TApplication::AddEnglishHandlers() {
     Server->Get("/api/english/admin/sessions", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminSessionsHandler);
     });
-
     Server->Post("/api/english/admin/translations", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminTranslationsHandler);
     });
@@ -86,6 +86,21 @@ void TApplication::AddEnglishHandlers() {
     });
     Server->Delete(R"(/api/english/admin/word_categories/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminWordCategoryHandler);
+    });
+    Server->Post("/api/english/admin/users", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminUsersHandler);
+    });
+    Server->Put("/api/english/admin/users", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PutAdminUsersHandler);
+    });
+    Server->Get("/api/english/admin/users", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminUsersHandler);
+    });
+    Server->Get(R"(/api/english/admin/users/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminUserHandler);
+    });
+    Server->Delete(R"(/api/english/admin/users/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminUserHandler);
     });
     
 }

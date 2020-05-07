@@ -1,10 +1,8 @@
 #include "validator_translation.h"
 
-#include "english/records/translation_record.h"
+#include "english/records/user_record.h"
 
 namespace NEnglish {
-
-    TMaybe<TRecordTranslation> FindByFullMatching(const NJson::TJsonValue&, const NJson::TJsonValue&, const NJson::TJsonValue&, const NJson::TJsonValue&);
 
     TValidatorTranslation::TValidatorTranslation(const NJson::TJsonValue& jsonData)
         : IValidatorCommonEnglish(jsonData) {}

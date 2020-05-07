@@ -2,7 +2,7 @@
 
 #include "english/collections/word_category_collection.h"
 #include "english/records/word_category_record.h"
-#include "english/validators/validator_word_category.h"
+#include "english/validators/admin/validator_word_category.h"
 
 #include "util/generic/ctype.h"
 #include "util/generic/iostream.h"

@@ -7,20 +7,26 @@ import os
 sys.path.append(os.path.join(sys.path[0], '../'))
 
 from data_generator import Fake
-from client import register_user, is_dict, login_user
+from client import Client
 
 def main():
     print("Task is started")
+    client = Client("http://localhost:1234/api/")
+
     users = []
     for i in range(50):
         users.append(Fake.user())
 
     for user in users:
-        register_user(user)
+        client.register_user(user)
 
     for user in users:
         for i in range(random.randint(0, 2)):
-            login_user(user)
+            client.login_user(user)
+
+    translations = json.load(open("translations_for_uploading.json"))
+    for translation in translations:
+        r = client.create_translation(translation)
 
     print("Task is finished")
 
