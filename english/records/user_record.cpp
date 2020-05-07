@@ -49,7 +49,7 @@ namespace NEnglish {
     NJson::TJsonValue TRecordUser::ToJson() const {
         NJson::TJsonValue json = ForDB();
         if (Id.has_value()) {
-            json[RECORD_USER_FIELD_ID] = *Id;
+            json[RECORD_FIELD_ID] = *Id;
         }
         return json;
     }

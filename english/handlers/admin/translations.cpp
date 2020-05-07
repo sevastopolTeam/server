@@ -4,7 +4,7 @@
 #include "english/handlers/common.h"
 
 #include "english/collections/translation_collection.h"
-#include "english/validators/validator_translation.h"
+#include "english/validators/admin/validator_translation.h"
 
 #include "util/generic/ctype.h"
 #include "util/generic/iostream.h"

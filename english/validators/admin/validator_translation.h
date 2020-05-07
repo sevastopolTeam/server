@@ -1,13 +1,11 @@
 #pragma once
 
-#include "validator_common_english.h"
+#include "english/validators/validator_common_english.h"
 
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
 
 #include "english/collections/translation_collection.h"
-
-class TCollectionTranslation;
 
 namespace NEnglish {
 

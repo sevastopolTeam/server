@@ -4,6 +4,7 @@ add_library(english_handlers STATIC
     users.cpp
     ./admin/translations.cpp
     ./admin/sessions.cpp
+    ./admin/users.cpp
 )
 
 target_link_libraries(english_handlers PUBLIC

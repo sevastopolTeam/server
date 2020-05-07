@@ -1,6 +1,6 @@
 #pragma once
 
-#include "validator_common_english.h"
+#include "english/validators/validator_common_english.h"
 
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
@@ -9,9 +9,9 @@
 
 namespace NEnglish {
 
-    class TValidatorUser : public IValidatorCommonEnglish {
+    class TValidatorAdminUser : public IValidatorCommonEnglish {
     public:
-        TValidatorUser(const NJson::TJsonValue& jsonData);
+        TValidatorAdminUser(const NJson::TJsonValue& jsonData);
         bool Validate(TCollectionUser& collectionUser);
         bool ValidateExists(TCollectionUser& collectionUser);
     };

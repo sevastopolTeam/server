@@ -7,7 +7,6 @@
 
 namespace NEnglish {
 
-    const TString RECORD_USER_FIELD_ID = "Id";
     const TString RECORD_USER_FIELD_EMAIL = "Email";
     const TString RECORD_USER_FIELD_NAME = "Name";
     const TString RECORD_USER_FIELD_PHONE = "Phone";
