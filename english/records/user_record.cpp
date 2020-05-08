@@ -54,7 +54,6 @@ namespace NEnglish {
         return json;
     }
 
-
     void TRecordUser::UpdateAdminFields(const NJson::TJsonValue& json) {
         Email = Normalize(NJson::GetString(json, RECORD_USER_FIELD_EMAIL, ""));
         Name = NJson::GetString(json, RECORD_USER_FIELD_NAME, "");
