@@ -54,6 +54,13 @@ namespace NEnglish {
         return json;
     }
 
+
+    void TRecordUser::UpdateAdminFields(const NJson::TJsonValue& json) {
+        Email = Normalize(NJson::GetString(json, RECORD_USER_FIELD_EMAIL, ""));
+        Name = NJson::GetString(json, RECORD_USER_FIELD_NAME, "");
+        Phone = NJson::GetString(json, RECORD_USER_FIELD_PHONE, "");
+    }
+
     bool TRecordUser::CheckPassword(const TString& password) const {
         return PasswordHash == NHashFunctions::GeneratePasswordHash(password);
     }
