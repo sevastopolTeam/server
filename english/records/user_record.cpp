@@ -58,6 +58,11 @@ namespace NEnglish {
         Email = Normalize(NJson::GetString(json, RECORD_USER_FIELD_EMAIL, ""));
         Name = NJson::GetString(json, RECORD_USER_FIELD_NAME, "");
         Phone = NJson::GetString(json, RECORD_USER_FIELD_PHONE, "");
+
+        const TString& password = NJson::GetString(json, RECORD_USER_FIELD_PASSWORD, "");
+        if (!password.empty()) {
+            PasswordHash = NHashFunctions::GeneratePasswordHash(password);
+        }
     }
 
     bool TRecordUser::CheckPassword(const TString& password) const {
