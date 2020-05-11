@@ -11,7 +11,7 @@ from client import Client
 
 API_URL = "http://localhost:5050/api/"
 
-class TestAdminTranslations:
+class TestAdminUsers:
 
     def setup_method(self, method):
         client = Client(API_URL)
@@ -112,7 +112,7 @@ class TestAdminTranslations:
         
         assert response["status_code"] == 200
         assert int(response["Body"]["RecordsCount"]) == 1 # there is admin always
-        assert not response["Body"]["Records"]
+        assert len(response["Body"]["Records"]) == 1
 
     def test_get_some(self, client):
         users_count = 10
@@ -137,7 +137,7 @@ class TestAdminTranslations:
         response = client.get_users({"PageSize": 8, "Page": 1}, client.admin_headers())
         assert response["status_code"] == 200
         assert response["Body"]["RecordsCount"] == users_count + 1
-        assert len(response["Body"]["Records"]) == 2
+        assert len(response["Body"]["Records"]) == 3
 
         response = client.get_users({"PageSize": 2, "Page": 9}, client.admin_headers())
         assert response["status_code"] == 200
@@ -227,11 +227,13 @@ class TestAdminTranslations:
         assert response.get("Status") == "ValidationError"
         assert isinstance(response.get("ValidationErrors"), dict)
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("ValueFrom")[0] == "AlreadyExists"
+        assert validation_errors.get("Email")[0] == "AlreadyExists"
 
     def test_edit_ok(self, client):
         user = Fake.user()
         response = client.create_user(user, client.admin_headers())
+        found_user = client.get_user_by_id({"Id": response["Body"]["Id"]}, client.admin_headers())["Body"]
+
         user["Id"] = response["Body"]["Id"]
         user["Name"] = "EditedName"
 
@@ -240,6 +242,7 @@ class TestAdminTranslations:
         assert response["Status"] == "Ok"
         assert response["Body"]["Id"] == user["Id"]
 
+        found_user["Name"] = "EditedName"
         response = client.get_user_by_id({ "Id": user["Id"] }, client.admin_headers())
         assert response["Status"] == "Ok"
-        assert response["Body"] == user
+        assert response["Body"] == found_user
