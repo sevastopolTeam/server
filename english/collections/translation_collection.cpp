@@ -17,4 +17,8 @@ namespace NEnglish {
         });
     }
 
+    NJson::TJsonValue TCollectionTranslation::JsonForSortingDefault() const {
+        return {{ RECORD_TRANSLATION_FIELD_FREQUENCY, -1 }};
+    }
+
 }
