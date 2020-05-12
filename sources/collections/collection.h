@@ -5,22 +5,29 @@
 
 #include "util/generic/vector.h"
 
+class TDataSource;
+
 template <class TRecord>
 class ICollection {
 public:
-    ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName)
+    TDataSource* DataSource;
+
+    ICollection(NMongo::THelper* master, const TString& dbName, const TString& collectionName, TDataSource* dataSource)
         : Master(master)
         , DbName(dbName)
         , CollectionName(collectionName)
+        , DataSource(dataSource)
     {}
 
+    TRecord ToRecord(const NJson::TJsonValue& jsonRecord);
     bool Exists(const NJson::TJsonValue& selection);
     bool Create(const TRecord& record);
     TMaybe<TRecord> CreateAndReturn(const TRecord& record);
     TVector<TRecord> Find(
-        const NJson::TJsonValue& selection = NJson::TJsonValue::object(),
+        const NJson::TJsonValue& where = NJson::TJsonValue::object(),
         const int skipRecords = 0,
-        const int limitRecords = 0
+        const int limitRecords = 0,
+        const NJson::TJsonValue& orderBy = NJson::TJsonValue::object()
     );
     TRecord FindAndModify(
         const NJson::TJsonValue& selection,
@@ -36,6 +43,7 @@ public:
     bool Remove(const NJson::TJsonValue& selection);
     bool RemoveById(const TString& recordId);
     long long Count(const NJson::TJsonValue& selection = NJson::TJsonValue::object());
+    NJson::TJsonValue JsonForSortingDefault();
 
     bool CreateIndex(const TString& index, bool uniq = false, bool desc = false, int expireAfterSeconds = -1);
 
@@ -46,6 +54,11 @@ protected:
     TString DbName;
     TString CollectionName;
 };
+
+template <class TRecord>
+TRecord ICollection<TRecord>::ToRecord(const NJson::TJsonValue& jsonRecord) {
+    return TRecord(jsonRecord);
+}
 
 template <class TRecord>
 bool ICollection<TRecord>::Create(const TRecord& record) {
@@ -61,7 +74,10 @@ TMaybe<TRecord> ICollection<TRecord>::CreateAndReturn(const TRecord& record) {
 }
 
 template <class TRecord>
-TVector<TRecord> ICollection<TRecord>::Find(const NJson::TJsonValue& selection, const int skipRecords, const int limitRecords) {
+TVector<TRecord> ICollection<TRecord>::Find(
+    const NJson::TJsonValue& where, const int skipRecords, const int limitRecords, const NJson::TJsonValue& orderBy)
+{
+    const NJson::TJsonValue& selection = { {"$query", where}, {"$orderby", orderBy} };
     TVector<NMongo::TBsonValue> result = Master->Find(
         DbName,
         CollectionName,
@@ -135,6 +151,11 @@ TMaybe<TRecord> ICollection<TRecord>::FindById(const TString& recordId) {
 template <class TRecord>
 long long ICollection<TRecord>::Count(const NJson::TJsonValue& selection) {
     return Master->Count(DbName, CollectionName, selection);
+}
+
+template <class TRecord>
+NJson::TJsonValue ICollection<TRecord>::JsonForSortingDefault() {
+    return NJson::TJsonValue::object();
 }
 
 template <class TRecord>

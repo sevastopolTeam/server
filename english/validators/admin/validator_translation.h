@@ -1,20 +1,20 @@
 #pragma once
 
-#include "validator_common_english.h"
+#include "english/validators/validator_common_english.h"
 
 #include "contrib/json/json.h"
 #include "util/generic/vector.h"
 
-#include "sources/data_source/data_source.h"
+#include "english/collections/translation_collection.h"
 
 namespace NEnglish {
 
     class TValidatorTranslation : public IValidatorCommonEnglish {
     public:
         TValidatorTranslation(const NJson::TJsonValue& jsonData);
-        bool Validate(TDataSource& dataSource);
+        bool Validate(TCollectionTranslation& collectionTranslation);
 
     private:
-        bool ValidateExists(TDataSource& dataSource);
+        bool ValidateExists(TCollectionTranslation& collectionTranslation);
     };
 }

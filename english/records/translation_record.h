@@ -7,7 +7,6 @@
 
 namespace NEnglish {
 
-    const TString RECORD_TRANSLATION_FIELD_ID = "Id";
     const TString RECORD_TRANSLATION_FIELD_VALUE_FROM = "ValueFrom";
     const TString RECORD_TRANSLATION_FIELD_VALUE_TO = "ValueTo";
     const TString RECORD_TRANSLATION_FIELD_LANGUAGE_FROM = "LanguageFrom";
