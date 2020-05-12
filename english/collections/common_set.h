@@ -15,7 +15,7 @@ namespace NEnglish {
         NEnglish::TCollectionSession CollectionSession;
         NEnglish::TCollectionTranslation CollectionTranslation;
         NEnglish::TCollectionWordCategory CollectionWordCategory;
-        NEnglish::TCollectionWordCategory CollectionTranslationToCategory;
+        NEnglish::TCollectionTranslationToCategory CollectionTranslationToCategory;
 
         TSetOfCollections(NMongo::THelper* master, const TString& dbName, TDataSource* dataSource);
     };

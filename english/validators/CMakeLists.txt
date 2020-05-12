@@ -5,9 +5,11 @@ add_library(english_validators STATIC
     ./admin/validator_translation.cpp
     ./admin/validator_admin_user.cpp
     ./admin/validator_word_category.cpp
+    ./admin/validator_translation_to_category.cpp
 )
 
 target_link_libraries(english_validators PUBLIC
+    data_source
     english_collections
     validators
 )

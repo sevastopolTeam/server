@@ -1,7 +1,12 @@
 #include "translation_to_category_collection.h"
 
 namespace NEnglish {
-    // TMaybe<TRecordWordCategory> TCollectionWordCategory::FindByName(const TString& name) {
-    //     return FindFirst({{ RECORD_WORD_CATEGORY_FIELD_NAME, name }});
-    // }
+    TMaybe<TRecordTranslationToCategory> TCollectionTranslationToCategory::FindByFullMatching(
+        const TString& traslationId, const TString& wordCategoryId)
+    {
+        return FindFirst({
+            { RECORD_TRANSLATION_TO_CATEGORY_FIELD_TRASLATION_ID, traslationId },
+            { RECORD_TRANSLATION_TO_CATEGORY_FIELD_WORD_CATEGORY_ID, wordCategoryId }
+        });
+    }
 }

@@ -13,7 +13,8 @@ namespace NEnglish {
     public:
         using ICollection::ICollection;
 
-        // TMaybe<TRecordTranslationToCategory> FindByName(const TString& name);
+        TMaybe<TRecordTranslationToCategory> FindByFullMatching(
+            const TString& traslationId, const TString& wordCategoryId);
     };
 
 }

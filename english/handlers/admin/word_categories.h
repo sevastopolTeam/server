@@ -11,5 +11,5 @@ namespace NEnglish {
     void PutAdminWordCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
     void GetAdminWordCategoryHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
     void DeleteAdminWordCategoryHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
-    void PostAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
+    void PostAdminTranslationToCategoryHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
 }
