@@ -8,6 +8,7 @@ PATH_TO_LOGIN_USER = "english/login"
 PATH_TO_LOGOUT = "english/logout"
 
 PATH_TO_ADMIN_TRANSLATIONS = "english/admin/translations"
+PATH_TO_ADMIN_WORD_CATEGORIES = "english/admin/word_categories"
 PATH_TO_ADMIN_USERS = "english/admin/users"
 
 class Client:
@@ -84,6 +85,28 @@ class Client:
         if response["Body"]["Records"]:
             for translation in response["Body"]["Records"]:
                 self.delete_translation(translation, headers)
+
+    # english/admin/word_categories
+    def get_word_category_by_id(self, word_category, headers = {}):
+        return self.get_request(PATH_TO_ADMIN_WORD_CATEGORIES + "/" + word_category["Id"], {}, headers)
+
+    def get_word_categories(self, params = {}, headers = {}):
+        return self.get_request(PATH_TO_ADMIN_WORD_CATEGORIES, params, headers)
+
+    def delete_word_category(self, word_category, headers = {}):
+        return self.delete_request(PATH_TO_ADMIN_WORD_CATEGORIES + "/" + word_category["Id"], {}, headers)
+
+    def create_word_category(self, word_category, headers = {}):
+        return self.post_request(PATH_TO_ADMIN_WORD_CATEGORIES, word_category, headers)
+
+    def edit_word_category(self, word_category, headers = {}):
+        return self.put_request(PATH_TO_ADMIN_WORD_CATEGORIES, word_category, headers)
+
+    def clear_word_categories(self, headers = {}):
+        response = self.get_request(PATH_TO_ADMIN_WORD_CATEGORIES, {}, headers)
+        if response["Body"]["Records"]:
+            for word_category in response["Body"]["Records"]:
+                self.delete_word_category(word_category, headers)
 
     # english/admin/users
     def get_user_by_id(self, user, headers = {}):

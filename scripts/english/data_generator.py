@@ -56,3 +56,9 @@ class Fake:
             "Frequency": random.randint(0, 1000000),
             "IsChecked": False
         }
+
+    @classmethod
+    def word_category(self):
+        return {
+            "Name": Fake.string(5)
+        }
