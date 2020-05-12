@@ -17,6 +17,8 @@ namespace NEnglish {
             const TString& languageTo
         );
 
+        NJson::TJsonValue JsonForSortingDefault() const;
+
     };
 
 }

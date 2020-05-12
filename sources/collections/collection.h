@@ -43,6 +43,7 @@ public:
     bool Remove(const NJson::TJsonValue& selection);
     bool RemoveById(const TString& recordId);
     long long Count(const NJson::TJsonValue& selection = NJson::TJsonValue::object());
+    NJson::TJsonValue JsonForSortingDefault();
 
     bool CreateIndex(const TString& index, bool uniq = false, bool desc = false, int expireAfterSeconds = -1);
 
@@ -150,6 +151,11 @@ TMaybe<TRecord> ICollection<TRecord>::FindById(const TString& recordId) {
 template <class TRecord>
 long long ICollection<TRecord>::Count(const NJson::TJsonValue& selection) {
     return Master->Count(DbName, CollectionName, selection);
+}
+
+template <class TRecord>
+NJson::TJsonValue ICollection<TRecord>::JsonForSortingDefault() {
+    return NJson::TJsonValue::object();
 }
 
 template <class TRecord>
