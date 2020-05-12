@@ -26,7 +26,7 @@ def main():
 
     translations = json.load(open("translations_for_uploading.json"))
     for translation in translations:
-        r = client.create_translation(translation)
+        r = client.create_translation(translation, client.admin_headers())
 
     print("Task is finished")
 
