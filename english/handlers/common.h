@@ -51,7 +51,7 @@ namespace NEnglish {
         const TPagination pagination(req);
         response[RESPONSE_BODY] = NJson::TJsonValue::object();
         response[RESPONSE_BODY][RESPONSE_FIELD_RECORDS] = NJson::ToVectorJson(
-            collection.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit, NJson::TJsonValue::object()));
+            collection.Find(NJson::TJsonValue::object(), pagination.skip, pagination.limit, collection.JsonForSortingDefault()));
         response[RESPONSE_BODY][RESPONSE_FIELD_RECORDS_COUNT] = collection.Count();
     }
 

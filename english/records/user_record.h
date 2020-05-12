@@ -26,11 +26,12 @@ namespace NEnglish {
         TRecordUser() = default;
         TRecordUser(const NJson::TJsonValue& json);
 
-        bool IsAdmin() const;        
+        bool IsAdmin() const;
         bool CheckPassword(const TString& password) const;
         NJson::TJsonValue ForDB() const override;
         NJson::TJsonValue ToJson() const override;
-        NJson::TJsonValue GetUniqSelector() const;
+
+        void UpdateAdminFields(const NJson::TJsonValue& json);
 
     private:
         // DB fields

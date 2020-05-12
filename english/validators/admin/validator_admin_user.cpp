@@ -17,6 +17,8 @@ namespace NEnglish {
         isValid &= ValidateRequired(RECORD_USER_FIELD_PHONE);
         isValid &= ValidatePhone(RECORD_USER_FIELD_PHONE);
 
+        isValid &= ValidateSame(RECORD_USER_FIELD_REPEAT_PASSWORD, RECORD_USER_FIELD_PASSWORD);
+
         return static_cast<bool>(isValid);
     }
 
