@@ -41,4 +41,10 @@ namespace NEnglish {
         );
     }
 
+    void PutAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        RestPutHandler<TCollectionTranslationToCategory, TValidatorTranslationToCategory>(
+            dataSource.English.CollectionTranslationToCategory, req, response
+        );
+    }
+
 }

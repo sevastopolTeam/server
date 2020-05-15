@@ -5,7 +5,7 @@ namespace NEnglish {
         const TString& traslationId, const TString& wordCategoryId)
     {
         return FindFirst({
-            { RECORD_TRANSLATION_TO_CATEGORY_FIELD_TRASLATION_ID, traslationId },
+            { RECORD_TRANSLATION_TO_CATEGORY_FIELD_TRANSLATION_ID, traslationId },
             { RECORD_TRANSLATION_TO_CATEGORY_FIELD_WORD_CATEGORY_ID, wordCategoryId }
         });
     }

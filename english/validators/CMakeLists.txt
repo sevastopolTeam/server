@@ -10,6 +10,7 @@ add_library(english_validators STATIC
 
 target_link_libraries(english_validators PUBLIC
     data_source
+    english_records
     english_collections
     validators
 )
