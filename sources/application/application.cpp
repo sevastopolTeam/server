@@ -102,7 +102,11 @@ void TApplication::AddEnglishHandlers() {
     Server->Delete(R"(/api/english/admin/users/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminUserHandler);
     });
-    Server->Post("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
+
+    Server->Get("/api/english/admin/translation_to_categories", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminTranslationToCategoriesHandler);
+    });
+    Server->Post("/api/english/admin/translation_to_categories", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminTranslationToCategoriesHandler);
     });
     

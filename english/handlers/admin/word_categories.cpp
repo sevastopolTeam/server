@@ -35,6 +35,11 @@ namespace NEnglish {
         RestDeleteHandler(dataSource, dataSource.English.CollectionWordCategory, req, response);
     }
 
+
+    void GetAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        RestGetHandler(dataSource.English.CollectionTranslationToCategory, req, response);
+    }
+
     void PostAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
         RestPostHandler<TCollectionTranslationToCategory, TValidatorTranslationToCategory>(
             dataSource.English.CollectionTranslationToCategory, req, response
