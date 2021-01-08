@@ -46,10 +46,8 @@ class Fake:
     @classmethod
     def translation(self):
         return {
-            "ValueFrom": Fake.string(5),
-            "ValueTo": Fake.string(5),
-            "LanguageFrom": "russian",
-            "LanguageTo": "english",
+            "Russian": Fake.string(5),
+            "English": Fake.string(5),
             "PartOfSpeech": Fake.string(5),
             "OriginUrl": "origin_url",
             "DownloadUrl": "download_url",

@@ -4,6 +4,7 @@
 #include "library/mongo/wrappers.h"
 
 #include "util/generic/vector.h"
+#include "util/generic/iostream.h"
 
 class TDataSource;
 

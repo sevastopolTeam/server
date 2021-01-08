@@ -9,4 +9,8 @@ namespace NEnglish {
             { RECORD_TRANSLATION_TO_CATEGORY_FIELD_WORD_CATEGORY_ID, wordCategoryId }
         });
     }
+
+    TVector<TRecordTranslationToCategory> TCollectionTranslationToCategory::FindByWordCategoryId(const TString& wordCategoryId) {
+        return Find({{ RECORD_TRANSLATION_TO_CATEGORY_FIELD_WORD_CATEGORY_ID, wordCategoryId }});
+    }
 }

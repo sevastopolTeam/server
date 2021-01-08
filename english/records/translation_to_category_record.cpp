@@ -25,4 +25,8 @@ namespace NEnglish {
         return json;
     }
 
+    TString TRecordTranslationToCategory::GetTranslationId() const {
+        return TranslationId;
+    }
+
 }

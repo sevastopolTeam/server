@@ -12,10 +12,8 @@ namespace {
 namespace NEnglish {
 
     TRecordTranslation::TRecordTranslation(const NJson::TJsonValue& json)
-        : ValueFrom(Normalize(NJson::GetString(json, RECORD_TRANSLATION_FIELD_VALUE_FROM, "")))
-        , ValueTo(Normalize(NJson::GetString(json, RECORD_TRANSLATION_FIELD_VALUE_TO, "")))
-        , LanguageFrom(NJson::GetString(json, RECORD_TRANSLATION_FIELD_LANGUAGE_FROM, ""))
-        , LanguageTo(NJson::GetString(json, RECORD_TRANSLATION_FIELD_LANGUAGE_TO, ""))
+        : Russian(Normalize(NJson::GetString(json, RECORD_TRANSLATION_FIELD_RUSSIAN, "")))
+        , English(Normalize(NJson::GetString(json, RECORD_TRANSLATION_FIELD_ENGLISH, "")))
         , OriginUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_ORIGIN_URL, ""))
         , DownloadUrl(NJson::GetString(json, RECORD_TRANSLATION_FIELD_DOWNLOAD_URL, ""))
         , PartOfSpeech(NJson::GetString(json, RECORD_TRANSLATION_FIELD_PART_OF_SPEECH, ""))
@@ -24,12 +22,14 @@ namespace NEnglish {
         , IRecord(NJson::GetString(json, PATH_TO_RECORD_ID))
     {}
 
+    TString TRecordTranslation::GetRussian() const {
+        return Russian;
+    }
+
     NJson::TJsonValue TRecordTranslation::ForDB() const {
         return {
-            {RECORD_TRANSLATION_FIELD_VALUE_FROM, ValueFrom},
-            {RECORD_TRANSLATION_FIELD_VALUE_TO, ValueTo},
-            {RECORD_TRANSLATION_FIELD_LANGUAGE_FROM, LanguageFrom},
-            {RECORD_TRANSLATION_FIELD_LANGUAGE_TO, LanguageTo},
+            {RECORD_TRANSLATION_FIELD_RUSSIAN, Russian},
+            {RECORD_TRANSLATION_FIELD_ENGLISH, English},
             {RECORD_TRANSLATION_FIELD_ORIGIN_URL, OriginUrl},
             {RECORD_TRANSLATION_FIELD_DOWNLOAD_URL, DownloadUrl},
             {RECORD_TRANSLATION_FIELD_PART_OF_SPEECH, PartOfSpeech},

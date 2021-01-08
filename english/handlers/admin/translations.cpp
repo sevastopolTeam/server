@@ -31,8 +31,29 @@ namespace NEnglish {
         RestGetByIdHandler(dataSource.English.CollectionTranslation, req, response);
     }
 
+    void GetAdminTranslationByFullMatchingHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TString& russian = req.GetParamValue("Russian", "");
+        const TString& english = req.GetParamValue("English", "");
+        
+        const auto& record = dataSource.English.CollectionTranslation.FindByFullMatching(russian, english);
+        if (record.has_value()) {
+            response[RESPONSE_BODY] = record->ToJson();
+        } else {
+            response[RESPONSE_STATUS] = RESPONSE_STATUS_ERROR;
+            response[RESPONSE_ERROR] = RESPONSE_ERROR_NOT_FOUND;
+        }
+    }
+
     void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
         RestDeleteHandler(dataSource, dataSource.English.CollectionTranslation, req, response);
+    }
+
+    void GetAdminTranslationsForAutoCompleteHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
+        const TString& name = req.GetParamValue("Name", "");
+        response[RESPONSE_BODY] = NJson::TJsonValue::object();
+        response[RESPONSE_BODY][RESPONSE_FIELD_RECORDS] = NJson::ToVectorJson(
+            dataSource.English.CollectionTranslation.FindByWord(name, 10)
+        );
     }
 
 }

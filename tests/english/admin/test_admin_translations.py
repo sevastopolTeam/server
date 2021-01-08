@@ -43,10 +43,8 @@ class TestAdminTranslations:
         assert response.get("Status") == "ValidationError"
         assert isinstance(response.get("ValidationErrors"), dict)
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("ValueFrom")[0] == "CanNotBeEmpty"
-        assert validation_errors.get("ValueTo")[0] == "CanNotBeEmpty"
-        assert validation_errors.get("LanguageFrom")[0] == "CanNotBeEmpty"
-        assert validation_errors.get("LanguageTo")[0] == "CanNotBeEmpty"
+        assert validation_errors.get("Russian")[0] == "CanNotBeEmpty"
+        assert validation_errors.get("English")[0] == "CanNotBeEmpty"
         assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
 
     def test_create_with_incorrect_frequency(self, client):
@@ -102,7 +100,7 @@ class TestAdminTranslations:
         assert response.get("Status") == "ValidationError"
         assert isinstance(response.get("ValidationErrors"), dict)
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("ValueFrom")[0] == "AlreadyExists"
+        assert validation_errors.get("Russian")[0] == "AlreadyExists"
 
     def test_create_ok(self, client):
         response = client.create_translation(Fake.translation(), client.admin_headers())
@@ -247,10 +245,8 @@ class TestAdminTranslations:
         assert response.get("Status") == "ValidationError"
         assert isinstance(response.get("ValidationErrors"), dict)
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("ValueFrom")[0] == "CanNotBeEmpty"
-        assert validation_errors.get("ValueTo")[0] == "CanNotBeEmpty"
-        assert validation_errors.get("LanguageFrom")[0] == "CanNotBeEmpty"
-        assert validation_errors.get("LanguageTo")[0] == "CanNotBeEmpty"
+        assert validation_errors.get("Russian")[0] == "CanNotBeEmpty"
+        assert validation_errors.get("English")[0] == "CanNotBeEmpty"
         assert validation_errors.get("Frequency")[0] == "CanNotBeEmpty"
 
     def test_edit_validation_error_same(self, client):
@@ -268,7 +264,7 @@ class TestAdminTranslations:
         assert response.get("Status") == "ValidationError"
         assert isinstance(response.get("ValidationErrors"), dict)
         validation_errors = response.get("ValidationErrors")
-        assert validation_errors.get("ValueFrom")[0] == "AlreadyExists"
+        assert validation_errors.get("Russian")[0] == "AlreadyExists"
 
     def test_edit_ok(self, client):
         translation = Fake.translation()
@@ -284,3 +280,82 @@ class TestAdminTranslations:
         response = client.get_translation_by_id({ "Id": translation["Id"] }, client.admin_headers())
         assert response["Status"] == "Ok"
         assert response["Body"] == translation
+
+
+    def test_autocomplete_for_unregistered_user(self, client):
+        response = client.get_translations_for_autocomplete("ab", {})
+        assert response["status_code"] == 200
+        assert response["Status"] == "Error"
+        assert response["Error"] == "AccessDenied"
+
+
+    def test_autocomplete_for_registered_user(self, client):
+        response = client.get_translations_for_autocomplete("ab", client.registered_headers())
+        assert response["status_code"] == 200
+        assert response["Status"] == "Error"
+        assert response["Error"] == "AccessDenied"
+
+    def test_autocomplete(self, client):
+        translation = Fake.translation()
+        translation["Russian"] = "abcd"
+        client.create_translation(translation, client.admin_headers())
+        translation["Russian"] = "abd"
+        client.create_translation(translation, client.admin_headers())
+        translation["Russian"] = "bcd"
+        client.create_translation(translation, client.admin_headers())
+        translation["Russian"] = "abcde"
+        client.create_translation(translation, client.admin_headers())
+
+        response = client.get_translations_for_autocomplete("ab", client.admin_headers())
+        assert response["status_code"] == 200
+        assert response["Status"] == "Ok"
+        records = response["Body"]["Records"]
+        assert len(records) == 3
+        for record in records:
+            assert record["Russian"] in [ "abcd", "abd", "abcde" ]
+
+        response = client.get_translations_for_autocomplete("abq", client.admin_headers())
+        assert response["status_code"] == 200
+        assert response["Status"] == "Ok"
+        records = response["Body"]["Records"]
+        assert not records
+
+        response = client.get_translations_for_autocomplete("abcd", client.admin_headers())
+        assert response["status_code"] == 200
+        assert response["Status"] == "Ok"
+        records = response["Body"]["Records"]
+        assert len(records) == 2
+        for record in records:
+            assert record["Russian"] in [ "abcd", "abcde" ]
+
+    def test_autocomplete_for_unregistered_user(self, client):
+        translation = Fake.translation()
+        response = client.get_translations_by_full_matching(translation, {})
+        assert response["status_code"] == 200
+        assert response["Status"] == "Error"
+        assert response["Error"] == "AccessDenied"
+
+    def test_autocomplete_for_registered_user(self, client):
+        translation = Fake.translation()
+        response = client.get_translations_by_full_matching(translation, {})
+        assert response["status_code"] == 200
+        assert response["Status"] == "Error"
+        assert response["Error"] == "AccessDenied"
+
+    def test_translations_by_full_matching(self, client):
+        translation1 = Fake.translation()
+        client.create_translation(translation1, client.admin_headers())
+        translation2 = Fake.translation()
+        client.create_translation(translation2, client.admin_headers())
+        translation3 = Fake.translation()
+        client.create_translation(translation3, client.admin_headers())
+
+        response = client.get_translations_by_full_matching(translation1, {})
+        assert response["status_code"] == 200
+        assert response["Status"] == "Ok"
+        assert response["Body"] == translation1
+
+        response = client.get_translations_by_full_matching(Fake.translation(), {})
+        assert response["status_code"] == 200
+        assert response["Status"] == "Error"
+        assert response["Error"] == "NotFound"

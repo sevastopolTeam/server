@@ -80,6 +80,12 @@ class Client:
     def edit_translation(self, translation, headers = {}):
         return self.put_request(PATH_TO_ADMIN_TRANSLATIONS, translation, headers)
 
+    def get_translations_for_autocomplete(self, name, headers = {}):
+        return self.get_request(PATH_TO_ADMIN_TRANSLATIONS + "_for_autocomplete", { "Name": name }, headers)
+
+    def get_translations_by_full_matching(self, translation, headers = {}):
+        return self.get_request("english/admin/translation_by_full_matching", translation, headers)
+
     def clear_translations(self, headers = {}):
         response = self.get_request(PATH_TO_ADMIN_TRANSLATIONS, {}, headers)
         if response["Body"]["Records"]:

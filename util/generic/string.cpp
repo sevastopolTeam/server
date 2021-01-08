@@ -12,6 +12,13 @@ namespace NString {
         return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
     }
 
+    bool StartsWith(const TString& value, const TString& prefix) {
+        if (prefix.size() > value.size()) {
+            return false;
+        }
+        return std::equal(prefix.begin(), prefix.end(), value.begin());
+    }
+
     bool Contains(const TString& value, const char searchSymbol) {
         return value.find(searchSymbol) != TString::npos;
     }

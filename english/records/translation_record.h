@@ -7,10 +7,8 @@
 
 namespace NEnglish {
 
-    const TString RECORD_TRANSLATION_FIELD_VALUE_FROM = "ValueFrom";
-    const TString RECORD_TRANSLATION_FIELD_VALUE_TO = "ValueTo";
-    const TString RECORD_TRANSLATION_FIELD_LANGUAGE_FROM = "LanguageFrom";
-    const TString RECORD_TRANSLATION_FIELD_LANGUAGE_TO = "LanguageTo";
+    const TString RECORD_TRANSLATION_FIELD_RUSSIAN = "Russian";
+    const TString RECORD_TRANSLATION_FIELD_ENGLISH = "English";
     const TString RECORD_TRANSLATION_FIELD_ORIGIN_URL = "OriginUrl";
     const TString RECORD_TRANSLATION_FIELD_DOWNLOAD_URL = "DownloadUrl";
     const TString RECORD_TRANSLATION_FIELD_PART_OF_SPEECH = "PartOfSpeech";
@@ -25,12 +23,12 @@ namespace NEnglish {
         NJson::TJsonValue ToJson() const override;
         NJson::TJsonValue ForDB() const override;
 
+        TString GetRussian() const;
+
     private:
         // DB fields
-        TString ValueFrom;
-        TString ValueTo;
-        TString LanguageFrom;
-        TString LanguageTo;
+        TString Russian;
+        TString English;
         TString OriginUrl;
         TString DownloadUrl;
         TString PartOfSpeech;

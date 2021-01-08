@@ -15,6 +15,8 @@ namespace NEnglish {
 
         TMaybe<TRecordTranslationToCategory> FindByFullMatching(
             const TString& traslationId, const TString& wordCategoryId);
+
+        TVector<TRecordTranslationToCategory> FindByWordCategoryId(const TString& wordCategoryId);
     };
 
 }

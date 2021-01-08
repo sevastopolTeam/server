@@ -72,6 +72,13 @@ void TApplication::AddEnglishHandlers() {
     Server->Delete(R"(/api/english/admin/translations/([a-zA-Z0-9]+))", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::DeleteAdminTranslationHandler);
     });
+    Server->Get(R"(/api/english/admin/translations_for_autocomplete)", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminTranslationsForAutoCompleteHandler);
+    });
+    Server->Get(R"(/api/english/admin/translation_by_full_matching)", [&](const httplib::Request& req, httplib::Response& res) {
+        NEnglish::AdminHandler(*DataSource, req, res, NEnglish::GetAdminTranslationByFullMatchingHandler);
+    });
+
     Server->Post("/api/english/admin/word_categories", [&](const httplib::Request& req, httplib::Response& res) {
         NEnglish::AdminHandler(*DataSource, req, res, NEnglish::PostAdminWordCategoriesHandler);
     });

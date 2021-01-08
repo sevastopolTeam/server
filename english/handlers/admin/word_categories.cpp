@@ -1,5 +1,7 @@
 #include "word_categories.h"
 
+#include "english/collections/translation_collection.h"
+
 #include "english/collections/word_category_collection.h"
 #include "english/validators/admin/validator_word_category.h"
 
@@ -8,6 +10,7 @@
 
 #include "util/generic/ctype.h"
 #include "util/generic/iostream.h"
+#include "util/generic/hashmap.h"
 
 namespace NEnglish {
 
@@ -37,7 +40,27 @@ namespace NEnglish {
 
 
     void GetAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {
-        RestGetHandler(dataSource.English.CollectionTranslationToCategory, req, response);
+        const TString& recordId = req.GetParamValue(RECORD_TRANSLATION_TO_CATEGORY_FIELD_WORD_CATEGORY_ID, "");
+        const auto& categoryTranslations = dataSource.English.CollectionTranslationToCategory.FindByWordCategoryId(recordId);
+        NJson::TJsonValue ids = NJson::TJsonValue::array();
+        for (const auto& c: categoryTranslations) {
+            ids.push_back({{ "$oid", c.GetTranslationId() }});
+        }
+        const auto& translations = dataSource.English.CollectionTranslation.Find({{ "_id", {{ "$in",  ids }} }});
+        THashMap<TString, TRecordTranslation> idToTranslation;
+        for (const auto& t: translations) {
+            idToTranslation[t.GetId()] = t;
+        }
+
+        NJson::TJsonValue categoriesWithTranslations = NJson::TJsonValue::array();        
+        for (auto& c: categoryTranslations) {
+            categoriesWithTranslations.push_back({
+                { "TranslationToCategory", c.ToJson() },
+                { "Translation", idToTranslation[c.GetTranslationId()].ToJson() }
+            });
+        }
+
+        response[RESPONSE_BODY] = {{ "Records", categoriesWithTranslations }};
     }
 
     void PostAdminTranslationToCategoriesHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response) {

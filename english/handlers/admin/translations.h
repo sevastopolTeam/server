@@ -10,5 +10,7 @@ namespace NEnglish {
     void PostAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
     void PutAdminTranslationsHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
     void GetAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
+    void GetAdminTranslationByFullMatchingHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
     void DeleteAdminTranslationHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
+    void GetAdminTranslationsForAutoCompleteHandler(TDataSource& dataSource, const httplib::Request& req, NJson::TJsonValue& response);
 }
